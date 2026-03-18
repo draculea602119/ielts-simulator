@@ -1,0 +1,14 @@
+# Python server cache
+__pycache__/
+*.pyc
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+*.swp
+
+# Build/temp scripts (not part of the webapp)
+js/_append_tests.js
