@@ -12,3 +12,13 @@ Thumbs.db
 
 # Build/temp scripts (not part of the webapp)
 js/_append_tests.js
+
+# Node.js
+node_modules/
+npm-debug.log*
+
+# Environment variables (secrets)
+.env
+
+# SQLite database (generated at runtime)
+data/*.db

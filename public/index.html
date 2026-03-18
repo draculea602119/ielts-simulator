@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IELTS Mock Exam Simulator</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="light-mode">
+
+<!-- ========== LOADING OVERLAY ========== -->
+<div id="loadingOverlay" class="loading-overlay" style="display:none">
+  <div class="loading-card">
+    <div class="spinner"></div>
+    <div id="loadingMsg" class="loading-msg">处理中...</div>
+  </div>
+</div>
+
+<!-- ========== AUTH PAGE ========== -->
+<div id="page-auth" class="page active">
+  <div class="auth-bg">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <span class="auth-logo-icon">📝</span>
+        <h1>IELTS Simulator</h1>
+        <p>雅思学术类模拟考试平台</p>
+      </div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" onclick="showAuthTab('login')">登录</button>
+        <button class="auth-tab" id="tab-register" onclick="showAuthTab('register')">注册</button>
+      </div>
+      <form id="form-login" class="auth-form" onsubmit="handleLogin(event)">
+        <input class="auth-input" id="login-username" type="text" placeholder="用户名" autocomplete="username" required>
+        <input class="auth-input" id="login-password" type="password" placeholder="密码" autocomplete="current-password" required>
+        <div class="auth-error" id="login-error"></div>
+        <button class="auth-submit" type="submit" id="login-btn">登录</button>
+      </form>
+      <form id="form-register" class="auth-form" style="display:none" onsubmit="handleRegister(event)">
+        <input class="auth-input" id="reg-username" type="text" placeholder="用户名（2-20个字符）" autocomplete="username" required>
+        <input class="auth-input" id="reg-password" type="password" placeholder="密码（至少6位）" autocomplete="new-password" required>
+        <input class="auth-input" id="reg-password2" type="password" placeholder="确认密码" autocomplete="new-password" required>
+        <div class="auth-error" id="reg-error"></div>
+        <button class="auth-submit" type="submit" id="reg-btn">注册账号</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ========== HOME PAGE ========== -->
+<div id="page-home" class="page">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">📝</span>
+        <span class="logo-text">IELTS Simulator</span>
+      </div>
+      <div class="header-right">
+        <span class="user-badge" id="userBadge"></span>
+        <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+          <span class="theme-icon">🌙</span>
+        </button>
+        <button class="logout-btn" onclick="logout()" title="退出登录">退出</button>
+      </div>
+    </div>
+  </header>
+  <main class="home-main">
+    <section class="hero">
+      <h1>雅思模拟考试平台</h1>
+      <p class="hero-sub">IELTS Academic Mock Exam Simulator — 25套完整真题模拟</p>
+      <div class="score-summary" id="scoreSummary" style="display:none">
+        <span id="summaryText"></span>
+      </div>
+    </section>
+    <section class="section-info">
+      <div class="info-cards">
+        <div class="info-card listening-card">
+          <div class="info-icon">🎧</div>
+          <div class="info-title">Listening</div>
+          <div class="info-detail">4 Sections · 40 Questions · 30 min</div>
+        </div>
+        <div class="info-card reading-card">
+          <div class="info-icon">📖</div>
+          <div class="info-title">Reading</div>
+          <div class="info-detail">3 Passages · 40 Questions · 60 min</div>
+        </div>
+        <div class="info-card writing-card">
+          <div class="info-icon">✍️</div>
+          <div class="info-title">Writing</div>
+          <div class="info-detail">Task 1 + Task 2 · 60 min</div>
+        </div>
+        <div class="info-card speaking-card">
+          <div class="info-icon">🎤</div>
+          <div class="info-title">Speaking</div>
+          <div class="info-detail">3 Parts · 11–14 min</div>
+        </div>
+      </div>
+    </section>
+    <section class="tests-grid-section">
+      <h2>选择考试</h2>
+      <div class="tests-grid" id="testsGrid"></div>
+    </section>
+  </main>
+</div>
+
+<!-- ========== EXAM PAGE ========== -->
+<div id="page-exam" class="page">
+  <header class="exam-header">
+    <div class="exam-header-inner">
+      <button class="back-btn" id="backBtn">← 返回首页</button>
+      <div class="exam-title" id="examTitle">Test 1</div>
+      <div class="exam-controls">
+        <div class="timer-box" id="timerBox">
+          <span class="timer-label">剩余时间</span>
+          <span class="timer-value" id="timerValue">--:--</span>
+        </div>
+        <button class="theme-toggle" id="themeToggle2" title="Toggle Theme">
+          <span class="theme-icon2">🌙</span>
+        </button>
+      </div>
+    </div>
+    <div class="section-tabs">
+      <button class="tab-btn active" data-section="listening">🎧 Listening</button>
+      <button class="tab-btn" data-section="reading">📖 Reading</button>
+      <button class="tab-btn" data-section="writing">✍️ Writing</button>
+      <button class="tab-btn" data-section="speaking">🎤 Speaking</button>
+    </div>
+  </header>
+  <main class="exam-main">
+    <div class="section-panel active" id="panel-listening">
+      <div class="panel-header">
+        <h2>Listening Test</h2>
+        <p class="panel-note">阅读以下录音材料（模拟听力场景），然后回答问题。</p>
+      </div>
+      <div id="listening-content"></div>
+    </div>
+    <div class="section-panel" id="panel-reading">
+      <div class="panel-header">
+        <h2>Academic Reading Test</h2>
+        <p class="panel-note">阅读三篇文章，完成相应题目。每道题1分，共40分。</p>
+      </div>
+      <div id="reading-content"></div>
+    </div>
+    <div class="section-panel" id="panel-writing">
+      <div class="panel-header">
+        <h2>Academic Writing Test</h2>
+        <p class="panel-note">Task 1至少150字 · Task 2至少250字</p>
+      </div>
+      <div id="writing-content"></div>
+    </div>
+    <div class="section-panel" id="panel-speaking">
+      <div class="panel-header">
+        <h2>Speaking Test</h2>
+        <p class="panel-note">口语考试共分三部分，请大声练习回答以下问题。</p>
+      </div>
+      <div id="speaking-content"></div>
+    </div>
+  </main>
+  <footer class="exam-footer">
+    <div class="exam-footer-inner">
+      <button class="submit-btn" id="submitBtn">提交答案并查看分数</button>
+    </div>
+  </footer>
+</div>
+
+<!-- ========== RESULT PAGE ========== -->
+<div id="page-result" class="page">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">📝</span>
+        <span class="logo-text">IELTS Simulator</span>
+      </div>
+      <div class="header-right">
+        <button class="theme-toggle" id="themeToggle3" title="Toggle Theme">
+          <span class="theme-icon3">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+  <main class="result-main">
+    <div class="result-card">
+      <h2>考试结果</h2>
+      <div class="result-band" id="resultBand"></div>
+      <div class="result-breakdown" id="resultBreakdown"></div>
+      <div class="result-actions">
+        <button class="btn-primary" id="reviewBtn">查看答案解析</button>
+        <button class="btn-secondary" id="homeBtn">返回首页</button>
+      </div>
+    </div>
+
+    <!-- AI Writing Feedback -->
+    <div id="aiFeedbackSection" class="ai-feedback-section" style="display:none">
+      <h3>🤖 Writing AI 评分报告</h3>
+      <div id="aiFeedbackContent"></div>
+    </div>
+
+    <div id="reviewArea" style="display:none"></div>
+  </main>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
