@@ -4,43 +4,70 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IELTS Mock Exam Simulator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="light-mode">
 
 <!-- ========== LOADING OVERLAY ========== -->
-<div id="loadingOverlay" class="loading-overlay" style="display:none">
-  <div class="loading-card">
-    <div class="spinner"></div>
-    <div id="loadingMsg" class="loading-msg">处理中...</div>
+<div id="loadingOverlay" class="v-loading" style="display:none">
+  <div class="v-loading-card">
+    <div class="v-spinner"></div>
+    <div id="loadingMsg" class="v-loading-msg">处理中...</div>
   </div>
 </div>
 
 <!-- ========== AUTH PAGE ========== -->
 <div id="page-auth" class="page active">
-  <div class="auth-bg">
-    <div class="auth-card">
-      <div class="auth-logo">
-        <span class="auth-logo-icon">📝</span>
-        <h1>IELTS Simulator</h1>
-        <p>雅思学术类模拟考试平台</p>
+  <div class="v-auth-scene">
+    <div class="v-auth-glow v-auth-glow-1"></div>
+    <div class="v-auth-glow v-auth-glow-2"></div>
+    <div class="v-auth-glow v-auth-glow-3"></div>
+
+    <div class="v-auth-card">
+      <div class="v-auth-brand">
+        <div class="v-auth-mark">IS</div>
+        <div class="v-auth-brand-text">
+          <div class="v-auth-brand-name">IELTS Simulator</div>
+          <div class="v-auth-brand-sub">Academic &middot; 学术类模拟考试</div>
+        </div>
       </div>
-      <div class="auth-tabs">
-        <button class="auth-tab active" id="tab-login" onclick="showAuthTab('login')">登录</button>
-        <button class="auth-tab" id="tab-register" onclick="showAuthTab('register')">注册</button>
+
+      <div class="v-auth-tabs">
+        <button class="v-auth-tab active" id="tab-login" onclick="showAuthTab('login')">登录</button>
+        <button class="v-auth-tab" id="tab-register" onclick="showAuthTab('register')">注册</button>
       </div>
-      <form id="form-login" class="auth-form" onsubmit="handleLogin(event)">
-        <input class="auth-input" id="login-username" type="text" placeholder="用户名" autocomplete="username" required>
-        <input class="auth-input" id="login-password" type="password" placeholder="密码" autocomplete="current-password" required>
-        <div class="auth-error" id="login-error"></div>
-        <button class="auth-submit" type="submit" id="login-btn">登录</button>
+
+      <form id="form-login" class="v-auth-form" onsubmit="handleLogin(event)">
+        <div class="v-field">
+          <label class="v-label">用户名</label>
+          <input class="v-input" id="login-username" type="text" placeholder="请输入用户名" autocomplete="username" required>
+        </div>
+        <div class="v-field">
+          <label class="v-label">密码</label>
+          <input class="v-input" id="login-password" type="password" placeholder="请输入密码" autocomplete="current-password" required>
+        </div>
+        <div class="v-auth-error" id="login-error"></div>
+        <button class="v-auth-submit" type="submit" id="login-btn">登录账号</button>
       </form>
-      <form id="form-register" class="auth-form" style="display:none" onsubmit="handleRegister(event)">
-        <input class="auth-input" id="reg-username" type="text" placeholder="用户名（2-20个字符）" autocomplete="username" required>
-        <input class="auth-input" id="reg-password" type="password" placeholder="密码（至少6位）" autocomplete="new-password" required>
-        <input class="auth-input" id="reg-password2" type="password" placeholder="确认密码" autocomplete="new-password" required>
-        <div class="auth-error" id="reg-error"></div>
-        <button class="auth-submit" type="submit" id="reg-btn">注册账号</button>
+
+      <form id="form-register" class="v-auth-form" style="display:none" onsubmit="handleRegister(event)">
+        <div class="v-field">
+          <label class="v-label">用户名</label>
+          <input class="v-input" id="reg-username" type="text" placeholder="2–20 个字符" autocomplete="username" required>
+        </div>
+        <div class="v-field">
+          <label class="v-label">密码</label>
+          <input class="v-input" id="reg-password" type="password" placeholder="至少 6 位" autocomplete="new-password" required>
+        </div>
+        <div class="v-field">
+          <label class="v-label">确认密码</label>
+          <input class="v-input" id="reg-password2" type="password" placeholder="再次输入密码" autocomplete="new-password" required>
+        </div>
+        <div class="v-auth-error" id="reg-error"></div>
+        <button class="v-auth-submit" type="submit" id="reg-btn">创建账号</button>
       </form>
     </div>
   </div>
@@ -48,13 +75,14 @@
 
 <!-- ========== HOME PAGE ========== -->
 <div id="page-home" class="page">
-  <header class="site-header">
-    <div class="header-inner">
-      <div class="logo">
-        <span class="logo-icon">📝</span>
-        <span class="logo-text">IELTS Simulator</span>
+
+  <header class="hp-nav">
+    <div class="hp-nav-inner">
+      <div class="hp-logo">
+        <div class="hp-logo-mark">IS</div>
+        <span class="hp-logo-text">IELTS Simulator</span>
       </div>
-      <div class="header-right">
+      <div class="hp-nav-right">
         <span class="user-badge" id="userBadge"></span>
         <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
           <span class="theme-icon">🌙</span>
@@ -63,42 +91,74 @@
       </div>
     </div>
   </header>
-  <main class="home-main">
-    <section class="hero">
-      <h1>雅思模拟考试平台</h1>
-      <p class="hero-sub">IELTS Academic Mock Exam Simulator — 25套完整真题模拟</p>
-      <div class="score-summary" id="scoreSummary" style="display:none">
+
+  <div class="hp-hero-wrap">
+    <div class="hp-hero-rings" aria-hidden="true"></div>
+    <section class="hp-hero">
+      <span class="hp-eyebrow">25 Mock Tests &nbsp;·&nbsp; Academic &nbsp;·&nbsp; 学术类</span>
+      <h1 class="hp-headline">
+        <span class="hp-hl-top">雅思模拟</span>
+        <span class="hp-hl-bot">考试平台</span>
+      </h1>
+      <p class="hp-sub">听说读写全模拟，精准预测你的雅思成绩</p>
+      <div class="hp-score-tag" id="scoreSummary" style="display:none">
         <span id="summaryText"></span>
       </div>
     </section>
-    <section class="section-info">
-      <div class="info-cards">
-        <div class="info-card listening-card">
-          <div class="info-icon">🎧</div>
-          <div class="info-title">Listening</div>
-          <div class="info-detail">4 Sections · 40 Questions · 30 min</div>
+  </div>
+
+  <main class="hp-main">
+
+    <section class="hp-modules">
+      <div class="hp-mod" data-c="blue">
+        <div class="hp-mod-icon">🎧</div>
+        <div class="hp-mod-info">
+          <div class="hp-mod-name">Listening</div>
+          <div class="hp-mod-detail">4 Sections &middot; 40 Questions &middot; 30 min</div>
         </div>
-        <div class="info-card reading-card">
-          <div class="info-icon">📖</div>
-          <div class="info-title">Reading</div>
-          <div class="info-detail">3 Passages · 40 Questions · 60 min</div>
+      </div>
+      <div class="hp-mod" data-c="green">
+        <div class="hp-mod-icon">📖</div>
+        <div class="hp-mod-info">
+          <div class="hp-mod-name">Reading</div>
+          <div class="hp-mod-detail">3 Passages &middot; 40 Questions &middot; 60 min</div>
         </div>
-        <div class="info-card writing-card">
-          <div class="info-icon">✍️</div>
-          <div class="info-title">Writing</div>
-          <div class="info-detail">Task 1 + Task 2 · 60 min</div>
+      </div>
+      <div class="hp-mod" data-c="amber">
+        <div class="hp-mod-icon">✍️</div>
+        <div class="hp-mod-info">
+          <div class="hp-mod-name">Writing</div>
+          <div class="hp-mod-detail">Task 1 + Task 2 &middot; 60 min</div>
         </div>
-        <div class="info-card speaking-card">
-          <div class="info-icon">🎤</div>
-          <div class="info-title">Speaking</div>
-          <div class="info-detail">3 Parts · 11–14 min</div>
+      </div>
+      <div class="hp-mod" data-c="violet">
+        <div class="hp-mod-icon">🎤</div>
+        <div class="hp-mod-info">
+          <div class="hp-mod-name">Speaking</div>
+          <div class="hp-mod-detail">3 Parts &middot; 11–14 min</div>
         </div>
       </div>
     </section>
-    <section class="tests-grid-section">
-      <h2>选择考试</h2>
-      <div class="tests-grid" id="testsGrid"></div>
+
+    <div class="hp-speak-cta">
+      <div class="hp-speak-cta-left">
+        <div class="hp-speak-cta-icon">🎤</div>
+        <div>
+          <div class="hp-speak-cta-title">口语 AI 练习</div>
+          <div class="hp-speak-cta-sub">与 Gemini AI 考官对话，实时语音练习 IELTS 口语 Part 1 / 2 / 3</div>
+        </div>
+      </div>
+      <button class="hp-speak-cta-btn" onclick="goToSpeakPage()">开始练习 →</button>
+    </div>
+
+    <section class="hp-tests">
+      <div class="hp-tests-hd">
+        <h2 class="hp-tests-title">选择考试</h2>
+        <span class="hp-tests-badge">25 tests</span>
+      </div>
+      <div id="testsGrid"></div>
     </section>
+
   </main>
 </div>
 
@@ -196,6 +256,138 @@
 
     <div id="reviewArea" style="display:none"></div>
   </main>
+</div>
+
+<!-- ========== SPEAKING PRACTICE PAGE ========== -->
+<div id="page-speak" class="page sp-page">
+  <!-- Ambient glow orbs -->
+  <div class="sp-orb sp-orb-1"></div>
+  <div class="sp-orb sp-orb-2"></div>
+
+  <header class="sp-header">
+    <button class="sp-back-btn" onclick="leaveSpeakPage()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      返回
+    </button>
+    <div class="sp-header-center">
+      <div class="sp-header-dot"></div>
+      <span class="sp-header-title">IELTS Speaking AI</span>
+    </div>
+    <div class="sp-header-right">
+      <span class="sp-timer" id="saTimer" style="display:none">
+        <span class="sp-timer-val" id="saTimerValue">00:00</span>
+      </span>
+      <button class="sp-theme-btn" id="themeToggle4" title="Toggle Theme">
+        <span class="theme-icon4">🌙</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Setup Screen -->
+  <div id="saSetup" class="sp-setup">
+    <div class="sp-setup-inner">
+      <div class="sp-badge">AI 口语练习</div>
+      <h1 class="sp-setup-heading">开始你的<br>IELTS 口语训练</h1>
+      <p class="sp-setup-sub">与 AI 考官真实对话，即时反馈，逐步提升口语 Band Score</p>
+
+      <div class="sp-section">
+        <div class="sp-label">选择考试部分</div>
+        <div class="sp-mode-row" id="saModeGroup">
+          <button class="sa-mode-btn active" data-mode="part1">
+            <span class="sp-mode-num">Part 1</span>
+            <span class="sp-mode-sub">个人话题</span>
+          </button>
+          <button class="sa-mode-btn" data-mode="part2">
+            <span class="sp-mode-num">Part 2</span>
+            <span class="sp-mode-sub">长篇独白</span>
+          </button>
+          <button class="sa-mode-btn" data-mode="part3">
+            <span class="sp-mode-num">Part 3</span>
+            <span class="sp-mode-sub">抽象讨论</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="sp-section">
+        <div class="sp-label">选择话题</div>
+        <div class="sp-topic-wrap" id="saTopicGrid"></div>
+      </div>
+
+      <div class="sa-browser-warn" id="saBrowserWarn" style="display:none">
+        ⚠ 请使用 Chrome 或 Edge 以启用语音识别，将自动启用文字输入模式。
+      </div>
+
+      <button class="sp-start-btn" id="saStartBtn" disabled onclick="startSpeakSession()">
+        请先选择话题
+      </button>
+    </div>
+  </div>
+
+  <!-- Session Screen -->
+  <div id="saBody" class="sp-session" style="display:none">
+    <div class="sp-main">
+      <!-- Orb Zone -->
+      <div class="sp-orb-zone">
+        <div class="sp-sess-tag" id="saSessionInfo"></div>
+        <div class="sp-orb-wrap">
+          <div class="sp-orb-ring sp-ring-1"></div>
+          <div class="sp-orb-ring sp-ring-2"></div>
+          <div class="sp-orb" id="spOrb">
+            <div class="sp-orb-bg"></div>
+            <div class="sp-blob sp-b1"></div>
+            <div class="sp-blob sp-b2"></div>
+            <div class="sp-blob sp-b3"></div>
+            <div class="sp-orb-shine"></div>
+          </div>
+        </div>
+        <div class="sp-orb-status" id="saStatus">准备就绪</div>
+      </div>
+
+      <!-- Transcript -->
+      <div class="sp-transcript" id="saChat"></div>
+
+      <!-- Controls -->
+      <div class="sp-ctrl-bar">
+        <div class="sp-text-wrap" id="saTextInputWrap" style="display:none">
+          <input class="sp-text-input" id="saTextInput" type="text" placeholder="输入您的回答..." onkeydown="if(event.key==='Enter')sendSpeakText()">
+          <button class="sp-send-btn" onclick="sendSpeakText()">发送</button>
+        </div>
+        <div class="sp-mic-row">
+          <button class="sp-end-link" onclick="leaveSpeakPage()">结束练习</button>
+          <button class="sp-mic-btn" id="saMicBtn" onclick="toggleListening()">
+            <svg class="sp-mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="2" width="6" height="12" rx="3"/>
+              <path d="M5 10a7 7 0 0 0 14 0M12 19v3M8 22h8"/>
+            </svg>
+          </button>
+          <div style="width:80px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar: Tips -->
+    <div class="sp-sidebar">
+      <div class="sp-sidebar-hd">AI 建议</div>
+      <div class="sp-tips-list" id="saTipsList">
+        <div class="sa-tips-empty">对话中将出现实时建议</div>
+      </div>
+    </div>
+
+    <!-- Score Overlay -->
+    <div class="sp-score-overlay" id="saScoreBox" style="display:none">
+      <div class="sp-score-card">
+        <div class="sp-sc-badge">IELTS 口语评分</div>
+        <div class="sp-sc-band" id="saScoreBandVal">
+          <div class="sp-sc-loading">评分中…</div>
+        </div>
+        <div class="sp-sc-label">Overall Band Score</div>
+        <div class="sp-sc-criteria" id="spScoreGrid"></div>
+        <div class="sp-sc-summary" id="spScoreSummary"></div>
+        <div class="sp-sc-lists" id="spScoreLists"></div>
+        <button class="sp-sc-btn" onclick="leaveSpeakPage()">返回首页</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script src="js/data.js"></script>

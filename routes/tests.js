@@ -33,9 +33,9 @@ function rawToBand(score, total) {
   return 4;
 }
 
-// Gemini writing evaluation
+// Groq writing evaluation
 async function evaluateWriting(taskLabel, prompt, essay) {
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey || !essay || essay.trim().length < 30) {
     const wordCount = (essay || '').trim().split(/\s+/).filter(w => w).length;
     const band = wordCount >= 400 ? 6.5 : wordCount >= 250 ? 6 : wordCount >= 150 ? 5.5 : 5;
@@ -45,12 +45,12 @@ async function evaluateWriting(taskLabel, prompt, essay) {
       coherence:        { score: band, comment: '未配置AI评分。' },
       lexical:          { score: band, comment: '未配置AI评分。' },
       grammar:          { score: band, comment: '未配置AI评分。' },
-      overall_feedback: apiKey ? '评分服务暂时不可用，已按字数估算分数。' : '请联系管理员配置 Gemini API Key 以启用 AI 评分。',
-      suggestions: '建议配置 Gemini API Key 获取详细写作反馈。'
+      overall_feedback: apiKey ? '评分服务暂时不可用，已按字数估算分数。' : '请联系管理员配置 GROQ_API_KEY 以启用 AI 评分。',
+      suggestions: '建议配置 GROQ_API_KEY 获取详细写作反馈。'
     };
   }
 
-  const systemPrompt = `You are a certified IELTS examiner. Evaluate this IELTS Academic Writing ${taskLabel} response.
+  const userPrompt = `You are a certified IELTS examiner. Evaluate this IELTS Academic Writing ${taskLabel} response.
 
 Task prompt: "${prompt}"
 
@@ -70,25 +70,30 @@ Evaluate strictly on 4 IELTS criteria. Respond ONLY with valid JSON, no other te
 
   try {
     const resp = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      'https://api.groq.com/openai/v1/chat/completions',
       {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: systemPrompt }] }],
-          generationConfig: { temperature: 0.2, maxOutputTokens: 1024 }
+          model: 'llama-3.3-70b-versatile',
+          messages: [{ role: 'user', content: userPrompt }],
+          temperature: 0.2,
+          max_tokens: 1024
         }),
         signal: AbortSignal.timeout(20000)
       }
     );
-    if (!resp.ok) throw new Error(`Gemini API ${resp.status}`);
+    if (!resp.ok) throw new Error(`Groq API ${resp.status}`);
     const data = await resp.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    const text = data.choices?.[0]?.message?.content || '';
     const match = text.match(/\{[\s\S]*\}/);
     if (match) return JSON.parse(match[0]);
     throw new Error('No JSON in response');
   } catch (e) {
-    console.error('Gemini error:', e.message);
+    console.error('Groq error:', e.message);
     const wordCount = essay.trim().split(/\s+/).filter(w => w).length;
     const band = wordCount >= 400 ? 6 : wordCount >= 250 ? 5.5 : 5;
     return {

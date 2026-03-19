@@ -1,0 +1,176 @@
+const express = require('express');
+const jwt = require('jsonwebtoken');
+
+const router = express.Router();
+const JWT_SECRET = process.env.JWT_SECRET || 'ielts-dev-secret-change-in-production';
+
+function requireAuth(req, res, next) {
+  const header = req.headers.authorization || '';
+  const token = header.startsWith('Bearer ') ? header.slice(7) : null;
+  if (!token) return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    req.user = jwt.verify(token, JWT_SECRET);
+    next();
+  } catch {
+    res.status(401).json({ error: 'Token 无效或已过期' });
+  }
+}
+
+const FORMAT = `
+RESPONSE FORMAT (CRITICAL — follow exactly):
+Write your spoken reply as plain English text, then on a new line write exactly "---META---", then a JSON object.
+
+Example:
+Hello, welcome to the IELTS speaking test. Tell me about your work.
+---META---
+{"tips":["用完整句子回答","尽量给出具体例子"],"sessionComplete":false,"bandEstimate":null,"cueCard":null}
+
+Rules: No JSON in the spoken part. No prose after ---META---. Tips must be in 简体中文.`;
+
+function buildSystemPrompt(mode, topic, subPhase) {
+  if (mode === 'part1') {
+    return `You are a friendly but professional IELTS examiner. Topic: "${topic}". Ask one personal question at a time. After 5-6 exchanges set sessionComplete:true and give a bandEstimate (e.g. 6.5).${FORMAT}`;
+  }
+  if (mode === 'part2') {
+    if (subPhase === 'cue_card') {
+      return `You are an IELTS examiner. Generate a Part 2 cue card about "${topic}". Tell the student they have 1 minute to prepare. Put the cue card in the cueCard JSON field.${FORMAT}`;
+    }
+    if (subPhase === 'monologue') {
+      return `You are an IELTS examiner. The student gave their Part 2 talk about "${topic}". Evaluate briefly and ask 1-2 follow-up questions.${FORMAT}`;
+    }
+    return `You are an IELTS examiner. Wrap up Part 2 about "${topic}" positively. Set sessionComplete:true with a bandEstimate.${FORMAT}`;
+  }
+  return `You are an IELTS examiner doing Part 3 discussion about "${topic}". Ask analytical questions. After 4-5 exchanges set sessionComplete:true with a bandEstimate.${FORMAT}`;
+}
+
+async function callGroqStream(apiKey, messages, res) {
+  const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+    body: JSON.stringify({
+      model: 'llama-3.3-70b-versatile',
+      messages,
+      temperature: 0.75,
+      max_tokens: 600,
+      stream: true
+    }),
+    signal: AbortSignal.timeout(30000)
+  });
+
+  if (!resp.ok) {
+    res.write(`data: ${JSON.stringify({ error: `Groq API ${resp.status}` })}\n\n`);
+    res.end();
+    return null;
+  }
+  return resp;
+}
+
+// POST /api/speaking/chat — SSE streaming
+router.post('/chat', requireAuth, async (req, res) => {
+  const { messages = [], mode = 'part1', topic = 'General', subPhase = 'cue_card' } = req.body;
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) return res.status(500).json({ error: 'GROQ_API_KEY 未配置' });
+
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.flushHeaders();
+
+  const systemPrompt = buildSystemPrompt(mode, topic, subPhase);
+  const groqMessages = [
+    { role: 'system', content: systemPrompt },
+    ...messages.map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.content }))
+  ];
+
+  try {
+    const resp = await callGroqStream(apiKey, groqMessages, res);
+    if (!resp) return;
+
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let fullText = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunk = decoder.decode(value, { stream: true });
+      for (const line of chunk.split('\n')) {
+        if (!line.startsWith('data: ')) continue;
+        const raw = line.slice(6).trim();
+        if (raw === '[DONE]') continue;
+        try {
+          const json = JSON.parse(raw);
+          const token = json.choices?.[0]?.delta?.content || '';
+          if (token) {
+            fullText += token;
+            res.write(`data: ${JSON.stringify({ token })}\n\n`);
+          }
+        } catch {}
+      }
+    }
+
+    // Parse metadata
+    const sep = fullText.indexOf('---META---');
+    let meta = { tips: [], sessionComplete: false, bandEstimate: null, cueCard: null };
+    const metaStr = sep !== -1 ? fullText.slice(sep + 10) : fullText;
+    const jsonMatch = metaStr.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      try { meta = { ...meta, ...JSON.parse(jsonMatch[0]) }; } catch {}
+    }
+
+    res.write(`data: ${JSON.stringify({ done: true, ...meta })}\n\n`);
+    res.end();
+  } catch (e) {
+    console.error('Speaking error:', e.message);
+    res.write(`data: ${JSON.stringify({ error: 'AI 服务暂时不可用' })}\n\n`);
+    res.end();
+  }
+});
+
+// POST /api/speaking/score — IELTS band scoring
+router.post('/score', requireAuth, async (req, res) => {
+  const { messages = [], mode = 'part1', topic = 'General' } = req.body;
+  const apiKey = process.env.GROQ_API_KEY;
+
+  const studentLines = messages.filter(m => m.role === 'user').map(m => m.content);
+  if (!apiKey || studentLines.length < 1) {
+    return res.json({ overall: 5.5, fc: { score: 5.5, comment: '对话内容不足，分数为估算值。' }, lr: { score: 5.5, comment: '请进行更完整的对话。' }, gr: { score: 5.5, comment: '需要更多样本才能评分。' }, summary: '对话时间较短，以下为估算评分。', strengths: ['完成了口语练习'], improvements: ['建议进行更长的对话'] });
+  }
+
+  const prompt = `You are an IELTS examiner. Evaluate this student's Part ${mode.replace('part', '')} speaking about "${topic}".
+
+Student's responses:
+${studentLines.map((t, i) => `${i + 1}. ${t}`).join('\n')}
+
+Score on 3 criteria (0.5 increments, 1-9). All comments in 简体中文.
+Respond ONLY with valid JSON:
+{
+  "overall": <band>,
+  "fc": {"score": <band>, "comment": "<2 sentences in Chinese>"},
+  "lr": {"score": <band>, "comment": "<2 sentences in Chinese>"},
+  "gr": {"score": <band>, "comment": "<2 sentences in Chinese>"},
+  "summary": "<3 sentences Chinese feedback>",
+  "strengths": ["<Chinese strength 1>", "<Chinese strength 2>"],
+  "improvements": ["<Chinese improvement 1>", "<Chinese improvement 2>"]
+}`;
+
+  try {
+    const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+      body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: [{ role: 'user', content: prompt }], temperature: 0.2, max_tokens: 800 }),
+      signal: AbortSignal.timeout(20000)
+    });
+    if (!resp.ok) throw new Error(`Groq ${resp.status}`);
+    const data = await resp.json();
+    const text = data.choices?.[0]?.message?.content || '';
+    const match = text.match(/\{[\s\S]*\}/);
+    if (match) return res.json(JSON.parse(match[0]));
+    throw new Error('No JSON');
+  } catch (e) {
+    console.error('Score error:', e.message);
+    res.json({ overall: 5.5, fc: { score: 5.5, comment: '评分服务暂时不可用。' }, lr: { score: 5.5, comment: '评分服务暂时不可用。' }, gr: { score: 5.5, comment: '评分服务暂时不可用。' }, summary: '评分服务遇到错误，分数为估算值，请稍后重试。', strengths: ['完成了对话练习'], improvements: ['请稍后重新评分'] });
+  }
+});
+
+module.exports = router;

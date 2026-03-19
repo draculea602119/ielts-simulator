@@ -19,6 +19,19 @@ const audio = { utterance: null, btn: null };
 
 function getEnVoice() {
   const voices = window.speechSynthesis.getVoices();
+  // Prefer Microsoft neural voices (Edge) for natural sound
+  const preferred = [
+    'Microsoft Aria Online (Natural) - English (United States)',
+    'Microsoft Jenny Online (Natural) - English (United States)',
+    'Microsoft Guy Online (Natural) - English (United States)',
+    'Microsoft Zira - English (United States)',
+    'Google UK English Female',
+    'Google US English',
+  ];
+  for (const name of preferred) {
+    const v = voices.find(v => v.name === name);
+    if (v) return v;
+  }
   return voices.find(v => v.lang === 'en-GB') ||
          voices.find(v => v.lang === 'en-US') ||
          voices.find(v => v.lang.startsWith('en')) || null;
@@ -691,6 +704,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('themeToggle').onclick = toggleTheme;
   document.getElementById('themeToggle2').onclick = toggleTheme;
   document.getElementById('themeToggle3').onclick = toggleTheme;
+  document.getElementById('themeToggle4').onclick = toggleTheme;
 
   document.getElementById('backBtn').onclick = () => {
     clearInterval(state.timerInterval);
@@ -705,3 +719,490 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   document.getElementById('submitBtn').onclick = submitExam;
 });
+
+// ================================================================
+//  SPEAKING AI PRACTICE
+// ================================================================
+
+const SPEAK_TOPICS = [
+  'Work & Career', 'Education', 'Technology', 'Travel & Tourism',
+  'Family & Relationships', 'Health & Fitness', 'Environment', 'Food & Cooking',
+  'Arts & Culture', 'Sports & Hobbies', 'Media & Entertainment', 'Cities & Housing'
+];
+
+const speakState = {
+  messages: [],
+  mode: 'part1',
+  topic: '',
+  subPhase: 'cue_card',
+  recognition: null,
+  isListening: false,
+  isSpeaking: false,
+  sessionActive: false,
+  timerInterval: null,
+  timerSeconds: 0,
+  selectedTopic: null
+};
+
+function goToSpeakPage() {
+  showPage('speak');
+  initSpeakPage();
+}
+
+function leaveSpeakPage() {
+  endSpeakSession();
+  showPage('home');
+  renderHome();
+}
+
+function initSpeakPage() {
+  // Reset state
+  speakState.messages = [];
+  speakState.mode = 'part1';
+  speakState.topic = '';
+  speakState.subPhase = 'cue_card';
+  speakState.selectedTopic = null;
+  speakState.sessionActive = false;
+
+  // Show setup, hide body
+  document.getElementById('saSetup').style.display = '';
+  document.getElementById('saBody').style.display = 'none';
+  document.getElementById('saTimer').style.display = 'none';
+
+  // Reset start button
+  const startBtn = document.getElementById('saStartBtn');
+  startBtn.disabled = true;
+  startBtn.textContent = '请先选择话题';
+
+  // Render mode buttons
+  const modeGroup = document.getElementById('saModeGroup');
+  modeGroup.querySelectorAll('.sa-mode-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mode === 'part1');
+    btn.onclick = () => {
+      speakState.mode = btn.dataset.mode;
+      modeGroup.querySelectorAll('.sa-mode-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    };
+  });
+
+  // Render topic grid
+  const grid = document.getElementById('saTopicGrid');
+  grid.innerHTML = '';
+  SPEAK_TOPICS.forEach(topic => {
+    const btn = document.createElement('button');
+    btn.className = 'sa-topic-btn';
+    btn.textContent = topic;
+    btn.onclick = () => {
+      speakState.topic = topic;
+      speakState.selectedTopic = topic;
+      grid.querySelectorAll('.sa-topic-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      startBtn.disabled = false;
+      startBtn.textContent = '开始练习 →';
+    };
+    grid.appendChild(btn);
+  });
+
+  // Check Speech API
+  const hasRecognition = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
+  document.getElementById('saBrowserWarn').style.display = hasRecognition ? 'none' : '';
+}
+
+function startSpeakSession() {
+  if (!speakState.selectedTopic) return;
+
+  document.getElementById('saSetup').style.display = 'none';
+  document.getElementById('saBody').style.display = '';
+  document.getElementById('saTimer').style.display = '';
+
+  // Set session info
+  const modeNames = { part1: 'Part 1 — 个人话题', part2: 'Part 2 — 长篇独白', part3: 'Part 3 — 抽象讨论' };
+  document.getElementById('saSessionInfo').textContent =
+    `${modeNames[speakState.mode]} · ${speakState.topic}`;
+
+  // Reset chat
+  document.getElementById('saChat').innerHTML = '';
+  document.getElementById('saTipsList').innerHTML = '';
+  document.getElementById('saScoreBox').style.display = 'none';
+
+  // Show/hide text input based on browser support
+  const hasRecognition = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
+  document.getElementById('saTextInputWrap').style.display = hasRecognition ? 'none' : '';
+
+  speakState.sessionActive = true;
+  speakState.messages = [];
+  speakState.timerSeconds = 0;
+  startSpeakTimer();
+
+  // Part 2 starts with cue_card subPhase
+  if (speakState.mode === 'part2') speakState.subPhase = 'cue_card';
+
+  setOrbState('thinking');
+  sendSpeakMessage('[SESSION_START]');
+}
+
+// ---- TTS Queue (sentence-by-sentence) ----
+const ttsQueue = [];
+let ttsActive = false;
+
+function enqueueTTS(sentence) {
+  if (!sentence.trim()) return;
+  ttsQueue.push(sentence.trim());
+  if (!ttsActive) processTTS();
+}
+
+function processTTS() {
+  if (!ttsQueue.length) { ttsActive = false; return; }
+  ttsActive = true;
+  const text = ttsQueue.shift();
+  const u = new SpeechSynthesisUtterance(text);
+  const voice = getEnVoice();
+  if (voice) u.voice = voice;
+  u.rate = 0.88; u.pitch = 1.05; u.volume = 1.0;
+  u.onend = u.onerror = processTTS;
+  window.speechSynthesis.speak(u);
+}
+
+function stopTTS() {
+  ttsQueue.length = 0;
+  ttsActive = false;
+  window.speechSynthesis && window.speechSynthesis.cancel();
+}
+
+function extractSentences(text) {
+  const re = /[^.!?。！？]+[.!?。！？]+\s*/g;
+  const complete = [];
+  let match;
+  let last = 0;
+  while ((match = re.exec(text)) !== null) {
+    complete.push(match[0].trim());
+    last = match.index + match[0].length;
+  }
+  return { complete, remaining: text.slice(last) };
+}
+
+// ---- Orb state ----
+function setOrbState(state) {
+  const pg = document.getElementById('page-speak');
+  if (!pg) return;
+  pg.classList.remove('sp-speaking', 'sp-listening', 'sp-thinking');
+  if (state !== 'idle') pg.classList.add('sp-' + state);
+}
+
+// ---- Streaming sendSpeakMessage ----
+async function sendSpeakMessage(text) {
+  if (!speakState.sessionActive) return;
+  disableMicBtn(true);
+  setOrbState('thinking');
+  document.getElementById('saStatus').textContent = 'AI 思考中…';
+
+  if (text !== '[SESSION_START]') {
+    speakState.messages.push({ role: 'user', content: text });
+    appendSpeakBubble('user', text);
+  }
+
+  try {
+    const res = await fetch('/api/speaking/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + authState.token
+      },
+      body: JSON.stringify({
+        messages: speakState.messages,
+        mode: speakState.mode,
+        topic: speakState.topic,
+        subPhase: speakState.subPhase
+      })
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+    let replyText = '';
+    let ttsBuffer = '';
+    let inMeta = false;
+    let aiDiv = null;
+    let metaDone = false;
+
+    setOrbState('speaking');
+    document.getElementById('saStatus').textContent = 'AI 说话中…';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const lines = dec.decode(value, { stream: true }).split('\n');
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const raw = line.slice(6).trim();
+        if (!raw) continue;
+        try {
+          const msg = JSON.parse(raw);
+          if (msg.error) throw new Error(msg.error);
+
+          if (msg.done) {
+            metaDone = true;
+            // Flush any remaining TTS buffer (only if not already flushed by meta detection)
+            if (!inMeta && ttsBuffer.trim()) { enqueueTTS(ttsBuffer); ttsBuffer = ''; }
+            // Save full reply to messages
+            if (replyText) speakState.messages.push({ role: 'assistant', content: replyText });
+            if (msg.cueCard) renderCueCard(msg.cueCard);
+            if (msg.tips && msg.tips.length) showSpeakTips(msg.tips);
+
+            if (msg.sessionComplete) {
+              speakState.sessionActive = false;
+              disableMicBtn(true);
+              setOrbState('idle');
+              document.getElementById('saStatus').textContent = '练习完毕，正在评分…';
+              document.getElementById('saScoreBox').style.display = '';
+              requestScore();
+              return;
+            }
+            // Advance Part 2 subPhase
+            if (speakState.mode === 'part2') {
+              if (speakState.subPhase === 'cue_card') speakState.subPhase = 'monologue';
+              else if (speakState.subPhase === 'monologue') speakState.subPhase = 'followup';
+            }
+            break;
+          }
+
+          if (msg.token && !inMeta) {
+            replyText += msg.token;
+            ttsBuffer += msg.token;
+
+            // Detect ---META--- in accumulated text (may span multiple tokens)
+            const metaIdx = replyText.indexOf('---META---');
+            if (metaIdx !== -1) {
+              inMeta = true;
+              // Keep only the clean part before the separator
+              replyText = replyText.slice(0, metaIdx);
+              ttsBuffer = ttsBuffer.slice(0, metaIdx);
+              if (aiDiv) aiDiv.textContent = replyText;
+              // Flush remaining TTS buffer
+              if (ttsBuffer.trim()) { enqueueTTS(ttsBuffer); ttsBuffer = ''; }
+            } else {
+              // Update bubble in real-time
+              if (!aiDiv) {
+                aiDiv = document.createElement('div');
+                aiDiv.className = 'sa-bubble sa-bubble-ai';
+                document.getElementById('saChat').appendChild(aiDiv);
+              }
+              aiDiv.textContent = replyText;
+              document.getElementById('saChat').scrollTop = 99999;
+              // Enqueue complete sentences for TTS
+              const s = extractSentences(ttsBuffer);
+              s.complete.forEach(enqueueTTS);
+              ttsBuffer = s.remaining;
+            }
+          }
+        } catch (e) {
+          if (!metaDone) { document.getElementById('saStatus').textContent = '错误：' + e.message; setOrbState('idle'); disableMicBtn(false); return; }
+        }
+      }
+    }
+
+    // Wait for TTS to finish then re-enable mic
+    const waitTTS = () => new Promise(r => {
+      const check = setInterval(() => { if (!ttsActive && !ttsQueue.length) { clearInterval(check); r(); } }, 200);
+    });
+    await waitTTS();
+    setOrbState('idle');
+    document.getElementById('saStatus').textContent = '轮到您了，点击麦克风发言';
+    disableMicBtn(false);
+
+  } catch (err) {
+    document.getElementById('saStatus').textContent = '错误：' + err.message;
+    setOrbState('idle');
+    disableMicBtn(false);
+  }
+}
+
+// ---- IELTS Scoring ----
+async function requestScore() {
+  try {
+    const data = await apiCall('/api/speaking/score', {
+      method: 'POST',
+      body: JSON.stringify({
+        messages: speakState.messages,
+        mode: speakState.mode,
+        topic: speakState.topic
+      })
+    });
+    showScoreCard(data);
+  } catch (e) {
+    document.getElementById('saScoreBandVal').textContent = '评分失败';
+  }
+}
+
+function showScoreCard(d) {
+  const bandEl = document.getElementById('saScoreBandVal');
+  bandEl.textContent = d.overall || '--';
+
+  const criteria = [
+    { key: 'fc', label: '流利 & 连贯' },
+    { key: 'lr', label: '词汇资源' },
+    { key: 'gr', label: '语法精度' }
+  ];
+  const grid = document.getElementById('spScoreGrid');
+  grid.innerHTML = criteria.map(c => `
+    <div class="sp-sc-criterion">
+      <div class="sp-sc-cr-label">${c.label}</div>
+      <div class="sp-sc-cr-score">${d[c.key]?.score || '--'}</div>
+      <div class="sp-sc-cr-comment">${d[c.key]?.comment || ''}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('spScoreSummary').textContent = d.summary || '';
+
+  const lists = document.getElementById('spScoreLists');
+  const mkList = (title, items) => `
+    <div>
+      <div class="sp-sc-col-title">${title}</div>
+      ${(items || []).map(i => `<div class="sp-sc-list-item">${i}</div>`).join('')}
+    </div>`;
+  lists.innerHTML = mkList('✓ 优势', d.strengths) + mkList('→ 改进', d.improvements);
+}
+
+function disableMicBtn(disabled) {
+  const btn = document.getElementById('saMicBtn');
+  if (btn) btn.disabled = disabled;
+}
+
+function toggleListening() {
+  if (speakState.isListening) {
+    stopListening();
+  } else {
+    startListening();
+  }
+}
+
+function startListening() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    document.getElementById('saTextInputWrap').style.display = '';
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+  recognition.lang = 'en-US';
+  recognition.continuous = false;
+  recognition.interimResults = true;
+  speakState.recognition = recognition;
+  speakState.isListening = true;
+
+  const micBtn = document.getElementById('saMicBtn');
+  micBtn.classList.add('sa-mic-active');
+  document.getElementById('saStatus').textContent = '正在聆听...';
+  const page = document.getElementById('page-speak');
+  if (page) page.classList.add('sp-listening');
+
+  let finalTranscript = '';
+
+  recognition.onresult = (e) => {
+    let interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) {
+        finalTranscript += e.results[i][0].transcript;
+      } else {
+        interim += e.results[i][0].transcript;
+      }
+    }
+    document.getElementById('saStatus').textContent = '识别中：' + (finalTranscript || interim);
+  };
+
+  recognition.onerror = (e) => {
+    console.warn('Speech recognition error:', e.error);
+    stopListening();
+    document.getElementById('saStatus').textContent = '语音识别出错，请重试';
+  };
+
+  recognition.onend = () => {
+    speakState.isListening = false;
+    document.getElementById('saMicBtn').classList.remove('sa-mic-active');
+    if (finalTranscript.trim()) {
+      sendSpeakMessage(finalTranscript.trim());
+    } else {
+      document.getElementById('saStatus').textContent = '未检测到语音，请重试';
+      disableMicBtn(false);
+    }
+  };
+
+  recognition.start();
+}
+
+function stopListening() {
+  if (speakState.recognition) {
+    speakState.recognition.stop();
+    speakState.recognition = null;
+  }
+  speakState.isListening = false;
+  document.getElementById('saMicBtn').classList.remove('sa-mic-active');
+  const page = document.getElementById('page-speak');
+  if (page) page.classList.remove('sp-listening');
+}
+
+
+function appendSpeakBubble(role, text) {
+  const chat = document.getElementById('saChat');
+  const div = document.createElement('div');
+  div.className = `sa-bubble sa-bubble-${role}`;
+  div.textContent = text;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function renderCueCard(card) {
+  const chat = document.getElementById('saChat');
+  const div = document.createElement('div');
+  div.className = 'sa-cue-card';
+  div.innerHTML = `
+    <div class="sa-cue-task">${card.task}</div>
+    <ul class="sa-cue-prompts">
+      ${(card.prompts || []).map(p => `<li>${p}</li>`).join('')}
+    </ul>
+    ${card.followUpHint ? `<div class="sa-cue-hint">💡 ${card.followUpHint}</div>` : ''}
+  `;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function showSpeakTips(tips) {
+  const list = document.getElementById('saTipsList');
+  const empty = list.querySelector('.sa-tips-empty');
+  if (empty) empty.remove();
+  tips.forEach(tip => {
+    const div = document.createElement('div');
+    div.className = 'sa-tip-item';
+    div.textContent = tip;
+    list.appendChild(div);
+  });
+}
+
+function endSpeakSession() {
+  stopListening();
+  stopTTS();
+  window.speechSynthesis && window.speechSynthesis.cancel();
+  clearInterval(speakState.timerInterval);
+  speakState.sessionActive = false;
+  speakState.isSpeaking = false;
+  setOrbState('idle');
+}
+
+function sendSpeakText() {
+  const input = document.getElementById('saTextInput');
+  const text = input.value.trim();
+  if (!text || !speakState.sessionActive) return;
+  input.value = '';
+  sendSpeakMessage(text);
+}
+
+function startSpeakTimer() {
+  speakState.timerSeconds = 0;
+  clearInterval(speakState.timerInterval);
+  speakState.timerInterval = setInterval(() => {
+    speakState.timerSeconds++;
+    const m = String(Math.floor(speakState.timerSeconds / 60)).padStart(2, '0');
+    const s = String(speakState.timerSeconds % 60).padStart(2, '0');
+    document.getElementById('saTimerValue').textContent = `${m}:${s}`;
+  }, 1000);
+}
