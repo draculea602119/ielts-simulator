@@ -1144,10 +1144,10 @@ body.dark-mode .result-band { color: var(--v-teal); }
 }
 .sp-main { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
 
-/* Orb Zone — dark immersive area */
+/* Orb Zone — compact, aligned to top */
 .sp-orb-zone {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  flex: 1; padding: 20px; min-height: 0;
+  display: flex; flex-direction: column; align-items: center;
+  flex-shrink: 0; padding: 24px 20px 20px;
   background: linear-gradient(180deg, var(--bg) 0%, #0d1117 100%);
 }
 .sp-sess-tag {
@@ -1208,7 +1208,7 @@ body.dark-mode .result-band { color: var(--v-teal); }
 .sp-page.sp-thinking .sp-orb-status { color: rgba(255,255,255,0.6); }
 
 /* ---- Transcript ---- */
-.sp-transcript { flex: 0 0 auto; max-height: 36vh; overflow-y: auto; padding: 10px 20px 4px; display: flex; flex-direction: column; gap: 10px; }
+.sp-transcript { flex: 1; overflow-y: auto; padding: 12px 20px 8px; display: flex; flex-direction: column; gap: 10px; background: #0d1117; min-height: 0; }
 .sp-transcript::-webkit-scrollbar { width: 3px; }
 .sp-transcript::-webkit-scrollbar-thumb { background: var(--bd); border-radius: 2px; }
 .sa-bubble { max-width: 78%; padding: 10px 14px; border-radius: var(--r); font-size: 0.85rem; line-height: 1.6; word-wrap: break-word; animation: sp-up 0.22s ease both; font-family: var(--f-body); }
@@ -1220,7 +1220,7 @@ body.dark-mode .result-band { color: var(--v-teal); }
 .sa-cue-hint { margin-top: 8px; font-size: 0.75rem; color: var(--tx-3); font-style: italic; }
 
 /* ---- Controls ---- */
-.sp-ctrl-bar { border-top: 1px solid var(--bd); background: var(--bg); padding: 12px 20px 16px; display: flex; flex-direction: column; align-items: center; gap: 10px; flex-shrink: 0; }
+.sp-ctrl-bar { border-top: 1px solid rgba(255,255,255,0.06); background: #0d1117; padding: 12px 20px 16px; display: flex; flex-direction: column; align-items: center; gap: 10px; flex-shrink: 0; }
 .sp-text-wrap { display: flex; gap: 8px; width: 100%; max-width: 480px; }
 .sp-text-input { flex: 1; padding: 10px 15px; background: var(--surface); border: 1px solid var(--bd); border-radius: var(--r-sm); color: var(--tx); font-family: var(--f-body); font-size: 0.87rem; }
 .sp-text-input:focus { outline: none; border-color: var(--c-speak); }
