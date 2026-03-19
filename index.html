@@ -4,64 +4,84 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IELTS Mock Exam Simulator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="light-mode">
 
 <!-- ========== HOME PAGE ========== -->
 <div id="page-home" class="page active">
-  <header class="site-header">
-    <div class="header-inner">
-      <div class="logo">
-        <span class="logo-icon">📝</span>
-        <span class="logo-text">IELTS Simulator</span>
+
+  <header class="hp-nav">
+    <div class="hp-nav-inner">
+      <div class="hp-logo">
+        <div class="hp-logo-mark">IS</div>
+        <span class="hp-logo-text">IELTS Simulator</span>
       </div>
-      <div class="header-right">
-        <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
-          <span class="theme-icon">🌙</span>
-        </button>
-      </div>
+      <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+        <span class="theme-icon">🌙</span>
+      </button>
     </div>
   </header>
 
-  <main class="home-main">
-    <section class="hero">
-      <h1>雅思模拟考试平台</h1>
-      <p class="hero-sub">IELTS Academic Mock Exam Simulator — 25套完整真题模拟</p>
-      <div class="score-summary" id="scoreSummary" style="display:none">
+  <div class="hp-hero-wrap">
+    <div class="hp-hero-rings" aria-hidden="true"></div>
+    <section class="hp-hero">
+      <span class="hp-eyebrow">25 Mock Tests &nbsp;·&nbsp; Academic &nbsp;·&nbsp; 学术类</span>
+      <h1 class="hp-headline">
+        <span class="hp-hl-top">雅思模拟</span>
+        <span class="hp-hl-bot">考试平台</span>
+      </h1>
+      <p class="hp-sub">听说读写全模拟，精准预测你的雅思成绩</p>
+      <div class="hp-score-tag" id="scoreSummary" style="display:none">
         <span id="summaryText"></span>
       </div>
     </section>
+  </div>
 
-    <section class="section-info">
-      <div class="info-cards">
-        <div class="info-card listening-card">
-          <div class="info-icon">🎧</div>
-          <div class="info-title">Listening</div>
-          <div class="info-detail">4 Sections · 40 Questions · 30 min</div>
+  <main class="hp-main">
+
+    <section class="hp-modules">
+      <div class="hp-mod" data-c="blue">
+        <div class="hp-mod-icon">🎧</div>
+        <div class="hp-mod-info">
+          <div class="hp-mod-name">Listening</div>
+          <div class="hp-mod-detail">4 Sections &middot; 40 Questions &middot; 30 min</div>
         </div>
-        <div class="info-card reading-card">
-          <div class="info-icon">📖</div>
-          <div class="info-title">Reading</div>
-          <div class="info-detail">3 Passages · 40 Questions · 60 min</div>
+      </div>
+      <div class="hp-mod" data-c="green">
+        <div class="hp-mod-icon">📖</div>
+        <div class="hp-mod-info">
+          <div class="hp-mod-name">Reading</div>
+          <div class="hp-mod-detail">3 Passages &middot; 40 Questions &middot; 60 min</div>
         </div>
-        <div class="info-card writing-card">
-          <div class="info-icon">✍️</div>
-          <div class="info-title">Writing</div>
-          <div class="info-detail">Task 1 + Task 2 · 60 min</div>
+      </div>
+      <div class="hp-mod" data-c="amber">
+        <div class="hp-mod-icon">✍️</div>
+        <div class="hp-mod-info">
+          <div class="hp-mod-name">Writing</div>
+          <div class="hp-mod-detail">Task 1 + Task 2 &middot; 60 min</div>
         </div>
-        <div class="info-card speaking-card">
-          <div class="info-icon">🎤</div>
-          <div class="info-title">Speaking</div>
-          <div class="info-detail">3 Parts · 11–14 min</div>
+      </div>
+      <div class="hp-mod" data-c="violet">
+        <div class="hp-mod-icon">🎤</div>
+        <div class="hp-mod-info">
+          <div class="hp-mod-name">Speaking</div>
+          <div class="hp-mod-detail">3 Parts &middot; 11–14 min</div>
         </div>
       </div>
     </section>
 
-    <section class="tests-grid-section">
-      <h2>选择考试</h2>
-      <div class="tests-grid" id="testsGrid"></div>
+    <section class="hp-tests">
+      <div class="hp-tests-hd">
+        <h2 class="hp-tests-title">选择考试</h2>
+        <span class="hp-tests-badge">25 tests</span>
+      </div>
+      <div id="testsGrid"></div>
     </section>
+
   </main>
 </div>
 
