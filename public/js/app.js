@@ -259,6 +259,13 @@ function startTest(testId) {
   renderSpeaking(test);
 }
 
+// ---- Quick Start by Section ----
+function quickStartSection(section) {
+  if (section === 'speaking') { goToSpeakPage(); return; }
+  startTest(TESTS[0].id);
+  if (section !== 'listening') switchSection(section);
+}
+
 // ---- Timer ----
 function startTimer(seconds) {
   clearInterval(state.timerInterval);
@@ -1007,8 +1014,14 @@ async function sendSpeakMessage(text) {
     });
     await waitTTS();
     setOrbState('idle');
-    document.getElementById('saStatus').textContent = '轮到您了，点击麦克风发言';
     disableMicBtn(false);
+    // Auto-start listening after AI finishes speaking
+    setTimeout(() => {
+      if (speakState.sessionActive && !speakState.isListening) {
+        document.getElementById('saStatus').textContent = '正在聆听…';
+        startListening();
+      }
+    }, 600);
 
   } catch (err) {
     document.getElementById('saStatus').textContent = '错误：' + err.message;

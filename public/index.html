@@ -110,33 +110,37 @@
   <main class="hp-main">
 
     <section class="hp-modules">
-      <div class="hp-mod" data-c="blue">
+      <div class="hp-mod" data-c="blue" onclick="quickStartSection('listening')" title="开始听力练习">
         <div class="hp-mod-icon">🎧</div>
         <div class="hp-mod-info">
           <div class="hp-mod-name">Listening</div>
           <div class="hp-mod-detail">4 Sections &middot; 40 Questions &middot; 30 min</div>
         </div>
+        <div class="hp-mod-arrow">→</div>
       </div>
-      <div class="hp-mod" data-c="green">
+      <div class="hp-mod" data-c="green" onclick="quickStartSection('reading')" title="开始阅读练习">
         <div class="hp-mod-icon">📖</div>
         <div class="hp-mod-info">
           <div class="hp-mod-name">Reading</div>
           <div class="hp-mod-detail">3 Passages &middot; 40 Questions &middot; 60 min</div>
         </div>
+        <div class="hp-mod-arrow">→</div>
       </div>
-      <div class="hp-mod" data-c="amber">
+      <div class="hp-mod" data-c="amber" onclick="quickStartSection('writing')" title="开始写作练习">
         <div class="hp-mod-icon">✍️</div>
         <div class="hp-mod-info">
           <div class="hp-mod-name">Writing</div>
           <div class="hp-mod-detail">Task 1 + Task 2 &middot; 60 min</div>
         </div>
+        <div class="hp-mod-arrow">→</div>
       </div>
-      <div class="hp-mod" data-c="violet">
+      <div class="hp-mod" data-c="violet" onclick="quickStartSection('speaking')" title="开始口语AI练习">
         <div class="hp-mod-icon">🎤</div>
         <div class="hp-mod-info">
           <div class="hp-mod-name">Speaking</div>
-          <div class="hp-mod-detail">3 Parts &middot; 11–14 min</div>
+          <div class="hp-mod-detail">AI 对话 &middot; Part 1 / 2 / 3</div>
         </div>
+        <div class="hp-mod-arrow">→</div>
       </div>
     </section>
 
@@ -145,7 +149,7 @@
         <div class="hp-speak-cta-icon">🎤</div>
         <div>
           <div class="hp-speak-cta-title">口语 AI 练习</div>
-          <div class="hp-speak-cta-sub">与 Gemini AI 考官对话，实时语音练习 IELTS 口语 Part 1 / 2 / 3</div>
+          <div class="hp-speak-cta-sub">与 AI 考官实时语音对话，流式回复 + 雅思评分，练习 Part 1 / 2 / 3</div>
         </div>
       </div>
       <button class="hp-speak-cta-btn" onclick="goToSpeakPage()">开始练习 →</button>
