@@ -977,13 +977,15 @@ async function sendSpeakMessage(text) {
             replyText += msg.token;
             ttsBuffer += msg.token;
 
-            // Detect ---META--- in accumulated text (may span multiple tokens)
-            const metaIdx = replyText.indexOf('---META---');
-            if (metaIdx !== -1) {
+            // Detect separator in accumulated text — <<META>> (new) or ---META--- / META--- (old/malformed)
+            const metaMatch = replyText.search(/<<META>>|---META---|META---/);
+            if (metaMatch !== -1) {
               inMeta = true;
-              // Keep only the clean part before the separator
-              replyText = replyText.slice(0, metaIdx);
-              ttsBuffer = ttsBuffer.slice(0, metaIdx);
+              // Walk back past any leading dashes to get the clean cut point
+              let cutAt = metaMatch;
+              while (cutAt > 0 && replyText[cutAt - 1] === '-') cutAt--;
+              replyText = replyText.slice(0, cutAt).trimEnd();
+              ttsBuffer = replyText; // sync ttsBuffer to clean text
               if (aiDiv) aiDiv.textContent = replyText;
               // Flush remaining TTS buffer
               if (ttsBuffer.trim()) { enqueueTTS(ttsBuffer); ttsBuffer = ''; }

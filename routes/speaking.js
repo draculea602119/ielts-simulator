@@ -18,14 +18,14 @@ function requireAuth(req, res, next) {
 
 const FORMAT = `
 RESPONSE FORMAT (CRITICAL — follow exactly):
-Write your spoken reply as plain English text, then on a new line write exactly "---META---", then a JSON object.
+Write your spoken reply as plain English text, then on a new line write exactly "<<META>>", then a JSON object.
 
 Example:
 Hello, welcome to the IELTS speaking test. Tell me about your work.
----META---
+<<META>>
 {"tips":["用完整句子回答","尽量给出具体例子"],"sessionComplete":false,"bandEstimate":null,"cueCard":null}
 
-Rules: No JSON in the spoken part. No prose after ---META---. Tips must be in 简体中文.`;
+Rules: No JSON in the spoken part. No prose after <<META>>. Tips must be in 简体中文. Never use --- dashes as separator.`;
 
 function buildSystemPrompt(mode, topic, subPhase) {
   if (mode === 'part1') {
@@ -109,10 +109,12 @@ router.post('/chat', requireAuth, async (req, res) => {
       }
     }
 
-    // Parse metadata
-    const sep = fullText.indexOf('---META---');
+    // Parse metadata — support <<META>> (new) and ---META--- (old fallback)
+    const sep = fullText.indexOf('<<META>>') !== -1
+      ? fullText.indexOf('<<META>>')
+      : fullText.search(/(?:---)?META---/);
     let meta = { tips: [], sessionComplete: false, bandEstimate: null, cueCard: null };
-    const metaStr = sep !== -1 ? fullText.slice(sep + 10) : fullText;
+    const metaStr = sep !== -1 ? fullText.slice(sep) : fullText;
     const jsonMatch = metaStr.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
       try { meta = { ...meta, ...JSON.parse(jsonMatch[0]) }; } catch {}
