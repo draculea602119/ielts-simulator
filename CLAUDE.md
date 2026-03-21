@@ -11,7 +11,7 @@ npm run dev    # Development with --watch (auto-restarts on file changes)
 
 Requires a `.env` file — copy `.env.example` and fill in:
 - `JWT_SECRET` — long random string (≥64 chars)
-- `GROQ_API_KEY` — used for writing evaluation and speaking AI
+- `GEMINI_API_KEY` — Google Gemini API key, used for writing evaluation and speaking AI
 - `HTTPS_PROXY` / `HTTP_PROXY` — optional, routes all Node.js `fetch` through a proxy via `undici`
 
 The SQLite database (`data/ielts.db`) is auto-created on first start. The `data/` directory is gitignored.
@@ -23,7 +23,7 @@ The SQLite database (`data/ielts.db`) is auto-created on first start. The `data/
 - Three API route files: `routes/auth.js` (JWT register/login/me), `routes/tests.js` (submit + history), `routes/speaking.js` (SSE streaming chat + scoring).
 - `db/database.js` initialises the SQLite connection and creates the `users` and `test_results` tables.
 - Auth middleware is inlined in `routes/tests.js` and `routes/speaking.js` (not a shared middleware module).
-- Groq API (`llama-3.3-70b-versatile`) is the AI backend for both writing evaluation (JSON response) and speaking (SSE token stream with `---META---` delimiter for metadata).
+- Gemini API (`gemini-2.5-flash`) via OpenAI-compatible endpoint is the AI backend for both writing evaluation (JSON response) and speaking (SSE token stream with `<<META>>` delimiter for metadata).
 
 **Frontend** (`public/`):
 - Single-page app — all pages (`auth`, `home`, test modules) are hidden `<div>` elements toggled by `showPage()`.
@@ -31,8 +31,6 @@ The SQLite database (`data/ielts.db`) is auto-created on first start. The `data/
 - Auth tokens and username are persisted to `localStorage` (`ielts_token`, `ielts_user`).
 - Listening audio uses the Web Speech API (TTS), preferring Microsoft Neural voices on Edge.
 - The speaking page uses SSE: the backend streams tokens, then sends a final `{done:true,...meta}` event containing tips, band estimate, and cue card data.
-
-**Legacy files** (root-level `index.html`, `css/`, `js/`): an earlier no-auth version of the frontend. Not served by Express — can be ignored.
 
 ## Key data shapes
 

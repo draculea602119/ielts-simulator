@@ -43,22 +43,24 @@ function buildSystemPrompt(mode, topic, subPhase) {
   return `You are an IELTS examiner doing Part 3 discussion about "${topic}". Ask analytical questions. After 4-5 exchanges set sessionComplete:true with a bandEstimate.${FORMAT}`;
 }
 
-async function callGroqStream(apiKey, messages, res) {
-  const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+async function callAIStream(apiKey, messages, res) {
+  const resp = await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
     body: JSON.stringify({
-      model: 'llama-3.3-70b-versatile',
+      model: 'gemini-2.5-flash',
       messages,
       temperature: 0.75,
-      max_tokens: 600,
+      max_tokens: 8192,
       stream: true
     }),
-    signal: AbortSignal.timeout(30000)
+    signal: AbortSignal.timeout(60000)
   });
 
   if (!resp.ok) {
-    res.write(`data: ${JSON.stringify({ error: `Groq API ${resp.status}` })}\n\n`);
+    const errBody = await resp.text().catch(() => '');
+    console.error('[Speaking] Gemini API error:', resp.status, errBody.substring(0, 500));
+    res.write(`data: ${JSON.stringify({ error: `Gemini API ${resp.status}` })}\n\n`);
     res.end();
     return null;
   }
@@ -68,8 +70,8 @@ async function callGroqStream(apiKey, messages, res) {
 // POST /api/speaking/chat — SSE streaming
 router.post('/chat', requireAuth, async (req, res) => {
   const { messages = [], mode = 'part1', topic = 'General', subPhase = 'cue_card' } = req.body;
-  const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) return res.status(500).json({ error: 'GROQ_API_KEY 未配置' });
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) return res.status(500).json({ error: 'GEMINI_API_KEY 未配置' });
 
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
@@ -77,18 +79,24 @@ router.post('/chat', requireAuth, async (req, res) => {
   res.flushHeaders();
 
   const systemPrompt = buildSystemPrompt(mode, topic, subPhase);
-  const groqMessages = [
+  const userMessages = messages.map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.content }));
+  // Gemini requires at least one user message — add a start prompt if empty
+  if (userMessages.length === 0) {
+    userMessages.push({ role: 'user', content: 'Please begin the speaking test.' });
+  }
+  const aiMessages = [
     { role: 'system', content: systemPrompt },
-    ...messages.map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.content }))
+    ...userMessages
   ];
 
   try {
-    const resp = await callGroqStream(apiKey, groqMessages, res);
+    const resp = await callAIStream(apiKey, aiMessages, res);
     if (!resp) return;
 
     const reader = resp.body.getReader();
     const decoder = new TextDecoder();
     let fullText = '';
+    let sentUpTo = 0; // track how much text we've already streamed to client
 
     while (true) {
       const { done, value } = await reader.read();
@@ -101,25 +109,45 @@ router.post('/chat', requireAuth, async (req, res) => {
         try {
           const json = JSON.parse(raw);
           const token = json.choices?.[0]?.delta?.content || '';
-          if (token) {
-            fullText += token;
-            res.write(`data: ${JSON.stringify({ token })}\n\n`);
-          }
+          if (token) fullText += token;
         } catch {}
+      }
+
+      // Stream only the spoken text (before <<META>>) to client
+      const metaIdx = fullText.search(/<<META>>|---META---|META---/);
+      const safeEnd = metaIdx !== -1 ? metaIdx : fullText.length;
+      if (safeEnd > sentUpTo) {
+        const newText = fullText.slice(sentUpTo, safeEnd);
+        // Send as individual tokens for frontend TTS
+        res.write(`data: ${JSON.stringify({ token: newText })}\n\n`);
+        sentUpTo = safeEnd;
       }
     }
 
-    // Parse metadata — support <<META>> (new) and ---META--- (old fallback)
-    const sep = fullText.indexOf('<<META>>') !== -1
-      ? fullText.indexOf('<<META>>')
-      : fullText.search(/(?:---)?META---/);
+    console.log('[Speaking] fullText:', fullText.substring(0, 300));
+
+    // Parse metadata
+    const sep = fullText.search(/<<META>>|---META---|META---/);
     let meta = { tips: [], sessionComplete: false, bandEstimate: null, cueCard: null };
-    const metaStr = sep !== -1 ? fullText.slice(sep) : fullText;
-    const jsonMatch = metaStr.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      try { meta = { ...meta, ...JSON.parse(jsonMatch[0]) }; } catch {}
+
+    if (sep !== -1) {
+      const metaStr = fullText.slice(sep);
+      const jsonMatch = metaStr.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        try { meta = { ...meta, ...JSON.parse(jsonMatch[0]) }; } catch (e) {
+          console.error('[Speaking] meta parse error:', e.message);
+        }
+      }
+    } else {
+      // Gemini may skip separator — try to find meta JSON at end of text
+      const jsonMatch = fullText.match(/\{[\s\S]*"tips"[\s\S]*\}/);
+      if (jsonMatch) {
+        try { meta = { ...meta, ...JSON.parse(jsonMatch[0]) }; } catch {}
+      }
+      console.warn('[Speaking] no <<META>> separator found');
     }
 
+    console.log('[Speaking] meta:', JSON.stringify(meta));
     res.write(`data: ${JSON.stringify({ done: true, ...meta })}\n\n`);
     res.end();
   } catch (e) {
@@ -132,7 +160,7 @@ router.post('/chat', requireAuth, async (req, res) => {
 // POST /api/speaking/score — IELTS band scoring
 router.post('/score', requireAuth, async (req, res) => {
   const { messages = [], mode = 'part1', topic = 'General' } = req.body;
-  const apiKey = process.env.GROQ_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
 
   const studentLines = messages.filter(m => m.role === 'user').map(m => m.content);
   if (!apiKey || studentLines.length < 1) {
@@ -157,13 +185,13 @@ Respond ONLY with valid JSON:
 }`;
 
   try {
-    const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const resp = await fetch('https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-      body: JSON.stringify({ model: 'llama-3.3-70b-versatile', messages: [{ role: 'user', content: prompt }], temperature: 0.2, max_tokens: 800 }),
-      signal: AbortSignal.timeout(20000)
+      body: JSON.stringify({ model: 'gemini-2.5-flash', messages: [{ role: 'user', content: prompt }], temperature: 0.2, max_tokens: 8192 }),
+      signal: AbortSignal.timeout(60000)
     });
-    if (!resp.ok) throw new Error(`Groq ${resp.status}`);
+    if (!resp.ok) throw new Error(`Gemini ${resp.status}`);
     const data = await resp.json();
     const text = data.choices?.[0]?.message?.content || '';
     const match = text.match(/\{[\s\S]*\}/);

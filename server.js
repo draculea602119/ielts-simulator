@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 
-// Make Node.js built-in fetch use system proxy (for Groq API access behind proxy)
+// Make Node.js built-in fetch use system proxy (for Gemini API access behind proxy)
 const proxyUrl = process.env.HTTPS_PROXY || process.env.https_proxy || process.env.HTTP_PROXY || process.env.http_proxy;
 if (proxyUrl) {
   try {
