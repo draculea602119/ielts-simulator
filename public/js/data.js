@@ -572,7 +572,7 @@ const TESTS = [
       return { description: `Based on ${desc}`, transcript: `This section is based on ${desc} covering topics related to ${t.topic}. The discussion highlights key developments, statistics, and perspectives from leading experts in the field. Students should listen for specific numbers, names, and factual statements that will be tested in the questions below.`, questions: qs };
     });
 
-    // Generate 3 reading passages × 13 questions each
+    // Generate 3 reading passages: P1 × 13, P2 × 13, P3 × 14 = 40 questions
     const passages = [1,2,3].map((pNum) => {
       const qs = [];
       const baseNum = (pNum-1)*13 + 1;
@@ -585,6 +585,10 @@ const TESTS = [
         } else {
           qs.push({ num, type:"fill", question:`The author uses the word '_______ ' in paragraph ${String.fromCharCode(65+Math.floor(q/3))} to indicate importance.`, answer:`significant` });
         }
+      }
+      // Add Q40 to Passage 3 to reach the IELTS standard of 40 reading questions
+      if (pNum === 3) {
+        qs.push({ num:40, type:"mc", question:`According to paragraph E, which combination will be key to future success?`, options:[`A. Military strength and economic isolation`,`B. Institutional flexibility and long-term strategic vision`,`C. Rapid industrialisation and minimal regulation`,`D. Short-term profits and political centralisation`], answer:`B` });
       }
       return {
         title: `${t.topic}: Perspectives and Challenges — Part ${pNum}`,

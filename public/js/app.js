@@ -656,6 +656,10 @@ function renderAIFeedback(t1, t2) {
 }
 
 // ---- Review ----
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
 function showReview(test) {
   const area = document.getElementById('reviewArea');
   area.style.display = 'block';
@@ -674,8 +678,8 @@ function showReview(test) {
       lDiv.innerHTML += `
         <div style="padding:8px 0;border-bottom:1px solid var(--border-light);font-size:0.85rem">
           <strong>Q${q.num}:</strong> ${q.question.replace(/<[^>]+>/g,'').substring(0,80)}...<br>
-          <span style="color:var(--text-muted)">你的答案：</span><span style="color:${isCorrect?'var(--accent-green)':'var(--accent-red)'}">${userAns}</span>
-          ${!isCorrect ? `<span style="color:var(--text-muted)"> · 正确答案：</span><span style="color:var(--accent-green)">${correct}</span>` : ' ✓'}
+          <span style="color:var(--text-muted)">你的答案：</span><span style="color:${isCorrect?'var(--accent-green)':'var(--accent-red)'}">${escapeHtml(userAns)}</span>
+          ${!isCorrect ? `<span style="color:var(--text-muted)"> · 正确答案：</span><span style="color:var(--accent-green)">${escapeHtml(correct)}</span>` : ' ✓'}
         </div>`;
     });
   });
@@ -694,8 +698,8 @@ function showReview(test) {
       rDiv.innerHTML += `
         <div style="padding:8px 0;border-bottom:1px solid var(--border-light);font-size:0.85rem">
           <strong>Q${q.num}:</strong> ${q.question.replace(/<[^>]+>/g,'').substring(0,80)}...<br>
-          <span style="color:var(--text-muted)">你的答案：</span><span style="color:${isCorrect?'var(--accent-green)':'var(--accent-red)'}">${userAns}</span>
-          ${!isCorrect ? `<span style="color:var(--text-muted)"> · 正确答案：</span><span style="color:var(--accent-green)">${correct}</span>` : ' ✓'}
+          <span style="color:var(--text-muted)">你的答案：</span><span style="color:${isCorrect?'var(--accent-green)':'var(--accent-red)'}">${escapeHtml(userAns)}</span>
+          ${!isCorrect ? `<span style="color:var(--text-muted)"> · 正确答案：</span><span style="color:var(--accent-green)">${escapeHtml(correct)}</span>` : ' ✓'}
         </div>`;
     });
   });
