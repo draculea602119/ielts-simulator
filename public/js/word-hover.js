@@ -272,19 +272,26 @@
     const controller = new AbortController();
     pendingRequest = controller;
 
-    try {
-      const resp = await fetch('/api/dict/word/' + encodeURIComponent(word), {
-        signal: controller.signal
-      });
-      if (!resp.ok) return null;
-      return await resp.json();
-    } catch (e) {
-      if (e.name === 'AbortError') return null;
-      console.warn('Word lookup failed:', e.message);
-      return null;
-    } finally {
-      if (pendingRequest === controller) pendingRequest = null;
+    // Try up to 2 times (handles transient Gemini timeouts)
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const resp = await fetch('/api/dict/word/' + encodeURIComponent(word), {
+          signal: controller.signal
+        });
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data && data.definition) return data;
+        }
+        // 404 = not found, don't retry
+        if (resp.status === 404) return null;
+      } catch (e) {
+        if (e.name === 'AbortError') return null;
+        console.warn(`Word lookup attempt ${attempt + 1} failed:`, e.message);
+      }
     }
+
+    if (pendingRequest === controller) pendingRequest = null;
+    return null;
   }
 
   // ---- Word Click Handler ----
