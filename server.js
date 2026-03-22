@@ -21,6 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/tests', require('./routes/tests'));
 app.use('/api/speaking', require('./routes/speaking'));
+app.use('/api/dict', require('./routes/dict'));
 
 // SPA fallback
 app.get('*', (req, res) => {

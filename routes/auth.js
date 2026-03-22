@@ -2,9 +2,9 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../db/database');
+const { JWT_SECRET } = require('../middleware/auth');
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'ielts-dev-secret-change-in-production';
 
 router.post('/register', (req, res) => {
   const { username, password } = req.body || {};
@@ -36,16 +36,10 @@ router.post('/login', (req, res) => {
   res.json({ token, username: user.username });
 });
 
-router.get('/me', (req, res) => {
-  const header = req.headers.authorization || '';
-  const token = header.startsWith('Bearer ') ? header.slice(7) : null;
-  if (!token) return res.status(401).json({ error: 'Unauthorized' });
-  try {
-    const payload = jwt.verify(token, JWT_SECRET);
-    res.json({ id: payload.id, username: payload.username });
-  } catch {
-    res.status(401).json({ error: 'Token 无效或已过期' });
-  }
+const { requireAuth } = require('../middleware/auth');
+
+router.get('/me', requireAuth, (req, res) => {
+  res.json({ id: req.user.id, username: req.user.username });
 });
 
 module.exports = router;

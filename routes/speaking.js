@@ -1,20 +1,7 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
+const { requireAuth } = require('../middleware/auth');
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'ielts-dev-secret-change-in-production';
-
-function requireAuth(req, res, next) {
-  const header = req.headers.authorization || '';
-  const token = header.startsWith('Bearer ') ? header.slice(7) : null;
-  if (!token) return res.status(401).json({ error: 'Unauthorized' });
-  try {
-    req.user = jwt.verify(token, JWT_SECRET);
-    next();
-  } catch {
-    res.status(401).json({ error: 'Token 无效或已过期' });
-  }
-}
 
 const FORMAT = `
 RESPONSE FORMAT (CRITICAL — follow exactly):
@@ -164,7 +151,7 @@ router.post('/score', requireAuth, async (req, res) => {
 
   const studentLines = messages.filter(m => m.role === 'user').map(m => m.content);
   if (!apiKey || studentLines.length < 1) {
-    return res.json({ overall: 5.5, fc: { score: 5.5, comment: '对话内容不足，分数为估算值。' }, lr: { score: 5.5, comment: '请进行更完整的对话。' }, gr: { score: 5.5, comment: '需要更多样本才能评分。' }, summary: '对话时间较短，以下为估算评分。', strengths: ['完成了口语练习'], improvements: ['建议进行更长的对话'] });
+    return res.json({ overall: 5.5, fc: { score: 5.5, comment: '对话内容不足，分数为估算值。' }, lr: { score: 5.5, comment: '请进行更完整的对话。' }, gr: { score: 5.5, comment: '需要更多样本才能评分。' }, pr: { score: 5.5, comment: '需要语音输入才能评估发音。' }, summary: '对话时间较短，以下为估算评分。', strengths: ['完成了口语练习'], improvements: ['建议进行更长的对话'] });
   }
 
   const prompt = `You are an IELTS examiner. Evaluate this student's Part ${mode.replace('part', '')} speaking about "${topic}".
@@ -172,13 +159,14 @@ router.post('/score', requireAuth, async (req, res) => {
 Student's responses:
 ${studentLines.map((t, i) => `${i + 1}. ${t}`).join('\n')}
 
-Score on 3 criteria (0.5 increments, 1-9). All comments in 简体中文.
+Score on 4 IELTS speaking criteria (0.5 increments, 1-9). All comments in 简体中文.
 Respond ONLY with valid JSON:
 {
   "overall": <band>,
   "fc": {"score": <band>, "comment": "<2 sentences in Chinese>"},
   "lr": {"score": <band>, "comment": "<2 sentences in Chinese>"},
   "gr": {"score": <band>, "comment": "<2 sentences in Chinese>"},
+  "pr": {"score": <band>, "comment": "<2 sentences in Chinese>"},
   "summary": "<3 sentences Chinese feedback>",
   "strengths": ["<Chinese strength 1>", "<Chinese strength 2>"],
   "improvements": ["<Chinese improvement 1>", "<Chinese improvement 2>"]
@@ -199,7 +187,7 @@ Respond ONLY with valid JSON:
     throw new Error('No JSON');
   } catch (e) {
     console.error('Score error:', e.message);
-    res.json({ overall: 5.5, fc: { score: 5.5, comment: '评分服务暂时不可用。' }, lr: { score: 5.5, comment: '评分服务暂时不可用。' }, gr: { score: 5.5, comment: '评分服务暂时不可用。' }, summary: '评分服务遇到错误，分数为估算值，请稍后重试。', strengths: ['完成了对话练习'], improvements: ['请稍后重新评分'] });
+    res.json({ overall: 5.5, fc: { score: 5.5, comment: '评分服务暂时不可用。' }, lr: { score: 5.5, comment: '评分服务暂时不可用。' }, gr: { score: 5.5, comment: '评分服务暂时不可用。' }, pr: { score: 5.5, comment: '评分服务暂时不可用。' }, summary: '评分服务遇到错误，分数为估算值，请稍后重试。', strengths: ['完成了对话练习'], improvements: ['请稍后重新评分'] });
   }
 });
 

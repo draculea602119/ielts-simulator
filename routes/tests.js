@@ -1,22 +1,8 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
 const db = require('../db/database');
+const { requireAuth } = require('../middleware/auth');
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'ielts-dev-secret-change-in-production';
-
-// Auth middleware
-function requireAuth(req, res, next) {
-  const header = req.headers.authorization || '';
-  const token = header.startsWith('Bearer ') ? header.slice(7) : null;
-  if (!token) return res.status(401).json({ error: 'Unauthorized' });
-  try {
-    req.user = jwt.verify(token, JWT_SECRET);
-    next();
-  } catch {
-    res.status(401).json({ error: 'Token 无效或已过期' });
-  }
-}
 
 // Band score from raw score
 function rawToBand(score, total) {

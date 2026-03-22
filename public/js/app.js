@@ -133,7 +133,7 @@ async function handleLogin(e) {
   } catch (err) {
     errEl.textContent = err.message;
   } finally {
-    btn.disabled = false; btn.textContent = '登录';
+    btn.disabled = false; btn.textContent = '登录账号';
   }
 }
 
@@ -162,7 +162,7 @@ async function handleRegister(e) {
   } catch (err) {
     errEl.textContent = err.message;
   } finally {
-    btn.disabled = false; btn.textContent = '注册账号';
+    btn.disabled = false; btn.textContent = '创建账号';
   }
 }
 
@@ -257,6 +257,13 @@ function startTest(testId) {
   renderReading(test);
   renderWriting(test);
   renderSpeaking(test);
+  // Enable click-to-lookup on all exam text
+  if (window.WordHover) {
+    WordHover.processTextNodes(document.getElementById('listening-content'));
+    WordHover.processTextNodes(document.getElementById('reading-content'));
+    WordHover.processTextNodes(document.getElementById('writing-content'));
+    WordHover.processTextNodes(document.getElementById('speaking-content'));
+  }
 }
 
 // ---- Quick Start by Section ----
@@ -333,6 +340,10 @@ function renderListening(test) {
 function toggleTranscript(si) {
   const el = document.getElementById('transcript-' + si);
   el.style.display = el.style.display === 'none' ? 'block' : 'none';
+  // Process text for word hover when transcript is first shown
+  if (el.style.display === 'block' && window.WordHover) {
+    WordHover.processTextNodes(el);
+  }
 }
 function toggleAnswers(id) {
   const el = document.getElementById(id);
@@ -716,8 +727,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('themeToggle2').onclick = toggleTheme;
   document.getElementById('themeToggle3').onclick = toggleTheme;
   document.getElementById('themeToggle4').onclick = toggleTheme;
+  if (document.getElementById('themeToggle5')) document.getElementById('themeToggle5').onclick = toggleTheme;
 
   document.getElementById('backBtn').onclick = () => {
+    const hasAnswers = Object.keys(state.answers).length > 0 ||
+      state.writingAnswers.task1 || state.writingAnswers.task2 ||
+      Object.values(state.speakingNotes).some(v => v);
+    if (hasAnswers && !confirm('你有未提交的答案，确定要离开吗？')) return;
     clearInterval(state.timerInterval);
     stopAudio();
     showPage('home');
@@ -758,6 +774,10 @@ const speakState = {
 function goToSpeakPage() {
   showPage('speak');
   initSpeakPage();
+}
+
+function goToNovelPage() {
+  if (window.Novel) Novel.showNovelPage();
 }
 
 function leaveSpeakPage() {
@@ -957,6 +977,8 @@ async function sendSpeakMessage(text) {
             if (!inMeta && ttsBuffer.trim()) { enqueueTTS(ttsBuffer); ttsBuffer = ''; }
             // Save full reply to messages
             if (replyText) speakState.messages.push({ role: 'assistant', content: replyText });
+            // Enable word hover on completed AI bubble
+            if (aiDiv && window.WordHover) WordHover.processTextNodes(aiDiv);
             if (msg.cueCard) renderCueCard(msg.cueCard);
             if (msg.tips && msg.tips.length) showSpeakTips(msg.tips);
 
@@ -1060,7 +1082,8 @@ function showScoreCard(d) {
   const criteria = [
     { key: 'fc', label: '流利 & 连贯' },
     { key: 'lr', label: '词汇资源' },
-    { key: 'gr', label: '语法精度' }
+    { key: 'gr', label: '语法精度' },
+    { key: 'pr', label: '发音' }
   ];
   const grid = document.getElementById('spScoreGrid');
   grid.innerHTML = criteria.map(c => `
@@ -1168,6 +1191,7 @@ function appendSpeakBubble(role, text) {
   div.textContent = text;
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
+  if (window.WordHover) WordHover.processTextNodes(div);
 }
 
 function renderCueCard(card) {
@@ -1183,6 +1207,7 @@ function renderCueCard(card) {
   `;
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
+  if (window.WordHover) WordHover.processTextNodes(div);
 }
 
 function showSpeakTips(tips) {
