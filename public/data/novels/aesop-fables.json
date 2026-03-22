@@ -1,0 +1,228 @@
+{
+  "id": "aesop-fables",
+  "title": "Aesop's Fables",
+  "author": "Aesop (retold)",
+  "difficulty": "beginner",
+  "ieltsLevel": "4-5",
+  "description": "A timeless collection of short moral stories featuring animals and everyday situations.",
+  "descriptionZh": "伊索寓言精选，以动物和日常情景为主角，通过简短故事传达智慧。",
+  "totalChapters": 15,
+  "chapters": [
+    {
+      "id": 1,
+      "title": "The Tortoise and the Hare",
+      "paragraphs": [
+        "A Hare was once boasting about how fast he could run. He laughed at the Tortoise for being so slow. \"Do you ever get anywhere?\" he asked with a mocking grin.",
+        "\"Yes,\" replied the Tortoise, \"and I get there sooner than you think. I'll run you a race and prove it.\"",
+        "The Hare was greatly amused at the idea of running a race with the Tortoise, but for the fun of the thing he agreed. The Fox was asked to be the judge, and he set the course and started the runners off.",
+        "The Hare was soon far out of sight, and to make the Tortoise feel how ridiculous it was for him to try a race with a Hare, he lay down beside the road to have a nap. \"I can catch up easily,\" he thought.",
+        "The Tortoise meanwhile kept going slowly but steadily, and after a time, passed the place where the Hare was sleeping. But the Hare slept on very peacefully.",
+        "When at last he did wake up, the Hare ran as fast as he could. But it was too late. The Tortoise was already at the finish line, waiting with a calm smile on his face."
+      ],
+      "moral": "Slow and steady wins the race.",
+      "moralZh": "稳扎稳打才能赢得比赛。坚持不懈比天赋更重要。",
+      "wordCount": 195
+    },
+    {
+      "id": 2,
+      "title": "The Boy Who Cried Wolf",
+      "paragraphs": [
+        "There was once a young shepherd boy who tended his sheep at the foot of a mountain near a dark forest. It was lonely for him all day, so he thought of a plan to get a little company and have some excitement.",
+        "He rushed down towards the village calling out \"Wolf! Wolf!\" The villagers came running out to help him, but when they arrived at the top of the hill, they found no wolf. The boy laughed at the sight of their angry faces.",
+        "A few days later, the boy tried the same trick again. Again the villagers came rushing to help, and again they found no wolf. They were very angry this time.",
+        "Then one evening, a real wolf did come out of the forest and began to chase the sheep. The boy ran towards the village shouting \"Wolf! Wolf!\" as loudly as he could.",
+        "But this time the villagers did not believe him. \"He is trying to fool us again,\" they said. And nobody came to help the boy.",
+        "The wolf attacked the flock and scattered it, and the boy learned a bitter lesson that day."
+      ],
+      "moral": "Nobody believes a liar, even when he is telling the truth.",
+      "moralZh": "没有人会相信一个说谎者，即使他说的是实话。",
+      "wordCount": 193
+    },
+    {
+      "id": 3,
+      "title": "The Fox and the Grapes",
+      "paragraphs": [
+        "One hot summer's day, a Fox was walking through an orchard. He stopped beneath a tall vine, where a bunch of ripe purple grapes hung high above his head.",
+        "\"Just the thing to cool me down!\" he said. He stood on his back legs and reached up, but the grapes were just out of reach.",
+        "He took a few steps back and made a running jump at them, but still he could not reach them. Again and again he tried, but every time he failed.",
+        "At last the Fox turned away. \"Those grapes are probably sour anyway,\" he said with a toss of his head. \"I don't want sour grapes.\"",
+        "And so he walked away, pretending he did not care at all."
+      ],
+      "moral": "It is easy to despise what you cannot get.",
+      "moralZh": "人们往往会贬低自己得不到的东西。吃不到葡萄说葡萄酸。",
+      "wordCount": 131
+    },
+    {
+      "id": 4,
+      "title": "The Ant and the Grasshopper",
+      "paragraphs": [
+        "In a field one summer's day, a Grasshopper was hopping about, singing and dancing in the sunshine. An Ant passed by, carrying a heavy grain of corn to his nest.",
+        "\"Why not come and sing with me,\" said the Grasshopper, \"instead of working so hard?\"",
+        "\"I am storing food for the winter,\" said the Ant. \"I suggest you do the same.\"",
+        "\"Why bother about winter?\" said the Grasshopper. \"We have plenty of food right now.\" The Ant shook his head and continued his work.",
+        "When winter came, the Grasshopper had no food and was very hungry. He saw the ants eating the corn they had stored during the summer.",
+        "The Grasshopper finally understood. It is best to prepare for the days of need while you still have the chance."
+      ],
+      "moral": "It is best to prepare for the days of necessity.",
+      "moralZh": "未雨绸缪是最好的策略。不要只贪图眼前的享乐而忽视未来。",
+      "wordCount": 153
+    },
+    {
+      "id": 5,
+      "title": "The Lion and the Mouse",
+      "paragraphs": [
+        "A Lion was sleeping peacefully in his den when a little Mouse ran across his paw and woke him up. The great beast caught the tiny creature in his huge paw.",
+        "\"Please let me go!\" cried the Mouse. \"One day I might be able to help you!\"",
+        "The Lion laughed at the idea that such a small animal could ever help him, but he was in a good mood, so he let the Mouse go.",
+        "Some time later, the Lion was caught in a hunter's net. He roared and struggled, but the ropes were too strong. He could not escape.",
+        "The little Mouse heard the Lion's roars and came running. She began to gnaw at the ropes with her sharp teeth, and before long she had set the Lion free.",
+        "\"You laughed at me once,\" said the Mouse. \"You thought I was too small to help you. Now you see that even a little Mouse can help a great Lion.\""
+      ],
+      "moral": "No act of kindness is ever wasted, no matter how small.",
+      "moralZh": "善良的行为永远不会白费，无论多么微小。",
+      "wordCount": 175
+    },
+    {
+      "id": 6,
+      "title": "The Crow and the Pitcher",
+      "paragraphs": [
+        "A Crow was half dead with thirst when he came upon a pitcher that had once been full of water. But when the Crow put his beak into the pitcher, he found that only a little water was left at the bottom.",
+        "He could not reach far enough down to get at it. He tried and tried, but at last he had to give up.",
+        "Then an idea came to him. He picked up a small stone and dropped it into the pitcher. Then another stone, and another, and another.",
+        "Slowly the water rose higher and higher, until at last it was near enough to the top for the Crow to drink.",
+        "The clever bird drank deeply and flew away, refreshed and happy."
+      ],
+      "moral": "Necessity is the mother of invention.",
+      "moralZh": "需要是发明之母。遇到困难时，用智慧去解决。",
+      "wordCount": 137
+    },
+    {
+      "id": 7,
+      "title": "The Dog and the Shadow",
+      "paragraphs": [
+        "A Dog was crossing a bridge over a stream with a piece of meat in his mouth. He looked down and saw his own reflection in the water below.",
+        "He thought it was another dog with a bigger piece of meat. He wanted that piece too.",
+        "So he snapped at the reflection in the water. But as he opened his mouth, the piece of meat fell out and dropped into the stream, where it was carried away by the current.",
+        "The Dog watched helplessly as his dinner disappeared. He had tried to grab the shadow of his meat and lost the real thing.",
+        "He walked home that evening hungry and sad, having learned a painful lesson about greed."
+      ],
+      "moral": "Beware lest you lose the substance by grasping at the shadow.",
+      "moralZh": "不要因为贪图虚幻的东西而失去已经拥有的。贪心不足蛇吞象。",
+      "wordCount": 132
+    },
+    {
+      "id": 8,
+      "title": "The Goose That Laid the Golden Eggs",
+      "paragraphs": [
+        "A farmer and his wife had a very special goose. Every day, the goose laid one egg made of pure gold.",
+        "At first they were overjoyed. They sold each golden egg and grew richer day by day. But soon they became impatient.",
+        "\"Why should we wait for just one egg a day?\" said the farmer. \"If we cut the goose open, we can get all the gold at once!\"",
+        "His wife agreed, and so they killed the goose. But when they cut it open, they found it was just like any other goose. There was no gold inside.",
+        "They had destroyed the wonderful goose and would never get another golden egg. Their greed had ruined everything."
+      ],
+      "moral": "Those who have plenty want more and so lose all they have.",
+      "moralZh": "贪得无厌的人最终会失去一切。知足常乐，不要杀鸡取卵。",
+      "wordCount": 137
+    },
+    {
+      "id": 9,
+      "title": "The North Wind and the Sun",
+      "paragraphs": [
+        "The North Wind and the Sun had a quarrel about which of them was stronger. They decided to settle the argument with a contest.",
+        "They agreed that the one who could make a traveller take off his cloak would be declared the winner.",
+        "The North Wind went first. He blew as hard as he could. But the harder he blew, the more tightly the traveller wrapped his cloak around himself.",
+        "Then it was the Sun's turn. The Sun began to shine warmly. The traveller felt the gentle warmth and soon unbuttoned his cloak. As the Sun grew warmer, the traveller took off his cloak entirely and sat down in the shade to rest.",
+        "The Sun had won. The North Wind had to admit that gentleness and warmth were stronger than force and fury."
+      ],
+      "moral": "Gentleness and kind persuasion win where force and bluster fail.",
+      "moralZh": "温和和善意的说服比强硬和暴力更有效。以柔克刚。",
+      "wordCount": 153
+    },
+    {
+      "id": 10,
+      "title": "The Fox and the Crow",
+      "paragraphs": [
+        "A Crow had stolen a piece of cheese and flew up to a high branch to eat it in peace. A Fox saw her and wanted the cheese for himself.",
+        "\"Good morning, beautiful Crow!\" said the Fox, looking up. \"How lovely your feathers are! I am sure your voice must be just as beautiful. Won't you sing a song for me?\"",
+        "The Crow was very flattered. She lifted her head and opened her beak to sing. But the moment she opened her mouth, the cheese fell down to the ground.",
+        "The Fox quickly snatched it up. \"Thank you, my dear Crow,\" he said with a grin. \"That was all I wanted. In exchange for your cheese, I will give you a piece of advice: never trust a flatterer.\""
+      ],
+      "moral": "Beware of flatterers; they have selfish motives.",
+      "moralZh": "警惕阿谀奉承之人，他们别有用心。",
+      "wordCount": 142
+    },
+    {
+      "id": 11,
+      "title": "The Wolf in Sheep's Clothing",
+      "paragraphs": [
+        "A Wolf found it very difficult to get any sheep to eat because the shepherd and his dogs kept careful watch over the flock.",
+        "One day the Wolf found the skin of a sheep that had died. He put it on over his own fur and walked among the sheep.",
+        "The lambs followed him about, thinking he was their mother. Even the shepherd was fooled.",
+        "That evening, the shepherd shut the Wolf in the fold with the rest of the sheep. He planned to eat well that night.",
+        "But that same evening, the shepherd wanted some mutton for his supper. He went into the fold and picked up the first animal he found. It was the Wolf.",
+        "The Wolf's trick had brought about his own end."
+      ],
+      "moral": "Appearances can be deceiving; deceit often leads to one's own downfall.",
+      "moralZh": "外表可能具有欺骗性；欺骗往往导致自身的毁灭。",
+      "wordCount": 137
+    },
+    {
+      "id": 12,
+      "title": "The City Mouse and the Country Mouse",
+      "paragraphs": [
+        "A Country Mouse invited his cousin from the city to visit him. The City Mouse arrived and they sat down to a dinner of barley and grain.",
+        "\"My dear cousin,\" said the City Mouse, \"how can you eat such plain food? Come with me to the city, and I will show you how to live!\"",
+        "So the Country Mouse went to the city. His cousin took him to a grand house where there were fine foods on the dining table: cheese, fruit, cake, and bread.",
+        "But just as they began to eat, a great cat came into the room. The two mice had to run and hide in a tiny hole in the wall. They trembled with fear.",
+        "When the cat went away, the Country Mouse said goodbye. \"You may have fine food here, but I prefer my simple barley in peace. A simple life with safety is better than a rich life full of danger.\""
+      ],
+      "moral": "A simple life in peace is better than a rich life in fear.",
+      "moralZh": "平安简朴的生活胜过充满危险的富裕生活。",
+      "wordCount": 172
+    },
+    {
+      "id": 13,
+      "title": "The Milkmaid and Her Pail",
+      "paragraphs": [
+        "A Milkmaid was walking to market with a pail of milk balanced on her head. As she walked, she began to dream about what she would do with the money from selling the milk.",
+        "\"I will buy some chickens,\" she said to herself. \"The chickens will lay eggs, and I will sell the eggs and buy a beautiful new dress.\"",
+        "\"In my new dress, I will go to the fair. All the young men will look at me and want to dance with me. But I will toss my head and refuse them all.\"",
+        "As she said this, she actually tossed her head. The pail fell off, and all the milk spilled onto the ground.",
+        "She went home with nothing. Her mother shook her head and said, \"My dear, do not count your chickens before they are hatched.\""
+      ],
+      "moral": "Do not count your chickens before they are hatched.",
+      "moralZh": "不要在事情成功之前就开始计划如何花费成果。不要过早乐观。",
+      "wordCount": 160
+    },
+    {
+      "id": 14,
+      "title": "The Bundle of Sticks",
+      "paragraphs": [
+        "An old man had three sons who were always quarrelling with each other. He tried many times to make them see how foolish their fighting was, but they would not listen.",
+        "One day the father called his sons to him. He showed them a bundle of sticks tied tightly together. \"Try to break this bundle,\" he said.",
+        "Each son tried his hardest, but none of them could break the bundle. It was too strong.",
+        "Then the father untied the bundle and gave each son a single stick. \"Now try,\" he said.",
+        "Each son broke his stick easily, snapping it in two without any effort.",
+        "\"You see, my sons,\" said the father. \"Together you are strong, like the bundle. But if you are divided and fight among yourselves, you will be broken as easily as a single stick. Unity is strength.\""
+      ],
+      "moral": "Unity is strength; division leads to weakness.",
+      "moralZh": "团结就是力量；分裂导致软弱。兄弟齐心，其利断金。",
+      "wordCount": 152
+    },
+    {
+      "id": 15,
+      "title": "The Shepherd Boy and the Wolf",
+      "paragraphs": [
+        "A Shepherd Boy was watching over his flock on the hillside. He was bored and lonely, and he wanted some excitement.",
+        "So he cried out at the top of his voice, \"Wolf! Wolf! The Wolf is chasing the sheep!\" The villagers came running with sticks and pitchforks, ready to fight the wolf.",
+        "But when they got there, they found no wolf. The boy just laughed at them.",
+        "He played the same trick several more times. Each time the villagers came, and each time there was no wolf. They grew tired of the boy's game.",
+        "Then one day, a real wolf appeared. The boy cried, \"Wolf! Wolf!\" But this time, no one came. The villagers thought he was lying again.",
+        "The wolf attacked the flock, and the boy could do nothing but watch. He had learned that trust, once broken, is very hard to repair."
+      ],
+      "moral": "A liar will not be believed, even when he speaks the truth.",
+      "moralZh": "一个说谎的人即使说真话也不会被相信。诚信一旦失去，很难挽回。",
+      "wordCount": 167
+    }
+  ]
+}

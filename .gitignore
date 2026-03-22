@@ -14,4 +14,4 @@ npm-debug.log*
 .env
 
 # SQLite database (generated at runtime)
-data/
+/data/

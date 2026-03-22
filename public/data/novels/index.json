@@ -1,0 +1,35 @@
+[
+  {
+    "id": "aesop-fables",
+    "title": "Aesop's Fables",
+    "author": "Aesop",
+    "emoji": "🦊",
+    "difficulty": "beginner",
+    "ieltsLevel": "4-5",
+    "description": "A timeless collection of short moral stories featuring animals and everyday situations.",
+    "descriptionZh": "伊索寓言精选 15 篇，以动物和日常情景为主角，通过简短故事传达智慧。",
+    "totalChapters": 15
+  },
+  {
+    "id": "happy-prince",
+    "title": "The Happy Prince and Other Tales",
+    "author": "Oscar Wilde",
+    "emoji": "👑",
+    "difficulty": "beginner",
+    "ieltsLevel": "4.5-5.5",
+    "description": "Beautiful fairy tales blending fantasy with social commentary on love and sacrifice.",
+    "descriptionZh": "王尔德经典童话 3 篇，融合幻想与社会评论，探索爱与牺牲的主题。",
+    "totalChapters": 3
+  },
+  {
+    "id": "little-prince",
+    "title": "The Little Prince",
+    "author": "Antoine de Saint-Exupéry",
+    "emoji": "🌹",
+    "difficulty": "beginner",
+    "ieltsLevel": "4-5",
+    "description": "A philosophical tale about a young prince traveling from planet to planet.",
+    "descriptionZh": "小王子的星际旅行，一个关于生命、爱与人性的哲理故事。前 10 章。",
+    "totalChapters": 10
+  }
+]
