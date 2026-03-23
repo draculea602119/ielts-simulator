@@ -250,7 +250,10 @@ function startTest(testId) {
   state.writingAnswers = { task1: '', task2: '' };
   state.speakingNotes = {};
   document.getElementById('examTitle').textContent = `Test ${test.id} — ${test.topic}`;
+  submitting = false;
   showPage('exam');
+  document.getElementById('submitBtn').disabled = false;
+  window.onbeforeunload = () => '你有未提交的答案，确定要离开吗？';
   switchSection('listening');
   startTimer(30 * 60);
   renderListening(test);
@@ -539,7 +542,11 @@ function scoreLocalLR() {
 }
 
 // ---- Submit Exam ----
+let submitting = false;
 async function submitExam() {
+  if (submitting) return;
+  submitting = true;
+  document.getElementById('submitBtn').disabled = true;
   clearInterval(state.timerInterval);
   stopAudio();
 
@@ -569,9 +576,13 @@ async function submitExam() {
       })
     });
     hideLoading();
+    submitting = false;
+    window.onbeforeunload = null;
     showResult(result);
   } catch (err) {
     hideLoading();
+    submitting = false;
+    document.getElementById('submitBtn').disabled = false;
     alert('提交失败：' + err.message + '\n请检查网络连接后重试。');
   }
 }
@@ -640,7 +651,7 @@ function renderAIFeedback(t1, t2) {
     return `
       <div class="ai-task-card">
         <div class="ai-task-header">
-          <span>${label}</span>
+          <span>${escapeHtml(label)}</span>
           <span class="ai-band-badge">Band ${fb.band}</span>
         </div>
         <div class="ai-criteria">
@@ -650,14 +661,14 @@ function renderAIFeedback(t1, t2) {
                 <span class="ai-criterion-name">${c.name}</span>
                 <span class="ai-criterion-score">${fb[c.key].score}</span>
               </div>
-              <div class="ai-criterion-comment">${fb[c.key].comment}</div>
+              <div class="ai-criterion-comment">${escapeHtml(fb[c.key].comment)}</div>
             </div>` : '').join('')}
         </div>
-        ${fb.overall_feedback ? `<div class="ai-overall"><strong>总体评价：</strong>${fb.overall_feedback}</div>` : ''}
+        ${fb.overall_feedback ? `<div class="ai-overall"><strong>总体评价：</strong>${escapeHtml(fb.overall_feedback)}</div>` : ''}
         ${suggestions.length ? `
           <div class="ai-suggestions">
             <strong>改进建议：</strong>
-            <ul>${suggestions.map(s => `<li>${s.trim()}</li>`).join('')}</ul>
+            <ul>${suggestions.map(s => `<li>${escapeHtml(s.trim())}</li>`).join('')}</ul>
           </div>` : ''}
       </div>
     `;
@@ -676,42 +687,36 @@ function showReview(test) {
   area.style.display = 'block';
   area.innerHTML = '';
 
+  function buildReviewHtml(title, sections) {
+    let html = `<h3>${title}</h3>`;
+    sections.forEach(({ questions, prefix }) => {
+      questions.forEach((q, qi) => {
+        const key = `${prefix}_${qi}`;
+        const userAns = state.answers[key] || '（未作答）';
+        const correct = q.answer;
+        const isCorrect = userAns.toLowerCase().trim() === correct.toLowerCase().trim() ||
+          (q.type === 'mc' && userAns.toLowerCase().trim() === correct.toLowerCase().charAt(0));
+        html += `
+          <div style="padding:8px 0;border-bottom:1px solid var(--border-light);font-size:0.85rem">
+            <strong>Q${q.num}:</strong> ${q.question.replace(/<[^>]+>/g,'').substring(0,80)}...<br>
+            <span style="color:var(--text-muted)">你的答案：</span><span style="color:${isCorrect?'var(--accent-green)':'var(--accent-red)'}">${escapeHtml(userAns)}</span>
+            ${!isCorrect ? `<span style="color:var(--text-muted)"> · 正确答案：</span><span style="color:var(--accent-green)">${escapeHtml(correct)}</span>` : ' ✓'}
+          </div>`;
+      });
+    });
+    return html;
+  }
+
+  const lSections = test.listening.sections.map((sec, si) => ({ questions: sec.questions, prefix: `L${si}` }));
   const lDiv = document.createElement('div');
   lDiv.className = 'review-section';
-  lDiv.innerHTML = '<h3>🎧 Listening — 答案解析</h3>';
-  test.listening.sections.forEach((sec, si) => {
-    sec.questions.forEach((q, qi) => {
-      const key = `L${si}_${qi}`;
-      const userAns = state.answers[key] || '（未作答）';
-      const correct = q.answer;
-      const isCorrect = userAns.toLowerCase().trim() === correct.toLowerCase().trim() ||
-        (q.type === 'mc' && userAns.toLowerCase().trim() === correct.toLowerCase().charAt(0));
-      lDiv.innerHTML += `
-        <div style="padding:8px 0;border-bottom:1px solid var(--border-light);font-size:0.85rem">
-          <strong>Q${q.num}:</strong> ${q.question.replace(/<[^>]+>/g,'').substring(0,80)}...<br>
-          <span style="color:var(--text-muted)">你的答案：</span><span style="color:${isCorrect?'var(--accent-green)':'var(--accent-red)'}">${escapeHtml(userAns)}</span>
-          ${!isCorrect ? `<span style="color:var(--text-muted)"> · 正确答案：</span><span style="color:var(--accent-green)">${escapeHtml(correct)}</span>` : ' ✓'}
-        </div>`;
-    });
-  });
+  lDiv.innerHTML = buildReviewHtml('🎧 Listening — 答案解析', lSections);
   area.appendChild(lDiv);
 
+  const rSections = test.reading.passages.map((p, pi) => ({ questions: p.questions, prefix: `R${pi}` }));
   const rDiv = document.createElement('div');
   rDiv.className = 'review-section';
-  rDiv.innerHTML = '<h3>📖 Reading — 答案解析</h3>';
-  test.reading.passages.forEach((passage, pi) => {
-    passage.questions.forEach((q, qi) => {
-      const key = `R${pi}_${qi}`;
-      const userAns = state.answers[key] || '（未作答）';
-      const correct = q.answer;
-      const isCorrect = userAns.toLowerCase().trim() === correct.toLowerCase().trim() ||
-        (q.type === 'mc' && userAns.toLowerCase().trim() === correct.toLowerCase().charAt(0));
-      rDiv.innerHTML += `
-        <div style="padding:8px 0;border-bottom:1px solid var(--border-light);font-size:0.85rem">
-          <strong>Q${q.num}:</strong> ${q.question.replace(/<[^>]+>/g,'').substring(0,80)}...<br>
-          <span style="color:var(--text-muted)">你的答案：</span><span style="color:${isCorrect?'var(--accent-green)':'var(--accent-red)'}">${escapeHtml(userAns)}</span>
-          ${!isCorrect ? `<span style="color:var(--text-muted)"> · 正确答案：</span><span style="color:var(--accent-green)">${escapeHtml(correct)}</span>` : ' ✓'}
-        </div>`;
+  rDiv.innerHTML = buildReviewHtml('📖 Reading — 答案解析', rSections);
     });
   });
   area.appendChild(rDiv);
@@ -734,6 +739,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       state.writingAnswers.task1 || state.writingAnswers.task2 ||
       Object.values(state.speakingNotes).some(v => v);
     if (hasAnswers && !confirm('你有未提交的答案，确定要离开吗？')) return;
+    window.onbeforeunload = null;
     clearInterval(state.timerInterval);
     stopAudio();
     showPage('home');
@@ -1090,7 +1096,7 @@ function showScoreCard(d) {
     <div class="sp-sc-criterion">
       <div class="sp-sc-cr-label">${c.label}</div>
       <div class="sp-sc-cr-score">${d[c.key]?.score || '--'}</div>
-      <div class="sp-sc-cr-comment">${d[c.key]?.comment || ''}</div>
+      <div class="sp-sc-cr-comment">${escapeHtml(d[c.key]?.comment || '')}</div>
     </div>
   `).join('');
 
@@ -1100,7 +1106,7 @@ function showScoreCard(d) {
   const mkList = (title, items) => `
     <div>
       <div class="sp-sc-col-title">${title}</div>
-      ${(items || []).map(i => `<div class="sp-sc-list-item">${i}</div>`).join('')}
+      ${(items || []).map(i => `<div class="sp-sc-list-item">${escapeHtml(i)}</div>`).join('')}
     </div>`;
   lists.innerHTML = mkList('✓ 优势', d.strengths) + mkList('→ 改进', d.improvements);
 }
@@ -1199,11 +1205,11 @@ function renderCueCard(card) {
   const div = document.createElement('div');
   div.className = 'sa-cue-card';
   div.innerHTML = `
-    <div class="sa-cue-task">${card.task}</div>
+    <div class="sa-cue-task">${escapeHtml(card.task || '')}</div>
     <ul class="sa-cue-prompts">
-      ${(card.prompts || []).map(p => `<li>${p}</li>`).join('')}
+      ${(card.prompts || []).map(p => `<li>${escapeHtml(p)}</li>`).join('')}
     </ul>
-    ${card.followUpHint ? `<div class="sa-cue-hint">💡 ${card.followUpHint}</div>` : ''}
+    ${card.followUpHint ? `<div class="sa-cue-hint">💡 ${escapeHtml(card.followUpHint)}</div>` : ''}
   `;
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;

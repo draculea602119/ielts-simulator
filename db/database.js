@@ -38,6 +38,8 @@ db.exec(`
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
   );
+
+  CREATE INDEX IF NOT EXISTS idx_test_results_user_id ON test_results(user_id, created_at DESC);
 `);
 
 module.exports = db;

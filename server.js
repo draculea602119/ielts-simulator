@@ -23,6 +23,11 @@ app.use('/api/tests', require('./routes/tests'));
 app.use('/api/speaking', require('./routes/speaking'));
 app.use('/api/dict', require('./routes/dict'));
 
+// API 404 (don't serve index.html for mistyped API routes)
+app.all('/api/*', (req, res) => {
+  res.status(404).json({ error: 'Not found' });
+});
+
 // SPA fallback
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
