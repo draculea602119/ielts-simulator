@@ -133,6 +133,7 @@
       <div class="hw-tt-divider" style="display:none"></div>
       <div class="hw-tt-header">
         <span class="hw-tt-word"></span>
+        <button class="hw-tt-star" title="收藏到生词本">☆</button>
         <button class="hw-tt-audio" title="播放发音">🔊</button>
       </div>
       <div class="hw-tt-phonetic"></div>
@@ -148,6 +149,28 @@
       e.stopPropagation();
       const word = tooltip.querySelector('.hw-tt-word').textContent;
       if (word) pronounceWord(word);
+    });
+
+    // Star button handler — save word to vocabulary
+    tooltip.querySelector('.hw-tt-star').addEventListener('click', (e) => {
+      e.stopPropagation();
+      const btn = e.currentTarget;
+      if (btn.classList.contains('hw-tt-starred')) return;
+      const word = tooltip.querySelector('.hw-tt-word').textContent;
+      const phonetic = tooltip.querySelector('.hw-tt-phonetic').textContent;
+      const pos = tooltip.querySelector('.hw-tt-pos').textContent;
+      const def = tooltip.querySelector('.hw-tt-def').textContent;
+      const defEn = tooltip.querySelector('.hw-tt-def-en').textContent;
+      if (!word) return;
+      // Determine source context
+      const activePage = document.querySelector('.page.active');
+      let ctx = '';
+      if (activePage) {
+        if (activePage.id === 'page-novel') ctx = document.getElementById('novel-title')?.textContent || 'Novel';
+        else if (activePage.id === 'page-exam') ctx = document.getElementById('examTitle')?.textContent || 'Exam';
+        else if (activePage.id === 'page-speak') ctx = 'Speaking Practice';
+      }
+      saveWordToVocab({ word, phonetic, pos, definition: def, definition_en: defEn, source_context: ctx }, btn);
     });
 
     // Prevent tooltip clicks from closing it
@@ -189,6 +212,21 @@
     tooltip.querySelector('.hw-tt-phonetic').style.display = '';
     tooltip.querySelector('.hw-tt-pos').style.display = '';
     tooltip.querySelector('.hw-tt-def').style.display = '';
+
+    // Reset star state and check if word is saved
+    const starBtn = tooltip.querySelector('.hw-tt-star');
+    starBtn.textContent = '☆';
+    starBtn.classList.remove('hw-tt-starred');
+    starBtn.title = '收藏到生词本';
+    if (data.word) {
+      checkStarred(data.word).then(saved => {
+        if (saved && tooltip.style.display !== 'none') {
+          starBtn.textContent = '★';
+          starBtn.classList.add('hw-tt-starred');
+          starBtn.title = '已收藏';
+        }
+      });
+    }
 
     positionTooltip(el);
     tooltip.style.display = '';
@@ -458,6 +496,40 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') hideTooltip();
     });
+  }
+
+  // ---- Save to Vocabulary ----
+  async function saveWordToVocab(data, btn) {
+    const token = localStorage.getItem('ielts_token');
+    if (!token) { btn.title = '请先登录'; return; }
+    try {
+      const resp = await fetch('/api/vocab/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify(data)
+      });
+      if (resp.ok) {
+        btn.textContent = '★';
+        btn.classList.add('hw-tt-starred');
+        btn.title = '已收藏';
+      }
+    } catch (e) {
+      console.warn('Save vocab failed:', e.message);
+    }
+  }
+
+  // Check if word is already in vocab (to show filled star)
+  async function checkStarred(word) {
+    const token = localStorage.getItem('ielts_token');
+    if (!token) return false;
+    try {
+      const resp = await fetch('/api/vocab/list?q=' + encodeURIComponent(word), {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      if (!resp.ok) return false;
+      const list = await resp.json();
+      return list.some(v => v.word === word.toLowerCase());
+    } catch { return false; }
   }
 
   // ---- Expose globally ----

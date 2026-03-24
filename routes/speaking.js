@@ -1,5 +1,6 @@
 const express = require('express');
 const { requireAuth } = require('../middleware/auth');
+const db = require('../db/database');
 
 const router = express.Router();
 
@@ -64,6 +65,14 @@ router.post('/chat', requireAuth, async (req, res) => {
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
   res.flushHeaders();
+
+  // Log activity for new speaking sessions (first message)
+  if (messages.length <= 1) {
+    try {
+      db.prepare('INSERT INTO study_activity (user_id, activity_type, activity_data) VALUES (?, ?, ?)')
+        .run(req.user.id, 'speaking_session', `${mode} - ${topic}`);
+    } catch {}
+  }
 
   const systemPrompt = buildSystemPrompt(mode, topic, subPhase);
   const userMessages = messages.map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.content }));

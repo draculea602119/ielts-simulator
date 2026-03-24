@@ -40,6 +40,70 @@ db.exec(`
   );
 
   CREATE INDEX IF NOT EXISTS idx_test_results_user_id ON test_results(user_id, created_at DESC);
+
+  CREATE TABLE IF NOT EXISTS user_vocabulary (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    word TEXT NOT NULL,
+    phonetic TEXT DEFAULT '',
+    pos TEXT DEFAULT '',
+    definition TEXT DEFAULT '',
+    definition_en TEXT DEFAULT '',
+    source_context TEXT DEFAULT '',
+    ease_factor REAL DEFAULT 2.5,
+    interval_days INTEGER DEFAULT 1,
+    next_review_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    review_count INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+  );
+
+  CREATE UNIQUE INDEX IF NOT EXISTS idx_user_vocab_word ON user_vocabulary(user_id, word);
+  CREATE INDEX IF NOT EXISTS idx_user_vocab_review ON user_vocabulary(user_id, next_review_at);
+
+  CREATE TABLE IF NOT EXISTS wrong_answers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    test_id INTEGER NOT NULL,
+    section TEXT NOT NULL,
+    question_num INTEGER NOT NULL,
+    question_text TEXT DEFAULT '',
+    question_type TEXT DEFAULT '',
+    user_answer TEXT DEFAULT '',
+    correct_answer TEXT DEFAULT '',
+    mastered INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_wrong_answers_user ON wrong_answers(user_id, mastered);
+
+  CREATE TABLE IF NOT EXISTS study_activity (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    activity_type TEXT NOT NULL,
+    activity_data TEXT DEFAULT '',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_study_activity_user ON study_activity(user_id, created_at DESC);
+
+  CREATE TABLE IF NOT EXISTS writing_practice (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    task_type TEXT NOT NULL,
+    prompt TEXT DEFAULT '',
+    essay TEXT DEFAULT '',
+    word_count INTEGER DEFAULT 0,
+    ai_feedback TEXT DEFAULT '{}',
+    band_score REAL DEFAULT 0,
+    time_spent_seconds INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_writing_practice_user ON writing_practice(user_id, created_at DESC);
 `);
 
 module.exports = db;
