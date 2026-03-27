@@ -784,6 +784,20 @@
         <div class="sp-topic-wrap" id="saTopicGrid"></div>
       </div>
 
+      <div class="sp-section">
+        <div class="sp-label">对话模式</div>
+        <div class="sp-mode-row" id="saConvModeGroup">
+          <button class="sa-mode-btn" data-conv="text">
+            <span class="sp-mode-num">Text</span>
+            <span class="sp-mode-sub">语音识别 + TTS</span>
+          </button>
+          <button class="sa-mode-btn active" data-conv="realtime">
+            <span class="sp-mode-num">Realtime</span>
+            <span class="sp-mode-sub">实时语音对话</span>
+          </button>
+        </div>
+      </div>
+
       <div class="sa-browser-warn" id="saBrowserWarn" style="display:none">
         ⚠ 请使用 Chrome 或 Edge 以启用语音识别，将自动启用文字输入模式。
       </div>
@@ -864,6 +878,7 @@
 <script src="js/data.js?v=20260324" defer></script>
 <script src="js/word-hover.js?v=20260324" defer></script>
 <script src="js/novel.js?v=20260324" defer></script>
+<script src="js/speaking-realtime.js?v=20260324" defer></script>
 <script src="js/app.js?v=20260324" defer></script>
 <script>
 // ---- Register Service Worker ----

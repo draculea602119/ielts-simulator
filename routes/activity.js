@@ -16,18 +16,27 @@ router.post('/log', (req, res) => {
 
 // Get streak info
 router.get('/streak', (req, res) => {
-  // Get distinct active days (in UTC)
+  // Client timezone offset (minutes from UTC, e.g., -480 for UTC+8)
+  const clientTz = parseInt(req.query.tz);
+  const tzHours = isNaN(clientTz) ? 0 : -clientTz / 60; // e.g., 8 for UTC+8
+  const tzSQL = `${tzHours >= 0 ? '+' : ''}${Math.round(tzHours)} hours`;
+
+  // Get distinct active days in user's local timezone
   const days = db.prepare(`
-    SELECT DISTINCT date(created_at) as d FROM study_activity
+    SELECT DISTINCT date(created_at, ?) as d FROM study_activity
     WHERE user_id = ? ORDER BY d DESC LIMIT 365
-  `).all(req.user.id).map(r => r.d);
+  `).all(tzSQL, req.user.id).map(r => r.d);
+
+  // Compute today/yesterday in user's local timezone
+  const nowLocal = new Date(Date.now() + tzHours * 3600000);
+  const todayStr = nowLocal.toISOString().slice(0, 10);
+  const ydLocal = new Date(Date.now() + tzHours * 3600000 - 86400000);
+  const yesterdayStr = ydLocal.toISOString().slice(0, 10);
 
   let streak = 0;
   if (days.length > 0) {
-    const today = new Date().toISOString().slice(0, 10);
-    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
     // Streak counts from today or yesterday backward
-    if (days[0] === today || days[0] === yesterday) {
+    if (days[0] === todayStr || days[0] === yesterdayStr) {
       streak = 1;
       for (let i = 1; i < days.length; i++) {
         const prev = new Date(days[i - 1]);
@@ -39,18 +48,18 @@ router.get('/streak', (req, res) => {
     }
   }
 
-  // Today's activity count
+  // Today's activity count (in user's timezone)
   const todayCount = db.prepare(`
     SELECT COUNT(*) as c FROM study_activity
-    WHERE user_id = ? AND date(created_at) = date('now')
-  `).get(req.user.id).c;
+    WHERE user_id = ? AND date(created_at, ?) = ?
+  `).get(req.user.id, tzSQL, todayStr).c;
 
   // This week's activities (for goal tracking)
   const weekActivities = db.prepare(`
     SELECT activity_type, COUNT(*) as c FROM study_activity
-    WHERE user_id = ? AND created_at >= date('now', 'weekday 0', '-7 days')
+    WHERE user_id = ? AND date(created_at, ?) >= date(?, 'weekday 0', '-7 days')
     GROUP BY activity_type
-  `).all(req.user.id);
+  `).all(req.user.id, tzSQL, todayStr);
 
   const weekMap = {};
   weekActivities.forEach(r => { weekMap[r.activity_type] = r.c; });

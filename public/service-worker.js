@@ -1,6 +1,6 @@
 // IELTS Simulator — Service Worker
 // Bump CACHE_VERSION to force a full cache refresh on deploy.
-const CACHE_VERSION = 'v4';
+const CACHE_VERSION = 'v5';
 const SHELL_CACHE  = `ielts-shell-${CACHE_VERSION}`;
 const DATA_CACHE   = `ielts-data-${CACHE_VERSION}`;
 const FONT_CACHE   = `ielts-fonts-${CACHE_VERSION}`;
@@ -15,6 +15,8 @@ const SHELL_ASSETS = [
   '/js/data.js',
   '/js/novel.js',
   '/js/word-hover.js',
+  '/js/speaking-realtime.js',
+  '/js/speaking-worklet.js',
   '/manifest.json',
   '/offline.html',
 ];

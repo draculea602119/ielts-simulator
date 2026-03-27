@@ -254,7 +254,7 @@ async function renderHome() {
 
 async function loadStreak() {
   try {
-    const s = await apiCall('/api/activity/streak');
+    const s = await apiCall('/api/activity/streak?tz=' + new Date().getTimezoneOffset());
     const row = document.getElementById('streakRow');
     if (s.streak > 0 || s.todayCount > 0) {
       row.style.display = '';
@@ -598,7 +598,7 @@ function collectWrongAnswers(test) {
       const userAns = (state.answers[key] || '').toLowerCase().trim();
       const correct = q.answer.toLowerCase().trim();
       const isCorrect = userAns === correct || (q.type === 'mc' && userAns === correct.charAt(0).toLowerCase());
-      if (!isCorrect && userAns) {
+      if (!isCorrect) {
         wrong.push({ section: 'listening', questionNum: qNum, questionText: q.question, questionType: q.type, userAnswer: state.answers[key] || '', correctAnswer: q.answer });
       }
     });
@@ -611,7 +611,7 @@ function collectWrongAnswers(test) {
       const userAns = (state.answers[key] || '').toLowerCase().trim();
       const correct = q.answer.toLowerCase().trim();
       const isCorrect = userAns === correct || (q.type === 'mc' && userAns === correct.charAt(0).toLowerCase());
-      if (!isCorrect && userAns) {
+      if (!isCorrect) {
         wrong.push({ section: 'reading', questionNum: qNum, questionText: q.question, questionType: q.type, userAnswer: state.answers[key] || '', correctAnswer: q.answer });
       }
     });
@@ -862,7 +862,8 @@ const speakState = {
   sessionActive: false,
   timerInterval: null,
   timerSeconds: 0,
-  selectedTopic: null
+  selectedTopic: null,
+  realtimeMode: true
 };
 
 function goToSpeakPage() {
@@ -928,7 +929,20 @@ function initSpeakPage() {
     grid.appendChild(btn);
   });
 
-  // Check Speech API
+  // Conversation mode toggle (text vs realtime)
+  const convGroup = document.getElementById('saConvModeGroup');
+  if (convGroup) {
+    convGroup.querySelectorAll('.sa-mode-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.conv === (speakState.realtimeMode ? 'realtime' : 'text'));
+      btn.onclick = () => {
+        speakState.realtimeMode = btn.dataset.conv === 'realtime';
+        convGroup.querySelectorAll('.sa-mode-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      };
+    });
+  }
+
+  // Check Speech API (only relevant for text mode)
   const hasRecognition = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
   document.getElementById('saBrowserWarn').style.display = hasRecognition ? 'none' : '';
 }
@@ -962,6 +976,66 @@ function startSpeakSession() {
   // Part 2 starts with cue_card subPhase
   if (speakState.mode === 'part2') speakState.subPhase = 'cue_card';
 
+  // Branch: realtime voice vs text mode
+  if (speakState.realtimeMode && window.SpeakRealtime) {
+    // Hide mic button row, show realtime indicator
+    document.querySelector('.sp-mic-row').style.display = 'none';
+    document.getElementById('saTextInputWrap').style.display = 'none';
+    document.getElementById('saStatus').textContent = '连接中…';
+    setOrbState('thinking');
+
+    let currentAiBubble = null;
+    let currentUserBubble = null;
+
+    SpeakRealtime.start(authState.token, speakState.mode, speakState.topic, speakState.subPhase, 'Kore', {
+      onOrbState: (s) => setOrbState(s),
+      onSetupComplete: () => {
+        document.getElementById('saStatus').textContent = '正在聆听… 请开始说话';
+      },
+      onAiText: (text) => {
+        if (!currentAiBubble) {
+          currentAiBubble = document.createElement('div');
+          currentAiBubble.className = 'sa-bubble sa-bubble-ai';
+          document.getElementById('saChat').appendChild(currentAiBubble);
+        }
+        currentAiBubble.textContent = text;
+        document.getElementById('saChat').scrollTop = 99999;
+      },
+      onUserText: (text) => {
+        if (!currentUserBubble) {
+          currentUserBubble = document.createElement('div');
+          currentUserBubble.className = 'sa-bubble sa-bubble-user';
+          document.getElementById('saChat').appendChild(currentUserBubble);
+        }
+        currentUserBubble.textContent = text;
+        document.getElementById('saChat').scrollTop = 99999;
+      },
+      onTurnComplete: () => {
+        // Enable word hover on completed bubbles
+        if (currentAiBubble && window.WordHover) WordHover.processTextNodes(currentAiBubble);
+        if (currentUserBubble && window.WordHover) WordHover.processTextNodes(currentUserBubble);
+        currentAiBubble = null;
+        currentUserBubble = null;
+        document.getElementById('saStatus').textContent = '正在聆听…';
+      },
+      onSessionEnd: (messages) => {
+        speakState.messages = messages;
+        speakState.sessionActive = false;
+        document.getElementById('saStatus').textContent = '练习完毕，正在评分…';
+        document.getElementById('saScoreBox').style.display = '';
+        requestScore();
+      },
+      onError: (err) => {
+        document.getElementById('saStatus').textContent = '错误: ' + err;
+        setOrbState('idle');
+        // Show text mode controls as fallback
+        document.querySelector('.sp-mic-row').style.display = '';
+      }
+    });
+    return;
+  }
+
+  // Text mode (original flow)
   setOrbState('thinking');
   sendSpeakMessage('[SESSION_START]');
 }
@@ -1317,6 +1391,10 @@ function showSpeakTips(tips) {
 }
 
 function endSpeakSession() {
+  // Stop realtime session if active
+  if (window.SpeakRealtime && SpeakRealtime.isActive()) {
+    SpeakRealtime.stop();
+  }
   stopListening();
   stopTTS();
   window.speechSynthesis && window.speechSynthesis.cancel();
@@ -1724,7 +1802,7 @@ function drawRadarChart(l, r, w, s) {
   // Data polygon
   const norm = v => Math.max(0, Math.min(1, (v - 4) / 5)); // 4-9 → 0-1
   ctx.fillStyle = 'rgba(40,120,106,0.15)';
-  ctx.strokeStyle = 'var(--v-teal)';
+  ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--v-teal').trim() || '#28786a';
   ctx.lineWidth = 2;
   ctx.beginPath();
   values.forEach((v, i) => {
@@ -2099,7 +2177,7 @@ function trStartReading(testId, passageIdx) {
 
   document.getElementById('trPassageBox').innerHTML = `
     <h3 class="tr-pass-title">${escapeHtml(p.title || 'Passage ' + (passageIdx + 1))}</h3>
-    <div class="tr-pass-text">${p.text.split('\n').map(para => `<p>${escapeHtml(para)}</p>`).join('')}</div>
+    <div class="tr-pass-text">${p.text}</div>
   `;
 
   // Start timer
