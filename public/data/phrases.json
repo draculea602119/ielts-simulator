@@ -1,0 +1,2662 @@
+{
+  "break the ice": {
+    "phrase": "break the ice",
+    "definition": "打破僵局；消除隔阂",
+    "example": "A joke can help break the ice at a party."
+  },
+  "piece of cake": {
+    "phrase": "piece of cake",
+    "definition": "小菜一碟；轻而易举的事",
+    "example": "The exam was a piece of cake for her."
+  },
+  "hit the nail on the head": {
+    "phrase": "hit the nail on the head",
+    "definition": "说得很对；一针见血",
+    "example": "You hit the nail on the head with that analysis."
+  },
+  "once in a blue moon": {
+    "phrase": "once in a blue moon",
+    "definition": "千载难逢；极其罕见",
+    "example": "We only see each other once in a blue moon."
+  },
+  "under the weather": {
+    "phrase": "under the weather",
+    "definition": "身体不舒服；生病",
+    "example": "I'm feeling a bit under the weather today."
+  },
+  "cost an arm and a leg": {
+    "phrase": "cost an arm and a leg",
+    "definition": "非常昂贵；价格不菲",
+    "example": "That designer bag must have cost an arm and a leg."
+  },
+  "the ball is in your court": {
+    "phrase": "the ball is in your court",
+    "definition": "该你做决定了；轮到你采取行动了",
+    "example": "I've made my offer — the ball is in your court now."
+  },
+  "bite the bullet": {
+    "phrase": "bite the bullet",
+    "definition": "咬紧牙关；忍痛做某事",
+    "example": "I decided to bite the bullet and have the surgery."
+  },
+  "a blessing in disguise": {
+    "phrase": "a blessing in disguise",
+    "definition": "塞翁失马，焉知非福；因祸得福",
+    "example": "Losing that job turned out to be a blessing in disguise."
+  },
+  "burn the midnight oil": {
+    "phrase": "burn the midnight oil",
+    "definition": "开夜车；熬夜工作或学习",
+    "example": "She burned the midnight oil to finish the report."
+  },
+  "call it a day": {
+    "phrase": "call it a day",
+    "definition": "到此为止；收工",
+    "example": "We've done enough — let's call it a day."
+  },
+  "get out of hand": {
+    "phrase": "get out of hand",
+    "definition": "失控；无法控制",
+    "example": "The situation quickly got out of hand."
+  },
+  "get the ball rolling": {
+    "phrase": "get the ball rolling",
+    "definition": "开始行动；着手做某事",
+    "example": "Let's get the ball rolling on this project."
+  },
+  "go the extra mile": {
+    "phrase": "go the extra mile",
+    "definition": "格外努力；加倍付出",
+    "example": "She always goes the extra mile for her students."
+  },
+  "hang in there": {
+    "phrase": "hang in there",
+    "definition": "坚持住；别放弃",
+    "example": "Hang in there — things will get better soon."
+  },
+  "hit the books": {
+    "phrase": "hit the books",
+    "definition": "用功读书；埋头苦读",
+    "example": "I need to hit the books before the final exam."
+  },
+  "it takes two to tango": {
+    "phrase": "it takes two to tango",
+    "definition": "一个巴掌拍不响；双方都有责任",
+    "example": "Don't just blame him — it takes two to tango."
+  },
+  "kill two birds with one stone": {
+    "phrase": "kill two birds with one stone",
+    "definition": "一石二鸟；一举两得",
+    "example": "By cycling to work, I kill two birds with one stone — I save money and stay fit."
+  },
+  "let the cat out of the bag": {
+    "phrase": "let the cat out of the bag",
+    "definition": "泄露秘密；说漏嘴",
+    "example": "She let the cat out of the bag about the surprise party."
+  },
+  "miss the boat": {
+    "phrase": "miss the boat",
+    "definition": "错失良机；坐失机会",
+    "example": "If you don't apply now, you'll miss the boat."
+  },
+  "no pain no gain": {
+    "phrase": "no pain no gain",
+    "definition": "不劳无获；没有付出就没有收获",
+    "example": "You have to practise every day — no pain, no gain."
+  },
+  "on the same page": {
+    "phrase": "on the same page",
+    "definition": "意见一致；达成共识",
+    "example": "We need to make sure everyone is on the same page."
+  },
+  "pull someone's leg": {
+    "phrase": "pull someone's leg",
+    "definition": "开某人的玩笑；逗某人",
+    "example": "Are you pulling my leg, or is that really true?"
+  },
+  "see eye to eye": {
+    "phrase": "see eye to eye",
+    "definition": "看法一致；意见相同",
+    "example": "We don't always see eye to eye on politics."
+  },
+  "speak of the devil": {
+    "phrase": "speak of the devil",
+    "definition": "说曹操曹操就到",
+    "example": "Speak of the devil — here comes Tom now!"
+  },
+  "spill the beans": {
+    "phrase": "spill the beans",
+    "definition": "泄露秘密；走漏消息",
+    "example": "Come on, spill the beans — what happened?"
+  },
+  "the best of both worlds": {
+    "phrase": "the best of both worlds",
+    "definition": "两全其美；兼得两者之长",
+    "example": "Working from home gives me the best of both worlds."
+  },
+  "the tip of the iceberg": {
+    "phrase": "the tip of the iceberg",
+    "definition": "冰山一角",
+    "example": "These complaints are just the tip of the iceberg."
+  },
+  "throw in the towel": {
+    "phrase": "throw in the towel",
+    "definition": "认输；放弃",
+    "example": "After years of trying, he finally threw in the towel."
+  },
+  "time flies": {
+    "phrase": "time flies",
+    "definition": "光阴似箭；时间过得真快",
+    "example": "Time flies when you're having fun."
+  },
+  "turn a blind eye": {
+    "phrase": "turn a blind eye",
+    "definition": "视而不见；睁一只眼闭一只眼",
+    "example": "The manager turned a blind eye to the problem."
+  },
+  "when pigs fly": {
+    "phrase": "when pigs fly",
+    "definition": "不可能的事；太阳打西边出来",
+    "example": "He'll clean his room when pigs fly."
+  },
+  "wrap your head around": {
+    "phrase": "wrap your head around",
+    "definition": "理解；弄明白",
+    "example": "I can't wrap my head around this concept."
+  },
+  "actions speak louder than words": {
+    "phrase": "actions speak louder than words",
+    "definition": "行胜于言；事实胜于雄辩",
+    "example": "Don't just promise — actions speak louder than words."
+  },
+  "add insult to injury": {
+    "phrase": "add insult to injury",
+    "definition": "雪上加霜；伤口上撒盐",
+    "example": "To add insult to injury, it started raining."
+  },
+  "at the drop of a hat": {
+    "phrase": "at the drop of a hat",
+    "definition": "立刻；毫不犹豫地",
+    "example": "She'd travel anywhere at the drop of a hat."
+  },
+  "back to square one": {
+    "phrase": "back to square one",
+    "definition": "回到原点；从头再来",
+    "example": "The deal fell through, so we're back to square one."
+  },
+  "barking up the wrong tree": {
+    "phrase": "barking up the wrong tree",
+    "definition": "找错了对象；搞错了方向",
+    "example": "If you think I did it, you're barking up the wrong tree."
+  },
+  "beat around the bush": {
+    "phrase": "beat around the bush",
+    "definition": "拐弯抹角；不直说",
+    "example": "Stop beating around the bush and tell me the truth."
+  },
+  "better late than never": {
+    "phrase": "better late than never",
+    "definition": "迟做总比不做好；亡羊补牢",
+    "example": "You finally finished your homework — better late than never."
+  },
+  "by the skin of your teeth": {
+    "phrase": "by the skin of your teeth",
+    "definition": "勉强地；险些没成功",
+    "example": "I passed the exam by the skin of my teeth."
+  },
+  "cut corners": {
+    "phrase": "cut corners",
+    "definition": "偷工减料；走捷径",
+    "example": "Don't cut corners on safety procedures."
+  },
+  "every cloud has a silver lining": {
+    "phrase": "every cloud has a silver lining",
+    "definition": "黑暗中总有一线光明；否极泰来",
+    "example": "I know things are tough, but every cloud has a silver lining."
+  },
+  "get cold feet": {
+    "phrase": "get cold feet",
+    "definition": "临阵退缩；胆怯",
+    "example": "She got cold feet and cancelled the wedding."
+  },
+  "give the benefit of the doubt": {
+    "phrase": "give the benefit of the doubt",
+    "definition": "姑且相信；不作有罪推定",
+    "example": "I'll give him the benefit of the doubt this time."
+  },
+  "in hot water": {
+    "phrase": "in hot water",
+    "definition": "陷入困境；惹上麻烦",
+    "example": "He's in hot water for missing the deadline."
+  },
+  "jump on the bandwagon": {
+    "phrase": "jump on the bandwagon",
+    "definition": "跟风；随大流",
+    "example": "Many companies jumped on the AI bandwagon."
+  },
+  "keep your chin up": {
+    "phrase": "keep your chin up",
+    "definition": "振作起来；不要灰心",
+    "example": "Keep your chin up — you'll find a new job soon."
+  },
+  "learn the ropes": {
+    "phrase": "learn the ropes",
+    "definition": "学会窍门；熟悉门道",
+    "example": "It took me a few weeks to learn the ropes at the new job."
+  },
+  "make ends meet": {
+    "phrase": "make ends meet",
+    "definition": "勉强维持生计；收支相抵",
+    "example": "Many families struggle to make ends meet."
+  },
+  "nip it in the bud": {
+    "phrase": "nip it in the bud",
+    "definition": "防患于未然；把问题消灭在萌芽中",
+    "example": "We need to nip this problem in the bud."
+  },
+  "off the top of my head": {
+    "phrase": "off the top of my head",
+    "definition": "不假思索地；即兴地",
+    "example": "Off the top of my head, I'd say about fifty people came."
+  },
+  "once bitten, twice shy": {
+    "phrase": "once bitten, twice shy",
+    "definition": "一朝被蛇咬，十年怕井绳",
+    "example": "After that bad investment, I'm once bitten, twice shy."
+  },
+  "put all your eggs in one basket": {
+    "phrase": "put all your eggs in one basket",
+    "definition": "孤注一掷；把所有希望寄托于一处",
+    "example": "Don't put all your eggs in one basket — diversify your investments."
+  },
+  "read between the lines": {
+    "phrase": "read between the lines",
+    "definition": "领会言外之意；读懂弦外之音",
+    "example": "If you read between the lines, his letter is quite critical."
+  },
+  "ring a bell": {
+    "phrase": "ring a bell",
+    "definition": "听起来耳熟；唤起记忆",
+    "example": "That name rings a bell, but I can't place it."
+  },
+  "sit on the fence": {
+    "phrase": "sit on the fence",
+    "definition": "骑墙；保持中立；不表态",
+    "example": "You can't sit on the fence forever — make a decision."
+  },
+  "take it with a grain of salt": {
+    "phrase": "take it with a grain of salt",
+    "definition": "半信半疑；不可全信",
+    "example": "Take his advice with a grain of salt."
+  },
+  "the last straw": {
+    "phrase": "the last straw",
+    "definition": "最后一根稻草；忍无可忍",
+    "example": "That remark was the last straw — I quit."
+  },
+  "under no circumstances": {
+    "phrase": "under no circumstances",
+    "definition": "在任何情况下都不；绝对不",
+    "example": "Under no circumstances should you open that door."
+  },
+  "up in the air": {
+    "phrase": "up in the air",
+    "definition": "悬而未决；尚无定论",
+    "example": "Our holiday plans are still up in the air."
+  },
+  "whole nine yards": {
+    "phrase": "whole nine yards",
+    "definition": "全部；一切",
+    "example": "She went the whole nine yards for the party."
+  },
+  "a drop in the ocean": {
+    "phrase": "a drop in the ocean",
+    "definition": "沧海一粟；九牛一毛",
+    "example": "A thousand pounds is just a drop in the ocean compared to what we need."
+  },
+  "play it by ear": {
+    "phrase": "play it by ear",
+    "definition": "随机应变；见机行事",
+    "example": "We don't have a plan — let's just play it by ear."
+  },
+  "a penny for your thoughts": {
+    "phrase": "a penny for your thoughts",
+    "definition": "你在想什么？（问对方在想什么）",
+    "example": "You look deep in thought — a penny for your thoughts?"
+  },
+  "the elephant in the room": {
+    "phrase": "the elephant in the room",
+    "definition": "显而易见却被忽视的问题",
+    "example": "Nobody wanted to mention the elephant in the room."
+  },
+  "food for thought": {
+    "phrase": "food for thought",
+    "definition": "发人深省的事；值得思考的问题",
+    "example": "The lecture gave us plenty of food for thought."
+  },
+  "in a nutshell": {
+    "phrase": "in a nutshell",
+    "definition": "简而言之；一言以蔽之",
+    "example": "In a nutshell, we need more funding."
+  },
+  "keep an eye on": {
+    "phrase": "keep an eye on",
+    "definition": "留意；照看",
+    "example": "Could you keep an eye on the children for me?"
+  },
+  "think outside the box": {
+    "phrase": "think outside the box",
+    "definition": "跳出固有思维；创新思考",
+    "example": "We need to think outside the box to solve this problem."
+  },
+  "a double-edged sword": {
+    "phrase": "a double-edged sword",
+    "definition": "双刃剑；利弊兼有的事",
+    "example": "Social media is a double-edged sword."
+  },
+  "the bottom line": {
+    "phrase": "the bottom line",
+    "definition": "最重要的一点；关键所在",
+    "example": "The bottom line is that we can't afford it."
+  },
+  "at the end of the day": {
+    "phrase": "at the end of the day",
+    "definition": "归根结底；说到底",
+    "example": "At the end of the day, it's your decision."
+  },
+  "pros and cons": {
+    "phrase": "pros and cons",
+    "definition": "利弊；优缺点",
+    "example": "Let's weigh the pros and cons before deciding."
+  },
+  "as a result": {
+    "phrase": "as a result",
+    "definition": "因此；结果",
+    "example": "He didn't study hard. As a result, he failed the exam."
+  },
+  "in terms of": {
+    "phrase": "in terms of",
+    "definition": "就……而言；在……方面",
+    "example": "In terms of quality, this product is the best."
+  },
+  "on the other hand": {
+    "phrase": "on the other hand",
+    "definition": "另一方面",
+    "example": "The job pays well. On the other hand, the hours are long."
+  },
+  "as a matter of fact": {
+    "phrase": "as a matter of fact",
+    "definition": "事实上；实际上",
+    "example": "As a matter of fact, I've been there twice."
+  },
+  "in addition to": {
+    "phrase": "in addition to",
+    "definition": "除……之外（还）",
+    "example": "In addition to English, she speaks French and German."
+  },
+  "by and large": {
+    "phrase": "by and large",
+    "definition": "总的来说；大体上",
+    "example": "By and large, the project was a success."
+  },
+  "for the most part": {
+    "phrase": "for the most part",
+    "definition": "在很大程度上；多半",
+    "example": "For the most part, the students were well-behaved."
+  },
+  "in the long run": {
+    "phrase": "in the long run",
+    "definition": "从长远来看；终究",
+    "example": "Exercise will benefit you in the long run."
+  },
+  "in the meantime": {
+    "phrase": "in the meantime",
+    "definition": "与此同时；在此期间",
+    "example": "The meeting is at three. In the meantime, let's have lunch."
+  },
+  "on the whole": {
+    "phrase": "on the whole",
+    "definition": "总的来说；大体上",
+    "example": "On the whole, I think the plan is good."
+  },
+  "to a certain extent": {
+    "phrase": "to a certain extent",
+    "definition": "在某种程度上",
+    "example": "To a certain extent, I agree with you."
+  },
+  "to a large extent": {
+    "phrase": "to a large extent",
+    "definition": "在很大程度上",
+    "example": "Success depends to a large extent on hard work."
+  },
+  "with regard to": {
+    "phrase": "with regard to",
+    "definition": "关于；至于",
+    "example": "With regard to your question, I'll get back to you."
+  },
+  "in light of": {
+    "phrase": "in light of",
+    "definition": "鉴于；考虑到",
+    "example": "In light of recent events, the policy has been changed."
+  },
+  "in the wake of": {
+    "phrase": "in the wake of",
+    "definition": "在……之后；由于……的结果",
+    "example": "In the wake of the scandal, the CEO resigned."
+  },
+  "as opposed to": {
+    "phrase": "as opposed to",
+    "definition": "而不是；相对于",
+    "example": "I prefer tea as opposed to coffee."
+  },
+  "in conjunction with": {
+    "phrase": "in conjunction with",
+    "definition": "与……一起；连同",
+    "example": "The drug should be used in conjunction with a healthy diet."
+  },
+  "with respect to": {
+    "phrase": "with respect to",
+    "definition": "关于；就……而言",
+    "example": "With respect to your proposal, we have some concerns."
+  },
+  "in accordance with": {
+    "phrase": "in accordance with",
+    "definition": "依照；按照",
+    "example": "The work was carried out in accordance with safety regulations."
+  },
+  "as far as i am concerned": {
+    "phrase": "as far as I am concerned",
+    "definition": "就我而言；在我看来",
+    "example": "As far as I am concerned, the matter is closed."
+  },
+  "by virtue of": {
+    "phrase": "by virtue of",
+    "definition": "凭借；由于",
+    "example": "She got the job by virtue of her experience."
+  },
+  "for instance": {
+    "phrase": "for instance",
+    "definition": "例如",
+    "example": "There are many options — for instance, we could try online advertising."
+  },
+  "in other words": {
+    "phrase": "in other words",
+    "definition": "换句话说；也就是说",
+    "example": "He's frugal — in other words, he's cheap."
+  },
+  "on the contrary": {
+    "phrase": "on the contrary",
+    "definition": "恰恰相反",
+    "example": "It didn't rain. On the contrary, it was a beautiful day."
+  },
+  "in contrast": {
+    "phrase": "in contrast",
+    "definition": "相比之下；与此相反",
+    "example": "The north is dry. In contrast, the south gets lots of rain."
+  },
+  "for the sake of": {
+    "phrase": "for the sake of",
+    "definition": "为了……的缘故",
+    "example": "Let's agree, for the sake of peace."
+  },
+  "in spite of": {
+    "phrase": "in spite of",
+    "definition": "尽管；不顾",
+    "example": "In spite of the rain, we enjoyed the picnic."
+  },
+  "as a consequence": {
+    "phrase": "as a consequence",
+    "definition": "因此；结果",
+    "example": "He broke the rules and, as a consequence, was expelled."
+  },
+  "in the first place": {
+    "phrase": "in the first place",
+    "definition": "首先；第一",
+    "example": "Why did you agree in the first place?"
+  },
+  "to sum up": {
+    "phrase": "to sum up",
+    "definition": "总而言之；概括地说",
+    "example": "To sum up, the evidence strongly supports the theory."
+  },
+  "in conclusion": {
+    "phrase": "in conclusion",
+    "definition": "总之；最后",
+    "example": "In conclusion, more research is needed in this area."
+  },
+  "all in all": {
+    "phrase": "all in all",
+    "definition": "总的来说；总而言之",
+    "example": "All in all, it was a successful event."
+  },
+  "from my point of view": {
+    "phrase": "from my point of view",
+    "definition": "在我看来；依我之见",
+    "example": "From my point of view, the plan needs improvement."
+  },
+  "it goes without saying": {
+    "phrase": "it goes without saying",
+    "definition": "不言而喻；不用说",
+    "example": "It goes without saying that education is important."
+  },
+  "it is widely believed": {
+    "phrase": "it is widely believed",
+    "definition": "人们普遍认为",
+    "example": "It is widely believed that exercise improves mental health."
+  },
+  "it is worth noting": {
+    "phrase": "it is worth noting",
+    "definition": "值得注意的是",
+    "example": "It is worth noting that the data has some limitations."
+  },
+  "there is no doubt that": {
+    "phrase": "there is no doubt that",
+    "definition": "毫无疑问",
+    "example": "There is no doubt that technology has changed our lives."
+  },
+  "it is generally accepted": {
+    "phrase": "it is generally accepted",
+    "definition": "人们普遍接受；公认",
+    "example": "It is generally accepted that smoking is harmful."
+  },
+  "play a vital role in": {
+    "phrase": "play a vital role in",
+    "definition": "在……中起着至关重要的作用",
+    "example": "Education plays a vital role in economic development."
+  },
+  "have a profound impact on": {
+    "phrase": "have a profound impact on",
+    "definition": "对……产生深远的影响",
+    "example": "The internet has had a profound impact on communication."
+  },
+  "take into account": {
+    "phrase": "take into account",
+    "definition": "考虑到；顾及",
+    "example": "We must take into account the cost of living."
+  },
+  "take into consideration": {
+    "phrase": "take into consideration",
+    "definition": "考虑到；把……纳入考量",
+    "example": "Please take into consideration the needs of all students."
+  },
+  "draw a conclusion": {
+    "phrase": "draw a conclusion",
+    "definition": "得出结论",
+    "example": "It's too early to draw a conclusion from the data."
+  },
+  "make a distinction between": {
+    "phrase": "make a distinction between",
+    "definition": "区分；辨别",
+    "example": "We should make a distinction between fact and opinion."
+  },
+  "shed light on": {
+    "phrase": "shed light on",
+    "definition": "阐明；使……更清楚",
+    "example": "The study sheds light on the causes of the disease."
+  },
+  "a wide range of": {
+    "phrase": "a wide range of",
+    "definition": "各种各样的；范围广泛的",
+    "example": "The university offers a wide range of courses."
+  },
+  "give rise to": {
+    "phrase": "give rise to",
+    "definition": "引起；导致",
+    "example": "Poor planning can give rise to serious problems."
+  },
+  "bring about": {
+    "phrase": "bring about",
+    "definition": "引起；造成；导致",
+    "example": "The new policy brought about significant changes."
+  },
+  "account for": {
+    "phrase": "account for",
+    "definition": "占（比例）；解释；说明",
+    "example": "Women account for 45% of the workforce."
+  },
+  "by no means": {
+    "phrase": "by no means",
+    "definition": "决不；一点也不",
+    "example": "This is by no means an easy task."
+  },
+  "for the time being": {
+    "phrase": "for the time being",
+    "definition": "暂时；目前",
+    "example": "Let's keep things as they are for the time being."
+  },
+  "give up": {
+    "phrase": "give up",
+    "definition": "放弃；停止",
+    "example": "Don't give up on your dreams."
+  },
+  "look forward to": {
+    "phrase": "look forward to",
+    "definition": "期待；盼望",
+    "example": "I look forward to hearing from you."
+  },
+  "carry out": {
+    "phrase": "carry out",
+    "definition": "执行；实施；进行",
+    "example": "The government plans to carry out major reforms."
+  },
+  "bring up": {
+    "phrase": "bring up",
+    "definition": "提出；养育",
+    "example": "She brought up an interesting point in the meeting."
+  },
+  "come across": {
+    "phrase": "come across",
+    "definition": "偶然遇到；给人某种印象",
+    "example": "I came across an old friend at the supermarket."
+  },
+  "deal with": {
+    "phrase": "deal with",
+    "definition": "处理；应对",
+    "example": "We need to deal with this problem immediately."
+  },
+  "figure out": {
+    "phrase": "figure out",
+    "definition": "弄清楚；想出",
+    "example": "I can't figure out how to solve this equation."
+  },
+  "get along with": {
+    "phrase": "get along with",
+    "definition": "与……相处融洽",
+    "example": "She gets along with all her colleagues."
+  },
+  "get rid of": {
+    "phrase": "get rid of",
+    "definition": "摆脱；去除",
+    "example": "We need to get rid of these old files."
+  },
+  "go through": {
+    "phrase": "go through",
+    "definition": "经历；仔细检查",
+    "example": "She went through a difficult time last year."
+  },
+  "keep up with": {
+    "phrase": "keep up with",
+    "definition": "跟上；不落后于",
+    "example": "It's hard to keep up with the latest technology."
+  },
+  "look into": {
+    "phrase": "look into",
+    "definition": "调查；研究",
+    "example": "The police are looking into the matter."
+  },
+  "make up for": {
+    "phrase": "make up for",
+    "definition": "弥补；补偿",
+    "example": "He tried to make up for his mistake."
+  },
+  "point out": {
+    "phrase": "point out",
+    "definition": "指出",
+    "example": "She pointed out several errors in the report."
+  },
+  "put off": {
+    "phrase": "put off",
+    "definition": "推迟；延期",
+    "example": "Don't put off until tomorrow what you can do today."
+  },
+  "run out of": {
+    "phrase": "run out of",
+    "definition": "用完；耗尽",
+    "example": "We've run out of milk."
+  },
+  "set up": {
+    "phrase": "set up",
+    "definition": "建立；设立；创建",
+    "example": "They set up a new company last year."
+  },
+  "take off": {
+    "phrase": "take off",
+    "definition": "起飞；脱下；（事业）腾飞",
+    "example": "The plane is about to take off."
+  },
+  "turn down": {
+    "phrase": "turn down",
+    "definition": "拒绝；调低",
+    "example": "She turned down the job offer."
+  },
+  "turn out": {
+    "phrase": "turn out",
+    "definition": "结果是；原来是",
+    "example": "It turned out that he was right all along."
+  },
+  "come up with": {
+    "phrase": "come up with",
+    "definition": "想出；提出",
+    "example": "We need to come up with a better plan."
+  },
+  "cut down on": {
+    "phrase": "cut down on",
+    "definition": "减少；缩减",
+    "example": "You should cut down on sugar."
+  },
+  "end up": {
+    "phrase": "end up",
+    "definition": "最终成为；最后处于",
+    "example": "If you keep spending like that, you'll end up in debt."
+  },
+  "find out": {
+    "phrase": "find out",
+    "definition": "查明；发现",
+    "example": "I need to find out more about this topic."
+  },
+  "get over": {
+    "phrase": "get over",
+    "definition": "克服；恢复",
+    "example": "It took her months to get over the illness."
+  },
+  "hold on": {
+    "phrase": "hold on",
+    "definition": "等一下；坚持住",
+    "example": "Hold on — I'll be right back."
+  },
+  "look after": {
+    "phrase": "look after",
+    "definition": "照顾；照看",
+    "example": "Who will look after the children while you're away?"
+  },
+  "look up to": {
+    "phrase": "look up to",
+    "definition": "尊敬；仰慕",
+    "example": "Many students look up to their teachers."
+  },
+  "make sense": {
+    "phrase": "make sense",
+    "definition": "有道理；说得通",
+    "example": "Your explanation makes perfect sense."
+  },
+  "pass away": {
+    "phrase": "pass away",
+    "definition": "去世；过世",
+    "example": "Her grandmother passed away last year."
+  },
+  "pick up": {
+    "phrase": "pick up",
+    "definition": "捡起；学会；接人",
+    "example": "She picked up French while living in Paris."
+  },
+  "put up with": {
+    "phrase": "put up with",
+    "definition": "忍受；容忍",
+    "example": "I can't put up with this noise any longer."
+  },
+  "show up": {
+    "phrase": "show up",
+    "definition": "出现；露面",
+    "example": "He didn't show up for the meeting."
+  },
+  "take over": {
+    "phrase": "take over",
+    "definition": "接管；接手",
+    "example": "She took over the family business."
+  },
+  "take up": {
+    "phrase": "take up",
+    "definition": "开始从事；占据（时间/空间）",
+    "example": "He took up painting as a hobby."
+  },
+  "work out": {
+    "phrase": "work out",
+    "definition": "锻炼；解决；算出",
+    "example": "Things will work out in the end."
+  },
+  "break down": {
+    "phrase": "break down",
+    "definition": "崩溃；出故障；分解",
+    "example": "The car broke down on the highway."
+  },
+  "break out": {
+    "phrase": "break out",
+    "definition": "爆发（战争、疾病等）",
+    "example": "War broke out in 1939."
+  },
+  "catch up with": {
+    "phrase": "catch up with",
+    "definition": "赶上；追上",
+    "example": "I need to catch up with the rest of the class."
+  },
+  "check in": {
+    "phrase": "check in",
+    "definition": "登记入住；签到",
+    "example": "We checked in at the hotel at noon."
+  },
+  "check out": {
+    "phrase": "check out",
+    "definition": "退房；查看",
+    "example": "You should check out this new restaurant."
+  },
+  "clean up": {
+    "phrase": "clean up",
+    "definition": "打扫；清理",
+    "example": "We need to clean up the mess before Mom gets home."
+  },
+  "drop off": {
+    "phrase": "drop off",
+    "definition": "送（某人到某处）；下降",
+    "example": "Can you drop me off at the station?"
+  },
+  "fall behind": {
+    "phrase": "fall behind",
+    "definition": "落后；掉队",
+    "example": "Don't fall behind on your homework."
+  },
+  "fill in": {
+    "phrase": "fill in",
+    "definition": "填写；替代",
+    "example": "Please fill in the application form."
+  },
+  "get away with": {
+    "phrase": "get away with",
+    "definition": "侥幸逃脱；做了坏事而未受惩罚",
+    "example": "He cheated and got away with it."
+  },
+  "go ahead": {
+    "phrase": "go ahead",
+    "definition": "开始做；进行",
+    "example": "Go ahead — I'm listening."
+  },
+  "hand in": {
+    "phrase": "hand in",
+    "definition": "上交；提交",
+    "example": "Please hand in your essays by Friday."
+  },
+  "hang out": {
+    "phrase": "hang out",
+    "definition": "闲逛；出去玩",
+    "example": "We like to hang out at the coffee shop."
+  },
+  "lay off": {
+    "phrase": "lay off",
+    "definition": "裁员；解雇",
+    "example": "The company laid off 200 workers."
+  },
+  "leave out": {
+    "phrase": "leave out",
+    "definition": "遗漏；省略",
+    "example": "Don't leave out any important details."
+  },
+  "live up to": {
+    "phrase": "live up to",
+    "definition": "不辜负；达到（期望）",
+    "example": "The film didn't live up to my expectations."
+  },
+  "look down on": {
+    "phrase": "look down on",
+    "definition": "看不起；轻视",
+    "example": "She looks down on people who didn't go to university."
+  },
+  "narrow down": {
+    "phrase": "narrow down",
+    "definition": "缩小范围",
+    "example": "We need to narrow down our options."
+  },
+  "opt for": {
+    "phrase": "opt for",
+    "definition": "选择；挑选",
+    "example": "Most students opted for the easier course."
+  },
+  "phase out": {
+    "phrase": "phase out",
+    "definition": "逐步淘汰；分阶段停止",
+    "example": "The old system is being phased out."
+  },
+  "rely on": {
+    "phrase": "rely on",
+    "definition": "依赖；依靠",
+    "example": "You can always rely on her for help."
+  },
+  "rule out": {
+    "phrase": "rule out",
+    "definition": "排除；不考虑",
+    "example": "We can't rule out the possibility of an error."
+  },
+  "stand for": {
+    "phrase": "stand for",
+    "definition": "代表；象征",
+    "example": "What does this abbreviation stand for?"
+  },
+  "stem from": {
+    "phrase": "stem from",
+    "definition": "源于；起因于",
+    "example": "The problem stems from a lack of communication."
+  },
+  "stick to": {
+    "phrase": "stick to",
+    "definition": "坚持；遵守",
+    "example": "Let's stick to the original plan."
+  },
+  "sum up": {
+    "phrase": "sum up",
+    "definition": "总结；概括",
+    "example": "To sum up, we need to act quickly."
+  },
+  "take on": {
+    "phrase": "take on",
+    "definition": "承担；接受；雇用",
+    "example": "She took on extra responsibilities at work."
+  },
+  "think over": {
+    "phrase": "think over",
+    "definition": "仔细考虑",
+    "example": "I need some time to think it over."
+  },
+  "throw away": {
+    "phrase": "throw away",
+    "definition": "扔掉；浪费",
+    "example": "Don't throw away this opportunity."
+  },
+  "turn into": {
+    "phrase": "turn into",
+    "definition": "变成；转变为",
+    "example": "The caterpillar turned into a butterfly."
+  },
+  "wear out": {
+    "phrase": "wear out",
+    "definition": "磨损；筋疲力尽",
+    "example": "These shoes are completely worn out."
+  },
+  "wipe out": {
+    "phrase": "wipe out",
+    "definition": "消灭；彻底摧毁",
+    "example": "The disease wiped out entire villages."
+  },
+  "in particular": {
+    "phrase": "in particular",
+    "definition": "尤其；特别",
+    "example": "I enjoyed the trip, in particular the visit to the museum."
+  },
+  "in general": {
+    "phrase": "in general",
+    "definition": "一般来说；总体上",
+    "example": "In general, people are living longer than before."
+  },
+  "for example": {
+    "phrase": "for example",
+    "definition": "例如",
+    "example": "Many countries, for example France and Germany, have adopted this policy."
+  },
+  "such as": {
+    "phrase": "such as",
+    "definition": "例如；比如",
+    "example": "Fruits such as apples and oranges are rich in vitamins."
+  },
+  "that is to say": {
+    "phrase": "that is to say",
+    "definition": "也就是说",
+    "example": "He's bilingual — that is to say, he speaks two languages."
+  },
+  "as well as": {
+    "phrase": "as well as",
+    "definition": "以及；也；和……一样",
+    "example": "She speaks French as well as German."
+  },
+  "due to": {
+    "phrase": "due to",
+    "definition": "由于；因为",
+    "example": "The flight was delayed due to bad weather."
+  },
+  "owing to": {
+    "phrase": "owing to",
+    "definition": "由于；因为",
+    "example": "Owing to the rain, the match was postponed."
+  },
+  "regardless of": {
+    "phrase": "regardless of",
+    "definition": "不管；不顾",
+    "example": "The law applies to everyone regardless of age."
+  },
+  "as long as": {
+    "phrase": "as long as",
+    "definition": "只要",
+    "example": "You can borrow my car as long as you drive carefully."
+  },
+  "provided that": {
+    "phrase": "provided that",
+    "definition": "如果；条件是",
+    "example": "I'll help you provided that you help me in return."
+  },
+  "in order to": {
+    "phrase": "in order to",
+    "definition": "为了",
+    "example": "She worked hard in order to pass the exam."
+  },
+  "so as to": {
+    "phrase": "so as to",
+    "definition": "以便；为了",
+    "example": "He spoke slowly so as to be understood."
+  },
+  "rather than": {
+    "phrase": "rather than",
+    "definition": "而不是",
+    "example": "I'd prefer to walk rather than drive."
+  },
+  "not only ... but also": {
+    "phrase": "not only ... but also",
+    "definition": "不仅……而且……",
+    "example": "She is not only smart but also hardworking."
+  },
+  "whether or not": {
+    "phrase": "whether or not",
+    "definition": "不管是否；无论",
+    "example": "I'm going whether or not you come with me."
+  },
+  "on behalf of": {
+    "phrase": "on behalf of",
+    "definition": "代表；为了",
+    "example": "I'm speaking on behalf of the whole team."
+  },
+  "prior to": {
+    "phrase": "prior to",
+    "definition": "在……之前",
+    "example": "Please arrive at least ten minutes prior to the event."
+  },
+  "subsequent to": {
+    "phrase": "subsequent to",
+    "definition": "在……之后",
+    "example": "Subsequent to the meeting, a decision was made."
+  },
+  "in the context of": {
+    "phrase": "in the context of",
+    "definition": "在……的背景下",
+    "example": "In the context of globalisation, cultural identity is important."
+  },
+  "on account of": {
+    "phrase": "on account of",
+    "definition": "由于；因为",
+    "example": "The match was cancelled on account of rain."
+  },
+  "in favour of": {
+    "phrase": "in favour of",
+    "definition": "支持；赞成",
+    "example": "Most people voted in favour of the proposal."
+  },
+  "in response to": {
+    "phrase": "in response to",
+    "definition": "作为对……的回应",
+    "example": "The company changed its policy in response to complaints."
+  },
+  "on the basis of": {
+    "phrase": "on the basis of",
+    "definition": "在……的基础上",
+    "example": "Decisions should be made on the basis of evidence."
+  },
+  "as a whole": {
+    "phrase": "as a whole",
+    "definition": "作为一个整体；总体而言",
+    "example": "The economy as a whole is recovering."
+  },
+  "in the absence of": {
+    "phrase": "in the absence of",
+    "definition": "在缺乏……的情况下",
+    "example": "In the absence of clear guidelines, confusion arose."
+  },
+  "with the exception of": {
+    "phrase": "with the exception of",
+    "definition": "除……之外",
+    "example": "Everyone passed with the exception of two students."
+  },
+  "in comparison with": {
+    "phrase": "in comparison with",
+    "definition": "与……相比",
+    "example": "The new model is cheaper in comparison with the old one."
+  },
+  "in relation to": {
+    "phrase": "in relation to",
+    "definition": "关于；与……有关",
+    "example": "There have been several changes in relation to the policy."
+  },
+  "to put it simply": {
+    "phrase": "to put it simply",
+    "definition": "简单来说",
+    "example": "To put it simply, we need more money."
+  },
+  "to begin with": {
+    "phrase": "to begin with",
+    "definition": "首先；一开始",
+    "example": "To begin with, I'd like to thank everyone for coming."
+  },
+  "last but not least": {
+    "phrase": "last but not least",
+    "definition": "最后但同样重要的",
+    "example": "Last but not least, I'd like to mention our volunteers."
+  },
+  "first and foremost": {
+    "phrase": "first and foremost",
+    "definition": "首先；最重要的是",
+    "example": "First and foremost, safety must be our priority."
+  },
+  "in the same way": {
+    "phrase": "in the same way",
+    "definition": "同样地；以同样的方式",
+    "example": "Adults, in the same way as children, need encouragement."
+  },
+  "by contrast": {
+    "phrase": "by contrast",
+    "definition": "相比之下",
+    "example": "The north is industrial. By contrast, the south is agricultural."
+  },
+  "on balance": {
+    "phrase": "on balance",
+    "definition": "总的来说；权衡利弊",
+    "example": "On balance, the advantages outweigh the disadvantages."
+  },
+  "to a great extent": {
+    "phrase": "to a great extent",
+    "definition": "在很大程度上",
+    "example": "Her success is to a great extent due to hard work."
+  },
+  "in essence": {
+    "phrase": "in essence",
+    "definition": "本质上；实质上",
+    "example": "In essence, the two theories are very similar."
+  },
+  "as a general rule": {
+    "phrase": "as a general rule",
+    "definition": "一般来说；通常",
+    "example": "As a general rule, you should drink eight glasses of water a day."
+  },
+  "needless to say": {
+    "phrase": "needless to say",
+    "definition": "不用说；不言而喻",
+    "example": "Needless to say, the exam was extremely difficult."
+  },
+  "it is worth mentioning": {
+    "phrase": "it is worth mentioning",
+    "definition": "值得一提的是",
+    "example": "It is worth mentioning that the study has some limitations."
+  },
+  "it stands to reason": {
+    "phrase": "it stands to reason",
+    "definition": "理所当然；合情合理",
+    "example": "It stands to reason that healthier employees are more productive."
+  },
+  "it remains to be seen": {
+    "phrase": "it remains to be seen",
+    "definition": "有待观察；尚不确定",
+    "example": "It remains to be seen whether the policy will be effective."
+  },
+  "it is no exaggeration to say": {
+    "phrase": "it is no exaggeration to say",
+    "definition": "毫不夸张地说",
+    "example": "It is no exaggeration to say that this discovery changed the world."
+  },
+  "it should be noted that": {
+    "phrase": "it should be noted that",
+    "definition": "应当注意的是",
+    "example": "It should be noted that these results are preliminary."
+  },
+  "there is growing evidence that": {
+    "phrase": "there is growing evidence that",
+    "definition": "有越来越多的证据表明",
+    "example": "There is growing evidence that meditation reduces stress."
+  },
+  "it is often argued that": {
+    "phrase": "it is often argued that",
+    "definition": "人们常常认为；有人经常论证",
+    "example": "It is often argued that technology makes life easier."
+  },
+  "it is commonly held that": {
+    "phrase": "it is commonly held that",
+    "definition": "人们通常认为",
+    "example": "It is commonly held that breakfast is the most important meal."
+  },
+  "from a practical standpoint": {
+    "phrase": "from a practical standpoint",
+    "definition": "从实际角度来看",
+    "example": "From a practical standpoint, the plan is not feasible."
+  },
+  "from a different perspective": {
+    "phrase": "from a different perspective",
+    "definition": "从不同的角度",
+    "example": "Let's look at the issue from a different perspective."
+  },
+  "on a global scale": {
+    "phrase": "on a global scale",
+    "definition": "在全球范围内",
+    "example": "Climate change is a problem on a global scale."
+  },
+  "keep in mind": {
+    "phrase": "keep in mind",
+    "definition": "记住；牢记",
+    "example": "Keep in mind that deadlines are strict."
+  },
+  "take for granted": {
+    "phrase": "take for granted",
+    "definition": "认为……理所当然",
+    "example": "We often take clean water for granted."
+  },
+  "bear in mind": {
+    "phrase": "bear in mind",
+    "definition": "记住；考虑到",
+    "example": "Bear in mind that prices may change."
+  },
+  "make the most of": {
+    "phrase": "make the most of",
+    "definition": "充分利用",
+    "example": "Let's make the most of this opportunity."
+  },
+  "at stake": {
+    "phrase": "at stake",
+    "definition": "处于危险中；在紧要关头",
+    "example": "There are many jobs at stake if the factory closes."
+  },
+  "at first glance": {
+    "phrase": "at first glance",
+    "definition": "乍一看；初看起来",
+    "example": "At first glance, the task seemed easy."
+  },
+  "at all costs": {
+    "phrase": "at all costs",
+    "definition": "不惜一切代价",
+    "example": "We must protect the environment at all costs."
+  },
+  "at a glance": {
+    "phrase": "at a glance",
+    "definition": "一眼就能看出",
+    "example": "You can see the key data at a glance."
+  },
+  "behind the scenes": {
+    "phrase": "behind the scenes",
+    "definition": "在幕后",
+    "example": "A lot of hard work goes on behind the scenes."
+  },
+  "beyond doubt": {
+    "phrase": "beyond doubt",
+    "definition": "毫无疑问",
+    "example": "Her talent is beyond doubt."
+  },
+  "catch someone's eye": {
+    "phrase": "catch someone's eye",
+    "definition": "引起某人注意",
+    "example": "The bright colours caught my eye."
+  },
+  "come to terms with": {
+    "phrase": "come to terms with",
+    "definition": "接受（不愉快的事实）；妥协",
+    "example": "He had to come to terms with his failure."
+  },
+  "down the road": {
+    "phrase": "down the road",
+    "definition": "将来；以后",
+    "example": "We may face problems down the road."
+  },
+  "face the music": {
+    "phrase": "face the music",
+    "definition": "承担后果；面对现实",
+    "example": "He had to face the music after the scandal."
+  },
+  "from scratch": {
+    "phrase": "from scratch",
+    "definition": "从零开始；从头做起",
+    "example": "She built the business from scratch."
+  },
+  "get to the bottom of": {
+    "phrase": "get to the bottom of",
+    "definition": "弄清真相；追根究底",
+    "example": "We need to get to the bottom of this mystery."
+  },
+  "have second thoughts": {
+    "phrase": "have second thoughts",
+    "definition": "再三考虑；改变主意",
+    "example": "I'm having second thoughts about the trip."
+  },
+  "in a row": {
+    "phrase": "in a row",
+    "definition": "连续地",
+    "example": "She won three competitions in a row."
+  },
+  "in the nick of time": {
+    "phrase": "in the nick of time",
+    "definition": "恰好及时；千钧一发之际",
+    "example": "The ambulance arrived in the nick of time."
+  },
+  "jump to conclusions": {
+    "phrase": "jump to conclusions",
+    "definition": "妄下结论；过早下结论",
+    "example": "Don't jump to conclusions before hearing the facts."
+  },
+  "keep track of": {
+    "phrase": "keep track of",
+    "definition": "记录；追踪",
+    "example": "It's hard to keep track of all the changes."
+  },
+  "lose track of": {
+    "phrase": "lose track of",
+    "definition": "失去联系；忘记",
+    "example": "I completely lost track of time."
+  },
+  "make a living": {
+    "phrase": "make a living",
+    "definition": "谋生；维持生计",
+    "example": "He makes a living by teaching English."
+  },
+  "make progress": {
+    "phrase": "make progress",
+    "definition": "取得进步",
+    "example": "The students are making good progress."
+  },
+  "not to mention": {
+    "phrase": "not to mention",
+    "definition": "更不用说",
+    "example": "The hotel was expensive, not to mention the food."
+  },
+  "on a daily basis": {
+    "phrase": "on a daily basis",
+    "definition": "每天地",
+    "example": "He exercises on a daily basis."
+  },
+  "on the rise": {
+    "phrase": "on the rise",
+    "definition": "在上升；在增长",
+    "example": "Unemployment is on the rise."
+  },
+  "on the verge of": {
+    "phrase": "on the verge of",
+    "definition": "濒临；即将",
+    "example": "The company is on the verge of bankruptcy."
+  },
+  "on top of that": {
+    "phrase": "on top of that",
+    "definition": "除此之外；更何况",
+    "example": "The work was hard. On top of that, the pay was low."
+  },
+  "out of the question": {
+    "phrase": "out of the question",
+    "definition": "不可能的；不值得讨论的",
+    "example": "A pay rise is out of the question right now."
+  },
+  "pave the way for": {
+    "phrase": "pave the way for",
+    "definition": "为……铺平道路",
+    "example": "This discovery paved the way for new treatments."
+  },
+  "second to none": {
+    "phrase": "second to none",
+    "definition": "首屈一指；无与伦比",
+    "example": "Her cooking skills are second to none."
+  },
+  "sooner or later": {
+    "phrase": "sooner or later",
+    "definition": "迟早",
+    "example": "Sooner or later, the truth will come out."
+  },
+  "stand out": {
+    "phrase": "stand out",
+    "definition": "突出；引人注目",
+    "example": "Her application stood out from the rest."
+  },
+  "state of the art": {
+    "phrase": "state of the art",
+    "definition": "最先进的；最新水平的",
+    "example": "The hospital has state-of-the-art equipment."
+  },
+  "take advantage of": {
+    "phrase": "take advantage of",
+    "definition": "利用",
+    "example": "You should take advantage of this opportunity."
+  },
+  "take place": {
+    "phrase": "take place",
+    "definition": "发生；举行",
+    "example": "The ceremony will take place next Saturday."
+  },
+  "take steps": {
+    "phrase": "take steps",
+    "definition": "采取措施",
+    "example": "The government has taken steps to reduce pollution."
+  },
+  "the pros and cons": {
+    "phrase": "the pros and cons",
+    "definition": "利与弊",
+    "example": "We should consider the pros and cons carefully."
+  },
+  "to some extent": {
+    "phrase": "to some extent",
+    "definition": "在某种程度上",
+    "example": "I agree with you to some extent."
+  },
+  "up to date": {
+    "phrase": "up to date",
+    "definition": "最新的；与时俱进的",
+    "example": "Make sure your software is up to date."
+  },
+  "vice versa": {
+    "phrase": "vice versa",
+    "definition": "反之亦然",
+    "example": "She helps him, and vice versa."
+  },
+  "weigh up": {
+    "phrase": "weigh up",
+    "definition": "权衡；仔细考虑",
+    "example": "You need to weigh up the risks before deciding."
+  },
+  "without a doubt": {
+    "phrase": "without a doubt",
+    "definition": "毫无疑问",
+    "example": "She is, without a doubt, the best candidate."
+  },
+  "a great deal of": {
+    "phrase": "a great deal of",
+    "definition": "大量的",
+    "example": "A great deal of research has been done on this topic."
+  },
+  "a growing number of": {
+    "phrase": "a growing number of",
+    "definition": "越来越多的",
+    "example": "A growing number of people are working from home."
+  },
+  "a significant proportion of": {
+    "phrase": "a significant proportion of",
+    "definition": "很大一部分",
+    "example": "A significant proportion of the budget goes to education."
+  },
+  "along the lines of": {
+    "phrase": "along the lines of",
+    "definition": "沿着……的思路；类似于",
+    "example": "We're thinking along the lines of a small garden party."
+  },
+  "as far as ... is concerned": {
+    "phrase": "as far as ... is concerned",
+    "definition": "就……而言",
+    "example": "As far as money is concerned, we're fine."
+  },
+  "at the expense of": {
+    "phrase": "at the expense of",
+    "definition": "以……为代价",
+    "example": "Economic growth should not come at the expense of the environment."
+  },
+  "at the forefront of": {
+    "phrase": "at the forefront of",
+    "definition": "在……的最前沿",
+    "example": "The university is at the forefront of medical research."
+  },
+  "be bound to": {
+    "phrase": "be bound to",
+    "definition": "一定会；必然",
+    "example": "With so much practice, she's bound to succeed."
+  },
+  "be inclined to": {
+    "phrase": "be inclined to",
+    "definition": "倾向于；有意",
+    "example": "I'm inclined to agree with you."
+  },
+  "be subject to": {
+    "phrase": "be subject to",
+    "definition": "受制于；可能遭受",
+    "example": "Prices are subject to change without notice."
+  },
+  "be supposed to": {
+    "phrase": "be supposed to",
+    "definition": "应该；被期望",
+    "example": "You're supposed to hand it in by Monday."
+  },
+  "boil down to": {
+    "phrase": "boil down to",
+    "definition": "归结为",
+    "example": "It all boils down to money in the end."
+  },
+  "by all means": {
+    "phrase": "by all means",
+    "definition": "当然可以；尽一切办法",
+    "example": "By all means, go ahead with the plan."
+  },
+  "by means of": {
+    "phrase": "by means of",
+    "definition": "借助于；通过",
+    "example": "We communicate by means of language."
+  },
+  "come into play": {
+    "phrase": "come into play",
+    "definition": "开始起作用",
+    "example": "Many factors come into play when making a decision."
+  },
+  "come to light": {
+    "phrase": "come to light",
+    "definition": "被发现；真相大白",
+    "example": "New evidence has come to light."
+  },
+  "contribute to": {
+    "phrase": "contribute to",
+    "definition": "有助于；促成",
+    "example": "Exercise contributes to good health."
+  },
+  "cope with": {
+    "phrase": "cope with",
+    "definition": "应对；处理",
+    "example": "She learned how to cope with stress."
+  },
+  "deprive of": {
+    "phrase": "deprive of",
+    "definition": "剥夺；使丧失",
+    "example": "The war deprived many children of their education."
+  },
+  "do away with": {
+    "phrase": "do away with",
+    "definition": "废除；取消",
+    "example": "The government wants to do away with outdated regulations."
+  },
+  "fall short of": {
+    "phrase": "fall short of",
+    "definition": "未达到；不够",
+    "example": "The results fell short of expectations."
+  },
+  "gain access to": {
+    "phrase": "gain access to",
+    "definition": "获得……的机会；进入",
+    "example": "Students can gain access to the library 24 hours a day."
+  },
+  "have an impact on": {
+    "phrase": "have an impact on",
+    "definition": "对……产生影响",
+    "example": "Social media has a huge impact on young people."
+  },
+  "in the long term": {
+    "phrase": "in the long term",
+    "definition": "从长远来看",
+    "example": "The investment will pay off in the long term."
+  },
+  "in the short term": {
+    "phrase": "in the short term",
+    "definition": "短期内",
+    "example": "In the short term, there may be some disruption."
+  },
+  "keep pace with": {
+    "phrase": "keep pace with",
+    "definition": "跟上……的步伐",
+    "example": "Wages have not kept pace with inflation."
+  },
+  "lend itself to": {
+    "phrase": "lend itself to",
+    "definition": "适合于",
+    "example": "This room lends itself to large meetings."
+  },
+  "make up": {
+    "phrase": "make up",
+    "definition": "组成；编造；化妆；和解",
+    "example": "Women make up 60% of the student body."
+  },
+  "map out": {
+    "phrase": "map out",
+    "definition": "规划；详细安排",
+    "example": "She mapped out her career path carefully."
+  },
+  "on the grounds that": {
+    "phrase": "on the grounds that",
+    "definition": "以……为由",
+    "example": "The application was rejected on the grounds that it was incomplete."
+  },
+  "open up": {
+    "phrase": "open up",
+    "definition": "打开；开放；坦诚相待",
+    "example": "New markets are opening up in Asia."
+  },
+  "pan out": {
+    "phrase": "pan out",
+    "definition": "结果是；发展",
+    "example": "Let's see how things pan out."
+  },
+  "pay attention to": {
+    "phrase": "pay attention to",
+    "definition": "注意；关注",
+    "example": "Please pay attention to the instructions."
+  },
+  "play a part in": {
+    "phrase": "play a part in",
+    "definition": "在……中起作用",
+    "example": "Genetics play a part in determining intelligence."
+  },
+  "pose a threat to": {
+    "phrase": "pose a threat to",
+    "definition": "对……构成威胁",
+    "example": "Pollution poses a serious threat to public health."
+  },
+  "put forward": {
+    "phrase": "put forward",
+    "definition": "提出（建议、意见）",
+    "example": "Several proposals have been put forward."
+  },
+  "put into practice": {
+    "phrase": "put into practice",
+    "definition": "付诸实践",
+    "example": "It's time to put our plan into practice."
+  },
+  "raise awareness": {
+    "phrase": "raise awareness",
+    "definition": "提高意识",
+    "example": "The campaign aims to raise awareness about recycling."
+  },
+  "result in": {
+    "phrase": "result in",
+    "definition": "导致；造成",
+    "example": "The accident resulted in three injuries."
+  },
+  "set out to": {
+    "phrase": "set out to",
+    "definition": "着手做；开始做",
+    "example": "She set out to prove everyone wrong."
+  },
+  "take measures": {
+    "phrase": "take measures",
+    "definition": "采取措施",
+    "example": "The government must take measures to fight climate change."
+  },
+  "take part in": {
+    "phrase": "take part in",
+    "definition": "参加",
+    "example": "Over 500 students took part in the competition."
+  },
+  "the key to": {
+    "phrase": "the key to",
+    "definition": "……的关键",
+    "example": "Hard work is the key to success."
+  },
+  "to a lesser extent": {
+    "phrase": "to a lesser extent",
+    "definition": "在较小程度上",
+    "example": "English and, to a lesser extent, French are used in business."
+  },
+  "with a view to": {
+    "phrase": "with a view to",
+    "definition": "为了；目的在于",
+    "example": "He studied law with a view to becoming a judge."
+  },
+  "a far cry from": {
+    "phrase": "a far cry from",
+    "definition": "与……相去甚远",
+    "example": "This apartment is a far cry from the one we saw last week."
+  },
+  "a matter of time": {
+    "phrase": "a matter of time",
+    "definition": "时间问题；迟早的事",
+    "example": "It's only a matter of time before they find out."
+  },
+  "across the board": {
+    "phrase": "across the board",
+    "definition": "全面地；全体地",
+    "example": "Salaries were increased across the board."
+  },
+  "all walks of life": {
+    "phrase": "all walks of life",
+    "definition": "各行各业；社会各阶层",
+    "example": "The event attracted people from all walks of life."
+  },
+  "at a crossroads": {
+    "phrase": "at a crossroads",
+    "definition": "处于十字路口；面临重大抉择",
+    "example": "The country is at a crossroads in its history."
+  },
+  "at face value": {
+    "phrase": "at face value",
+    "definition": "从表面上看",
+    "example": "You shouldn't take everything at face value."
+  },
+  "at hand": {
+    "phrase": "at hand",
+    "definition": "手边的；即将到来的",
+    "example": "Let's focus on the task at hand."
+  },
+  "at odds with": {
+    "phrase": "at odds with",
+    "definition": "与……不一致；与……相矛盾",
+    "example": "His actions are at odds with his words."
+  },
+  "bridge the gap": {
+    "phrase": "bridge the gap",
+    "definition": "弥合差距；缩小差距",
+    "example": "Education can bridge the gap between rich and poor."
+  },
+  "broaden one's horizons": {
+    "phrase": "broaden one's horizons",
+    "definition": "开阔眼界",
+    "example": "Travelling abroad can broaden your horizons."
+  },
+  "by the same token": {
+    "phrase": "by the same token",
+    "definition": "同样地；出于同样的原因",
+    "example": "She was nervous, but by the same token, she was excited."
+  },
+  "cast doubt on": {
+    "phrase": "cast doubt on",
+    "definition": "对……产生怀疑",
+    "example": "The new evidence casts doubt on the original theory."
+  },
+  "cause and effect": {
+    "phrase": "cause and effect",
+    "definition": "因果关系",
+    "example": "It's important to understand the cause and effect of climate change."
+  },
+  "cut back on": {
+    "phrase": "cut back on",
+    "definition": "缩减；削减",
+    "example": "We need to cut back on unnecessary spending."
+  },
+  "day in, day out": {
+    "phrase": "day in, day out",
+    "definition": "日复一日地",
+    "example": "She practises the piano day in, day out."
+  },
+  "do one's utmost": {
+    "phrase": "do one's utmost",
+    "definition": "竭尽全力",
+    "example": "We will do our utmost to help you."
+  },
+  "draw attention to": {
+    "phrase": "draw attention to",
+    "definition": "引起对……的注意",
+    "example": "The report draws attention to the growing inequality."
+  },
+  "far-reaching": {
+    "phrase": "far-reaching",
+    "definition": "深远的；影响广泛的",
+    "example": "The decision had far-reaching consequences."
+  },
+  "from time to time": {
+    "phrase": "from time to time",
+    "definition": "偶尔；有时",
+    "example": "I visit my grandmother from time to time."
+  },
+  "gain ground": {
+    "phrase": "gain ground",
+    "definition": "取得进展；占上风",
+    "example": "Renewable energy is gaining ground worldwide."
+  },
+  "go hand in hand": {
+    "phrase": "go hand in hand",
+    "definition": "密切相关；并行",
+    "example": "Poverty and poor health often go hand in hand."
+  },
+  "hard and fast": {
+    "phrase": "hard and fast",
+    "definition": "严格的；不可更改的",
+    "example": "There are no hard and fast rules about this."
+  },
+  "in a bid to": {
+    "phrase": "in a bid to",
+    "definition": "为了；试图",
+    "example": "The company cut prices in a bid to attract more customers."
+  },
+  "in hindsight": {
+    "phrase": "in hindsight",
+    "definition": "事后看来",
+    "example": "In hindsight, I should have accepted the offer."
+  },
+  "in line with": {
+    "phrase": "in line with",
+    "definition": "与……一致；符合",
+    "example": "The results are in line with our expectations."
+  },
+  "in the face of": {
+    "phrase": "in the face of",
+    "definition": "面对；在……面前",
+    "example": "She remained calm in the face of danger."
+  },
+  "in the midst of": {
+    "phrase": "in the midst of",
+    "definition": "在……当中；在……之中",
+    "example": "We are in the midst of a global crisis."
+  },
+  "in turn": {
+    "phrase": "in turn",
+    "definition": "依次；反过来",
+    "example": "Exercise improves health, which in turn boosts productivity."
+  },
+  "make a difference": {
+    "phrase": "make a difference",
+    "definition": "有影响；起作用",
+    "example": "Every small action can make a difference."
+  },
+  "neck and neck": {
+    "phrase": "neck and neck",
+    "definition": "不相上下；势均力敌",
+    "example": "The two candidates are neck and neck in the polls."
+  },
+  "now and then": {
+    "phrase": "now and then",
+    "definition": "偶尔；时不时地",
+    "example": "We go to the cinema now and then."
+  },
+  "off the record": {
+    "phrase": "off the record",
+    "definition": "非正式地；不公开地",
+    "example": "Off the record, I think the policy will fail."
+  },
+  "on the decline": {
+    "phrase": "on the decline",
+    "definition": "在下降；在衰退",
+    "example": "Traditional industries are on the decline."
+  },
+  "on the spot": {
+    "phrase": "on the spot",
+    "definition": "当场；立即",
+    "example": "She was offered the job on the spot."
+  },
+  "out of reach": {
+    "phrase": "out of reach",
+    "definition": "够不到的；无法实现的",
+    "example": "A university education is out of reach for many families."
+  },
+  "raise the bar": {
+    "phrase": "raise the bar",
+    "definition": "提高标准",
+    "example": "This new product really raises the bar."
+  },
+  "run the risk of": {
+    "phrase": "run the risk of",
+    "definition": "冒……的风险",
+    "example": "We run the risk of losing everything."
+  },
+  "scratch the surface": {
+    "phrase": "scratch the surface",
+    "definition": "浅尝辄止；触及表面",
+    "example": "We've only scratched the surface of this problem."
+  },
+  "take a toll on": {
+    "phrase": "take a toll on",
+    "definition": "对……造成损害",
+    "example": "Stress takes a toll on your health."
+  },
+  "take the lead": {
+    "phrase": "take the lead",
+    "definition": "带头；领先",
+    "example": "China has taken the lead in renewable energy investment."
+  },
+  "the other way around": {
+    "phrase": "the other way around",
+    "definition": "反过来",
+    "example": "It's not that I don't like him — it's the other way around."
+  },
+  "tip of the iceberg": {
+    "phrase": "tip of the iceberg",
+    "definition": "冰山一角",
+    "example": "What we've seen so far is just the tip of the iceberg."
+  },
+  "to the point": {
+    "phrase": "to the point",
+    "definition": "切题的；中肯的",
+    "example": "Her comments were brief and to the point."
+  },
+  "trial and error": {
+    "phrase": "trial and error",
+    "definition": "反复试验；摸索",
+    "example": "We learned through trial and error."
+  },
+  "turn of events": {
+    "phrase": "turn of events",
+    "definition": "事态的转变",
+    "example": "In a surprising turn of events, the underdog won."
+  },
+  "ups and downs": {
+    "phrase": "ups and downs",
+    "definition": "起起落落；浮沉",
+    "example": "Every relationship has its ups and downs."
+  },
+  "water under the bridge": {
+    "phrase": "water under the bridge",
+    "definition": "过去的事了；既往不咎",
+    "example": "We had our disagreements, but that's water under the bridge."
+  },
+  "way of life": {
+    "phrase": "way of life",
+    "definition": "生活方式",
+    "example": "Technology has changed our way of life."
+  },
+  "well-being": {
+    "phrase": "well-being",
+    "definition": "幸福；健康",
+    "example": "The government should prioritise the well-being of its citizens."
+  },
+  "with flying colours": {
+    "phrase": "with flying colours",
+    "definition": "出色地；以优异的成绩",
+    "example": "She passed the exam with flying colours."
+  },
+  "a vicious circle": {
+    "phrase": "a vicious circle",
+    "definition": "恶性循环",
+    "example": "Poverty and poor education create a vicious circle."
+  },
+  "according to": {
+    "phrase": "according to",
+    "definition": "根据；按照",
+    "example": "According to the report, crime rates have decreased."
+  },
+  "after all": {
+    "phrase": "after all",
+    "definition": "毕竟；终归",
+    "example": "Don't be too hard on her — she's only a child, after all."
+  },
+  "all the more": {
+    "phrase": "all the more",
+    "definition": "更加；越发",
+    "example": "His criticism made her all the more determined."
+  },
+  "amount to": {
+    "phrase": "amount to",
+    "definition": "总计；等于",
+    "example": "The total cost amounted to several million dollars."
+  },
+  "apart from": {
+    "phrase": "apart from",
+    "definition": "除了……之外",
+    "example": "Apart from the weather, the trip was wonderful."
+  },
+  "around the clock": {
+    "phrase": "around the clock",
+    "definition": "夜以继日地；全天候",
+    "example": "Doctors worked around the clock to save patients."
+  },
+  "as a rule": {
+    "phrase": "as a rule",
+    "definition": "通常；一般而言",
+    "example": "As a rule, I go to bed before midnight."
+  },
+  "as it were": {
+    "phrase": "as it were",
+    "definition": "可以说；在某种程度上",
+    "example": "He is, as it were, the backbone of the team."
+  },
+  "at any rate": {
+    "phrase": "at any rate",
+    "definition": "无论如何；至少",
+    "example": "At any rate, we should try our best."
+  },
+  "at large": {
+    "phrase": "at large",
+    "definition": "总体上；逍遥法外",
+    "example": "The community at large will benefit from this project."
+  },
+  "be aware of": {
+    "phrase": "be aware of",
+    "definition": "意识到；知道",
+    "example": "You should be aware of the potential risks."
+  },
+  "be likely to": {
+    "phrase": "be likely to",
+    "definition": "可能会",
+    "example": "Prices are likely to rise in the near future."
+  },
+  "be well worth": {
+    "phrase": "be well worth",
+    "definition": "很值得",
+    "example": "The museum is well worth a visit."
+  },
+  "bring to light": {
+    "phrase": "bring to light",
+    "definition": "揭露；使显现",
+    "example": "The investigation brought several issues to light."
+  },
+  "by far": {
+    "phrase": "by far",
+    "definition": "到目前为止；显然",
+    "example": "She is by far the most talented singer."
+  },
+  "call for": {
+    "phrase": "call for",
+    "definition": "要求；呼吁",
+    "example": "The situation calls for immediate action."
+  },
+  "call into question": {
+    "phrase": "call into question",
+    "definition": "质疑；对……提出疑问",
+    "example": "The findings call into question the original hypothesis."
+  },
+  "carry on": {
+    "phrase": "carry on",
+    "definition": "继续进行",
+    "example": "Please carry on with your work."
+  },
+  "catch on": {
+    "phrase": "catch on",
+    "definition": "流行起来；理解",
+    "example": "The trend quickly caught on among young people."
+  },
+  "come about": {
+    "phrase": "come about",
+    "definition": "发生；产生",
+    "example": "How did this situation come about?"
+  },
+  "come down to": {
+    "phrase": "come down to",
+    "definition": "归结为",
+    "example": "In the end, it all comes down to money."
+  },
+  "dawn on": {
+    "phrase": "dawn on",
+    "definition": "（突然）明白；意识到",
+    "example": "It dawned on me that I had been wrong."
+  },
+  "derive from": {
+    "phrase": "derive from",
+    "definition": "源自；来源于",
+    "example": "Many English words derive from Latin."
+  },
+  "every now and then": {
+    "phrase": "every now and then",
+    "definition": "偶尔；时不时",
+    "example": "Every now and then, I like to treat myself to a nice dinner."
+  },
+  "for good": {
+    "phrase": "for good",
+    "definition": "永远地；永久地",
+    "example": "She left the country for good."
+  },
+  "from the outset": {
+    "phrase": "from the outset",
+    "definition": "从一开始",
+    "example": "Problems were apparent from the outset."
+  },
+  "get to grips with": {
+    "phrase": "get to grips with",
+    "definition": "开始认真处理；掌握",
+    "example": "It took me a while to get to grips with the software."
+  },
+  "give way to": {
+    "phrase": "give way to",
+    "definition": "让步于；被……取代",
+    "example": "Traditional methods gave way to modern technology."
+  },
+  "go beyond": {
+    "phrase": "go beyond",
+    "definition": "超越；超出",
+    "example": "This problem goes beyond what we expected."
+  },
+  "have a tendency to": {
+    "phrase": "have a tendency to",
+    "definition": "有……的倾向",
+    "example": "He has a tendency to exaggerate."
+  },
+  "in a sense": {
+    "phrase": "in a sense",
+    "definition": "从某种意义上说",
+    "example": "In a sense, we are all responsible for the environment."
+  },
+  "in any case": {
+    "phrase": "in any case",
+    "definition": "无论如何；不管怎样",
+    "example": "In any case, we should proceed as planned."
+  },
+  "in the event of": {
+    "phrase": "in the event of",
+    "definition": "万一；如果发生",
+    "example": "In the event of a fire, use the emergency exits."
+  },
+  "in this regard": {
+    "phrase": "in this regard",
+    "definition": "在这方面",
+    "example": "The government has made progress in this regard."
+  },
+  "in view of": {
+    "phrase": "in view of",
+    "definition": "鉴于；考虑到",
+    "example": "In view of the circumstances, we decided to postpone."
+  },
+  "lay the groundwork for": {
+    "phrase": "lay the groundwork for",
+    "definition": "为……打下基础",
+    "example": "Early education lays the groundwork for lifelong learning."
+  },
+  "lead to": {
+    "phrase": "lead to",
+    "definition": "导致；通向",
+    "example": "Poor diet can lead to health problems."
+  },
+  "let alone": {
+    "phrase": "let alone",
+    "definition": "更不用说",
+    "example": "He can't even cook rice, let alone a full meal."
+  },
+  "little by little": {
+    "phrase": "little by little",
+    "definition": "一点一点地；逐渐地",
+    "example": "Little by little, she improved her English."
+  },
+  "more often than not": {
+    "phrase": "more often than not",
+    "definition": "往往；多半",
+    "example": "More often than not, simple solutions work best."
+  },
+  "no matter what": {
+    "phrase": "no matter what",
+    "definition": "无论如何",
+    "example": "I'll support you no matter what."
+  },
+  "none the less": {
+    "phrase": "none the less",
+    "definition": "尽管如此；然而",
+    "example": "It was a difficult journey, but none the less rewarding."
+  },
+  "on the one hand": {
+    "phrase": "on the one hand",
+    "definition": "一方面",
+    "example": "On the one hand, I want to go; on the other, I'm tired."
+  },
+  "other than": {
+    "phrase": "other than",
+    "definition": "除了；不同于",
+    "example": "I have no choice other than to accept."
+  },
+  "over and above": {
+    "phrase": "over and above",
+    "definition": "除了……之外（还有）",
+    "example": "There are benefits over and above the salary."
+  },
+  "point of view": {
+    "phrase": "point of view",
+    "definition": "观点；看法",
+    "example": "Everyone has a different point of view."
+  },
+  "put emphasis on": {
+    "phrase": "put emphasis on",
+    "definition": "强调；注重",
+    "example": "Schools should put more emphasis on creativity."
+  },
+  "rest assured": {
+    "phrase": "rest assured",
+    "definition": "放心；尽管放心",
+    "example": "Rest assured, we will solve the problem."
+  },
+  "serve as": {
+    "phrase": "serve as",
+    "definition": "充当；用作",
+    "example": "This example serves as a warning to others."
+  },
+  "so far": {
+    "phrase": "so far",
+    "definition": "到目前为止",
+    "example": "So far, we have received 100 applications."
+  },
+  "take action": {
+    "phrase": "take action",
+    "definition": "采取行动",
+    "example": "It's time to take action against climate change."
+  },
+  "take responsibility for": {
+    "phrase": "take responsibility for",
+    "definition": "对……承担责任",
+    "example": "Everyone should take responsibility for their own actions."
+  },
+  "the bulk of": {
+    "phrase": "the bulk of",
+    "definition": "大部分",
+    "example": "The bulk of the funding goes to research."
+  },
+  "the fact remains that": {
+    "phrase": "the fact remains that",
+    "definition": "事实仍然是",
+    "example": "The fact remains that we have a long way to go."
+  },
+  "the vast majority of": {
+    "phrase": "the vast majority of",
+    "definition": "绝大多数",
+    "example": "The vast majority of students passed the exam."
+  },
+  "time and again": {
+    "phrase": "time and again",
+    "definition": "屡次；反复地",
+    "example": "He has proved himself time and again."
+  },
+  "to the extent that": {
+    "phrase": "to the extent that",
+    "definition": "到了……的程度",
+    "example": "She was helpful to the extent that she could be."
+  },
+  "with this in mind": {
+    "phrase": "with this in mind",
+    "definition": "考虑到这一点",
+    "example": "With this in mind, we revised our strategy."
+  },
+  "above all": {
+    "phrase": "above all",
+    "definition": "最重要的是；首先",
+    "example": "Above all, we must ensure the safety of the passengers."
+  },
+  "alongside": {
+    "phrase": "alongside",
+    "definition": "与……一起；在……旁边",
+    "example": "She worked alongside her colleagues for years."
+  },
+  "an array of": {
+    "phrase": "an array of",
+    "definition": "一系列的；大量的",
+    "example": "The store offers an array of organic products."
+  },
+  "as such": {
+    "phrase": "as such",
+    "definition": "因此；作为这样",
+    "example": "He is the captain and, as such, must lead by example."
+  },
+  "back and forth": {
+    "phrase": "back and forth",
+    "definition": "来来回回；反复地",
+    "example": "We went back and forth on the issue for hours."
+  },
+  "be at the heart of": {
+    "phrase": "be at the heart of",
+    "definition": "是……的核心",
+    "example": "Innovation is at the heart of the company's success."
+  },
+  "be in keeping with": {
+    "phrase": "be in keeping with",
+    "definition": "与……一致；符合",
+    "example": "The design is in keeping with the building's heritage."
+  },
+  "be of paramount importance": {
+    "phrase": "be of paramount importance",
+    "definition": "至关重要",
+    "example": "Safety is of paramount importance in the workplace."
+  },
+  "be prone to": {
+    "phrase": "be prone to",
+    "definition": "易于……的；有……倾向的",
+    "example": "This area is prone to flooding."
+  },
+  "bear witness to": {
+    "phrase": "bear witness to",
+    "definition": "见证；证明",
+    "example": "The ruins bear witness to a once-great civilisation."
+  },
+  "break new ground": {
+    "phrase": "break new ground",
+    "definition": "开辟新天地；有创新突破",
+    "example": "The research breaks new ground in cancer treatment."
+  },
+  "by definition": {
+    "phrase": "by definition",
+    "definition": "根据定义；从本质上说",
+    "example": "A democracy is, by definition, governed by the people."
+  },
+  "catch up on": {
+    "phrase": "catch up on",
+    "definition": "赶做；补上",
+    "example": "I need to catch up on some sleep."
+  },
+  "close the gap": {
+    "phrase": "close the gap",
+    "definition": "缩小差距",
+    "example": "The government aims to close the gap between rich and poor."
+  },
+  "come to a conclusion": {
+    "phrase": "come to a conclusion",
+    "definition": "得出结论",
+    "example": "After much discussion, we came to a conclusion."
+  },
+  "contrary to": {
+    "phrase": "contrary to",
+    "definition": "与……相反",
+    "example": "Contrary to popular belief, coffee is not always bad for you."
+  },
+  "do more harm than good": {
+    "phrase": "do more harm than good",
+    "definition": "弊大于利",
+    "example": "Overprotective parenting can do more harm than good."
+  },
+  "embark on": {
+    "phrase": "embark on",
+    "definition": "着手做；开始（新的事业）",
+    "example": "She embarked on a new career in teaching."
+  },
+  "err on the side of caution": {
+    "phrase": "err on the side of caution",
+    "definition": "宁可谨慎行事",
+    "example": "When in doubt, err on the side of caution."
+  },
+  "food for thought": {
+    "phrase": "food for thought",
+    "definition": "引人深思的事",
+    "example": ""
+  },
+  "get the hang of": {
+    "phrase": "get the hang of",
+    "definition": "掌握……的窍门",
+    "example": "It takes time to get the hang of a new language."
+  },
+  "go a long way": {
+    "phrase": "go a long way",
+    "definition": "大有帮助；很有效果",
+    "example": "A little kindness goes a long way."
+  },
+  "have a bearing on": {
+    "phrase": "have a bearing on",
+    "definition": "与……有关；对……有影响",
+    "example": "Your attitude has a direct bearing on your success."
+  },
+  "in a position to": {
+    "phrase": "in a position to",
+    "definition": "有能力做；有条件做",
+    "example": "We are not in a position to comment at this time."
+  },
+  "in pursuit of": {
+    "phrase": "in pursuit of",
+    "definition": "追求；寻求",
+    "example": "Many people move abroad in pursuit of a better life."
+  },
+  "in the interests of": {
+    "phrase": "in the interests of",
+    "definition": "为了……的利益",
+    "example": "In the interests of safety, please wear a seatbelt."
+  },
+  "in this day and age": {
+    "phrase": "in this day and age",
+    "definition": "在当今时代",
+    "example": "In this day and age, everyone should be able to access education."
+  },
+  "keep abreast of": {
+    "phrase": "keep abreast of",
+    "definition": "了解最新情况；紧跟",
+    "example": "It's important to keep abreast of current affairs."
+  },
+  "level the playing field": {
+    "phrase": "level the playing field",
+    "definition": "创造公平竞争环境",
+    "example": "The new regulations aim to level the playing field."
+  },
+  "loom large": {
+    "phrase": "loom large",
+    "definition": "变得突出；显得重要",
+    "example": "Environmental concerns loom large in political debate."
+  },
+  "make headway": {
+    "phrase": "make headway",
+    "definition": "取得进展",
+    "example": "We are finally making headway on the project."
+  },
+  "mark a turning point": {
+    "phrase": "mark a turning point",
+    "definition": "标志着转折点",
+    "example": "The discovery marked a turning point in science."
+  },
+  "no wonder": {
+    "phrase": "no wonder",
+    "definition": "难怪；不足为奇",
+    "example": "You didn't sleep — no wonder you're tired."
+  },
+  "of great significance": {
+    "phrase": "of great significance",
+    "definition": "意义重大的",
+    "example": "This finding is of great significance."
+  },
+  "on the grounds of": {
+    "phrase": "on the grounds of",
+    "definition": "以……为理由",
+    "example": "She was dismissed on the grounds of misconduct."
+  },
+  "one way or another": {
+    "phrase": "one way or another",
+    "definition": "以某种方式；不管怎样",
+    "example": "One way or another, we'll get it done."
+  },
+  "outweigh": {
+    "phrase": "outweigh",
+    "definition": "超过；胜过",
+    "example": "The benefits outweigh the risks."
+  },
+  "owing to the fact that": {
+    "phrase": "owing to the fact that",
+    "definition": "由于……的事实",
+    "example": "He failed, owing to the fact that he didn't prepare."
+  },
+  "play devil's advocate": {
+    "phrase": "play devil's advocate",
+    "definition": "故意唱反调",
+    "example": "Let me play devil's advocate for a moment."
+  },
+  "provide insight into": {
+    "phrase": "provide insight into",
+    "definition": "提供对……的深刻见解",
+    "example": "The study provides insight into consumer behaviour."
+  },
+  "reap the benefits": {
+    "phrase": "reap the benefits",
+    "definition": "收获利益；享受好处",
+    "example": "If you study hard, you will reap the benefits."
+  },
+  "set the stage for": {
+    "phrase": "set the stage for",
+    "definition": "为……做好准备；为……奠定基础",
+    "example": "This agreement sets the stage for future cooperation."
+  },
+  "shed light on": {
+    "phrase": "shed light on",
+    "definition": "阐明；使……更加清楚",
+    "example": ""
+  },
+  "side by side": {
+    "phrase": "side by side",
+    "definition": "肩并肩；一起",
+    "example": "The two communities live side by side."
+  },
+  "strike a balance": {
+    "phrase": "strike a balance",
+    "definition": "取得平衡",
+    "example": "We need to strike a balance between work and leisure."
+  },
+  "take a stand": {
+    "phrase": "take a stand",
+    "definition": "表明立场；采取立场",
+    "example": "It's time to take a stand against injustice."
+  },
+  "take its toll": {
+    "phrase": "take its toll",
+    "definition": "产生不良后果；造成损失",
+    "example": "Years of stress have taken their toll on his health."
+  },
+  "the crux of the matter": {
+    "phrase": "the crux of the matter",
+    "definition": "问题的关键",
+    "example": "The crux of the matter is funding."
+  },
+  "think twice": {
+    "phrase": "think twice",
+    "definition": "三思；再想想",
+    "example": "You should think twice before making such a big decision."
+  },
+  "to name but a few": {
+    "phrase": "to name but a few",
+    "definition": "仅举几例",
+    "example": "There are many benefits — improved health, lower costs, and reduced pollution, to name but a few."
+  },
+  "touch on": {
+    "phrase": "touch on",
+    "definition": "涉及；谈到",
+    "example": "The speaker touched on several important issues."
+  },
+  "turn the tide": {
+    "phrase": "turn the tide",
+    "definition": "扭转局面",
+    "example": "New technology could turn the tide in the fight against disease."
+  },
+  "uphold": {
+    "phrase": "uphold",
+    "definition": "支持；维护",
+    "example": "It is our duty to uphold the law."
+  },
+  "wreak havoc": {
+    "phrase": "wreak havoc",
+    "definition": "造成严重破坏",
+    "example": "The storm wreaked havoc on the coastal town."
+  },
+  "at the outset": {
+    "phrase": "at the outset",
+    "definition": "在开始时",
+    "example": "At the outset, I'd like to clarify a few points."
+  },
+  "come to fruition": {
+    "phrase": "come to fruition",
+    "definition": "实现；成果",
+    "example": "After years of planning, the project came to fruition."
+  },
+  "in the foreseeable future": {
+    "phrase": "in the foreseeable future",
+    "definition": "在可预见的将来",
+    "example": "There's no sign of improvement in the foreseeable future."
+  },
+  "on a broader level": {
+    "phrase": "on a broader level",
+    "definition": "在更广泛的层面上",
+    "example": "On a broader level, the policy affects the entire economy."
+  },
+  "at one's disposal": {
+    "phrase": "at one's disposal",
+    "definition": "可供使用；任凭支配",
+    "example": "We have the latest technology at our disposal."
+  },
+  "on the grounds": {
+    "phrase": "on the grounds",
+    "definition": "以……为理由",
+    "example": "He was rejected on the grounds of insufficient experience."
+  },
+  "turn a deaf ear to": {
+    "phrase": "turn a deaf ear to",
+    "definition": "对……充耳不闻",
+    "example": "The authorities turned a deaf ear to our complaints."
+  },
+  "in stark contrast to": {
+    "phrase": "in stark contrast to",
+    "definition": "与……形成鲜明对比",
+    "example": "Her optimism was in stark contrast to his pessimism."
+  },
+  "leave much to be desired": {
+    "phrase": "leave much to be desired",
+    "definition": "有很多不足之处",
+    "example": "The quality of service leaves much to be desired."
+  },
+  "to no avail": {
+    "phrase": "to no avail",
+    "definition": "徒劳；无效",
+    "example": "He tried to fix it, but to no avail."
+  },
+  "the bottom line is": {
+    "phrase": "the bottom line is",
+    "definition": "关键是；最重要的是",
+    "example": "The bottom line is we need to cut costs."
+  },
+  "at the core of": {
+    "phrase": "at the core of",
+    "definition": "在……的核心",
+    "example": "Education is at the core of national development."
+  },
+  "a stepping stone": {
+    "phrase": "a stepping stone",
+    "definition": "跳板；垫脚石",
+    "example": "This job can be a stepping stone to a better career."
+  },
+  "in a broader sense": {
+    "phrase": "in a broader sense",
+    "definition": "从更广泛的意义上说",
+    "example": "In a broader sense, this issue affects all of society."
+  },
+  "the driving force behind": {
+    "phrase": "the driving force behind",
+    "definition": "……的推动力",
+    "example": "Innovation is the driving force behind economic growth."
+  },
+  "to that end": {
+    "phrase": "to that end",
+    "definition": "为此目的",
+    "example": "We want to improve efficiency. To that end, we've hired more staff."
+  },
+  "go without saying": {
+    "phrase": "go without saying",
+    "definition": "不言而喻",
+    "example": "It goes without saying that hard work pays off."
+  },
+  "have the upper hand": {
+    "phrase": "have the upper hand",
+    "definition": "占上风；处于有利地位",
+    "example": "The home team had the upper hand throughout the match."
+  },
+  "in the realm of": {
+    "phrase": "in the realm of",
+    "definition": "在……的领域里",
+    "example": "There have been breakthroughs in the realm of medicine."
+  },
+  "make or break": {
+    "phrase": "make or break",
+    "definition": "成败攸关的",
+    "example": "This exam could make or break her future."
+  },
+  "on the horizon": {
+    "phrase": "on the horizon",
+    "definition": "即将来临；在望",
+    "example": "There are exciting changes on the horizon."
+  },
+  "the root cause of": {
+    "phrase": "the root cause of",
+    "definition": "……的根本原因",
+    "example": "We must address the root cause of the problem."
+  },
+  "a handful of": {
+    "phrase": "a handful of",
+    "definition": "少数的；一小部分",
+    "example": "Only a handful of students got full marks."
+  },
+  "go from strength to strength": {
+    "phrase": "go from strength to strength",
+    "definition": "不断壮大；越来越好",
+    "example": "The company has gone from strength to strength."
+  },
+  "in no uncertain terms": {
+    "phrase": "in no uncertain terms",
+    "definition": "毫不含糊地；明确地",
+    "example": "She told him in no uncertain terms to leave."
+  },
+  "a host of": {
+    "phrase": "a host of",
+    "definition": "大量的；许多",
+    "example": "The project faces a host of challenges."
+  },
+  "above and beyond": {
+    "phrase": "above and beyond",
+    "definition": "超出；超越本分",
+    "example": "She went above and beyond to help us."
+  },
+  "at the mercy of": {
+    "phrase": "at the mercy of",
+    "definition": "受……支配；任凭……摆布",
+    "example": "Farmers are at the mercy of the weather."
+  },
+  "get a grip on": {
+    "phrase": "get a grip on",
+    "definition": "控制住；掌握",
+    "example": "You need to get a grip on your spending."
+  },
+  "in the pipeline": {
+    "phrase": "in the pipeline",
+    "definition": "在准备中；在进行中",
+    "example": "Several new products are in the pipeline."
+  },
+  "on a par with": {
+    "phrase": "on a par with",
+    "definition": "与……同等水平",
+    "example": "His work is on a par with the best in the field."
+  },
+  "set a precedent": {
+    "phrase": "set a precedent",
+    "definition": "开创先例",
+    "example": "This ruling could set a dangerous precedent."
+  },
+  "the lion's share": {
+    "phrase": "the lion's share",
+    "definition": "最大的份额；大部分",
+    "example": "The lion's share of the budget goes to defence."
+  },
+  "at this juncture": {
+    "phrase": "at this juncture",
+    "definition": "在此关头；在此时",
+    "example": "At this juncture, we must make a decision."
+  },
+  "a bone of contention": {
+    "phrase": "a bone of contention",
+    "definition": "争论的焦点；分歧所在",
+    "example": "Immigration has long been a bone of contention."
+  },
+  "leave no stone unturned": {
+    "phrase": "leave no stone unturned",
+    "definition": "想尽一切办法；不遗余力",
+    "example": "The police left no stone unturned in their investigation."
+  }
+}

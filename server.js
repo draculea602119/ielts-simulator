@@ -14,13 +14,40 @@ if (proxyUrl) {
   }
 }
 
+const compression = require('compression');
+
 const app = express();
+app.use(compression());
 app.use(express.json({ limit: '2mb' }));
-app.use(express.static(path.join(__dirname, 'public')));
+
+// Static files — no strong cache for JS/CSS/HTML (use ETag for revalidation)
+app.use(express.static(path.join(__dirname, 'public'), {
+  etag: true,
+  lastModified: true,
+  setHeaders(res, filePath) {
+    if (filePath.endsWith('.html') || filePath.endsWith('.js') || filePath.endsWith('.css')) {
+      // Always revalidate code files — ETag handles 304 Not Modified
+      res.setHeader('Cache-Control', 'no-cache');
+    } else if (filePath.includes('/data/') || filePath.endsWith('.json')) {
+      res.setHeader('Cache-Control', 'public, max-age=86400'); // 1 day for data
+    } else {
+      res.setHeader('Cache-Control', 'public, max-age=604800'); // 7 days for images/fonts/icons
+    }
+  }
+}));
 
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/tests', require('./routes/tests'));
 app.use('/api/speaking', require('./routes/speaking'));
+app.use('/api/dict', require('./routes/dict'));
+app.use('/api/vocab', require('./routes/vocabulary'));
+app.use('/api/activity', require('./routes/activity'));
+app.use('/api/writing', require('./routes/writing'));
+
+// API 404 (don't serve index.html for mistyped API routes)
+app.all('/api/*', (req, res) => {
+  res.status(404).json({ error: 'Not found' });
+});
 
 // SPA fallback
 app.get('*', (req, res) => {
@@ -28,6 +55,10 @@ app.get('*', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`IELTS Simulator running on http://localhost:${PORT}`);
 });
+
+// Attach realtime speaking WebSocket
+const { attachRealtimeWS } = require('./routes/speaking-realtime');
+attachRealtimeWS(server);

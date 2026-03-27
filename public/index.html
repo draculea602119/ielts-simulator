@@ -1,18 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IELTS Mock Exam Simulator</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <title>IELTS Mock Exam Simulator — 雅思模拟考试平台</title>
+  <meta name="description" content="Free online IELTS Academic mock exam simulator with 25 full tests. Practice Listening, Reading, Writing & Speaking with AI scoring, timed exercises, vocabulary flashcards, and detailed analytics.">
+  <meta name="keywords" content="IELTS, 雅思模拟考试, IELTS mock test, IELTS practice, 雅思听力, 雅思阅读, 雅思写作, 雅思口语, AI speaking practice, IELTS simulator">
+  <link rel="canonical" href="https://ielts.draculea.cn/">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="IELTS Mock Exam Simulator — 雅思模拟考试平台">
+  <meta property="og:description" content="25 套雅思学术类全真模拟，AI 写作批改 + 口语评分，在线免费练习">
+  <meta property="og:url" content="https://ielts.draculea.cn/">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:site_name" content="IELTS Simulator">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="IELTS Mock Exam Simulator — 雅思模拟考试平台">
+  <meta name="twitter:description" content="25 full Academic mock tests with AI scoring. Practice Listening, Reading, Writing & Speaking online.">
+  <!-- Hreflang -->
+  <link rel="alternate" hreflang="zh-CN" href="https://ielts.draculea.cn/">
+  <link rel="alternate" hreflang="en" href="https://ielts.draculea.cn/">
+  <link rel="alternate" hreflang="x-default" href="https://ielts.draculea.cn/">
+  <!-- PWA -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#28786a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="IELTS Sim">
+  <link rel="apple-touch-icon" href="/icons/icon-192.svg">
+  <!-- Fonts (non-render-blocking) & CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
   <link rel="stylesheet" href="css/style.css">
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "IELTS Mock Exam Simulator",
+    "alternateName": "雅思模拟考试平台",
+    "url": "https://ielts.draculea.cn/",
+    "description": "Free online IELTS Academic mock exam simulator with 25 full tests, AI-powered Writing and Speaking scoring, vocabulary flashcards, and detailed analytics.",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "inLanguage": ["en", "zh-CN"],
+    "provider": { "@type": "Organization", "name": "IELTS Simulator" }
+  }
+  </script>
 </head>
 <body class="light-mode">
 
+<!-- Skip Navigation -->
+<a href="#main-content" class="skip-nav">跳到主要内容</a>
+
 <!-- ========== LOADING OVERLAY ========== -->
-<div id="loadingOverlay" class="v-loading" style="display:none">
+<div id="loadingOverlay" class="v-loading" style="display:none" role="alert" aria-live="polite">
   <div class="v-loading-card">
     <div class="v-spinner"></div>
     <div id="loadingMsg" class="v-loading-msg">处理中...</div>
@@ -42,31 +90,31 @@
 
       <form id="form-login" class="v-auth-form" onsubmit="handleLogin(event)">
         <div class="v-field">
-          <label class="v-label">用户名</label>
+          <label class="v-label" for="login-username">用户名</label>
           <input class="v-input" id="login-username" type="text" placeholder="请输入用户名" autocomplete="username" required>
         </div>
         <div class="v-field">
-          <label class="v-label">密码</label>
+          <label class="v-label" for="login-password">密码</label>
           <input class="v-input" id="login-password" type="password" placeholder="请输入密码" autocomplete="current-password" required>
         </div>
-        <div class="v-auth-error" id="login-error"></div>
+        <div class="v-auth-error" id="login-error" role="alert" aria-live="polite"></div>
         <button class="v-auth-submit" type="submit" id="login-btn">登录账号</button>
       </form>
 
       <form id="form-register" class="v-auth-form" style="display:none" onsubmit="handleRegister(event)">
         <div class="v-field">
-          <label class="v-label">用户名</label>
+          <label class="v-label" for="reg-username">用户名</label>
           <input class="v-input" id="reg-username" type="text" placeholder="2–20 个字符" autocomplete="username" required>
         </div>
         <div class="v-field">
-          <label class="v-label">密码</label>
+          <label class="v-label" for="reg-password">密码</label>
           <input class="v-input" id="reg-password" type="password" placeholder="至少 6 位" autocomplete="new-password" required>
         </div>
         <div class="v-field">
-          <label class="v-label">确认密码</label>
+          <label class="v-label" for="reg-password2">确认密码</label>
           <input class="v-input" id="reg-password2" type="password" placeholder="再次输入密码" autocomplete="new-password" required>
         </div>
-        <div class="v-auth-error" id="reg-error"></div>
+        <div class="v-auth-error" id="reg-error" role="alert" aria-live="polite"></div>
         <button class="v-auth-submit" type="submit" id="reg-btn">创建账号</button>
       </form>
     </div>
@@ -84,7 +132,7 @@
       </div>
       <div class="hp-nav-right">
         <span class="user-badge" id="userBadge"></span>
-        <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+        <button class="theme-toggle" id="themeToggle" title="Toggle Theme" aria-label="切换深色/浅色模式">
           <span class="theme-icon">🌙</span>
         </button>
         <button class="logout-btn" onclick="logout()" title="退出登录">退出</button>
@@ -104,13 +152,21 @@
       <div class="hp-score-tag" id="scoreSummary" style="display:none">
         <span id="summaryText"></span>
       </div>
+      <div class="hp-streak-row" id="streakRow" style="display:none">
+        <div class="hp-streak-badge" id="streakBadge" title="连续学习天数">
+          <span class="hp-streak-fire">🔥</span>
+          <span class="hp-streak-num" id="streakNum">0</span>
+          <span class="hp-streak-label">天</span>
+        </div>
+        <div class="hp-week-rings" id="weekRings"></div>
+      </div>
     </section>
   </div>
 
-  <main class="hp-main">
+  <main class="hp-main" id="main-content">
 
     <section class="hp-modules">
-      <div class="hp-mod" data-c="blue" onclick="quickStartSection('listening')" title="开始听力练习">
+      <div class="hp-mod" data-c="blue" onclick="quickStartSection('listening')" onkeydown="if(event.key==='Enter')quickStartSection('listening')" role="button" tabindex="0" title="开始听力练习">
         <div class="hp-mod-icon">🎧</div>
         <div class="hp-mod-info">
           <div class="hp-mod-name">Listening</div>
@@ -118,7 +174,7 @@
         </div>
         <div class="hp-mod-arrow">→</div>
       </div>
-      <div class="hp-mod" data-c="green" onclick="quickStartSection('reading')" title="开始阅读练习">
+      <div class="hp-mod" data-c="green" onclick="quickStartSection('reading')" onkeydown="if(event.key==='Enter')quickStartSection('reading')" role="button" tabindex="0" title="开始阅读练习">
         <div class="hp-mod-icon">📖</div>
         <div class="hp-mod-info">
           <div class="hp-mod-name">Reading</div>
@@ -126,7 +182,7 @@
         </div>
         <div class="hp-mod-arrow">→</div>
       </div>
-      <div class="hp-mod" data-c="amber" onclick="quickStartSection('writing')" title="开始写作练习">
+      <div class="hp-mod" data-c="amber" onclick="quickStartSection('writing')" onkeydown="if(event.key==='Enter')quickStartSection('writing')" role="button" tabindex="0" title="开始写作练习">
         <div class="hp-mod-icon">✍️</div>
         <div class="hp-mod-info">
           <div class="hp-mod-name">Writing</div>
@@ -134,7 +190,7 @@
         </div>
         <div class="hp-mod-arrow">→</div>
       </div>
-      <div class="hp-mod" data-c="violet" onclick="quickStartSection('speaking')" title="开始口语AI练习">
+      <div class="hp-mod" data-c="violet" onclick="quickStartSection('speaking')" onkeydown="if(event.key==='Enter')quickStartSection('speaking')" role="button" tabindex="0" title="开始口语AI练习">
         <div class="hp-mod-icon">🎤</div>
         <div class="hp-mod-info">
           <div class="hp-mod-name">Speaking</div>
@@ -155,6 +211,86 @@
       <button class="hp-speak-cta-btn" onclick="goToSpeakPage()">开始练习 →</button>
     </div>
 
+    <div class="hp-speak-cta hp-novel-cta">
+      <div class="hp-speak-cta-left">
+        <div class="hp-speak-cta-icon">📚</div>
+        <div>
+          <div class="hp-speak-cta-title">英文小说阅读</div>
+          <div class="hp-speak-cta-sub">精选经典公版小说，分级难度，点击查词 + 朗读功能，轻松积累词汇</div>
+        </div>
+      </div>
+      <button class="hp-speak-cta-btn" onclick="goToNovelPage()">开始阅读 →</button>
+    </div>
+
+    <div class="hp-cta-row">
+      <div class="hp-speak-cta hp-writing-cta hp-cta-half">
+        <div class="hp-speak-cta-left">
+          <div class="hp-speak-cta-icon">✍️</div>
+          <div>
+            <div class="hp-speak-cta-title">写作练习</div>
+            <div class="hp-speak-cta-sub">50题，AI 四维评分</div>
+          </div>
+        </div>
+        <button class="hp-speak-cta-btn" onclick="goToWritingPage()">开始 →</button>
+      </div>
+      <div class="hp-speak-cta hp-tread-cta hp-cta-half">
+        <div class="hp-speak-cta-left">
+          <div class="hp-speak-cta-icon">⏱️</div>
+          <div>
+            <div class="hp-speak-cta-title">限时阅读</div>
+            <div class="hp-speak-cta-sub">计时阅读，追踪 WPM</div>
+          </div>
+        </div>
+        <button class="hp-speak-cta-btn" onclick="goToTimedReadPage()">开始 →</button>
+      </div>
+    </div>
+
+    <div class="hp-cta-row">
+      <div class="hp-speak-cta hp-vocab-cta hp-cta-half">
+        <div class="hp-speak-cta-left">
+          <div class="hp-speak-cta-icon">📖</div>
+          <div>
+            <div class="hp-speak-cta-title">生词本</div>
+            <div class="hp-speak-cta-sub">查词收藏，间隔重复闪卡复习</div>
+          </div>
+        </div>
+        <button class="hp-speak-cta-btn" onclick="goToVocabPage()">打开 →</button>
+      </div>
+      <div class="hp-speak-cta hp-dictation-cta hp-cta-half">
+        <div class="hp-speak-cta-left">
+          <div class="hp-speak-cta-icon">🎧</div>
+          <div>
+            <div class="hp-speak-cta-title">听力精听</div>
+            <div class="hp-speak-cta-sub">逐句听写，训练拼写和理解</div>
+          </div>
+        </div>
+        <button class="hp-speak-cta-btn" onclick="goToDictationPage()">开始 →</button>
+      </div>
+    </div>
+
+    <div class="hp-cta-row">
+      <div class="hp-speak-cta hp-wrong-cta hp-cta-half">
+        <div class="hp-speak-cta-left">
+          <div class="hp-speak-cta-icon">📝</div>
+          <div>
+            <div class="hp-speak-cta-title">错题本</div>
+            <div class="hp-speak-cta-sub">自动收集听力、阅读错题，标记已掌握</div>
+          </div>
+        </div>
+        <button class="hp-speak-cta-btn" onclick="goToWrongPage()">查看错题 →</button>
+      </div>
+      <div class="hp-speak-cta hp-analytics-cta hp-cta-half">
+        <div class="hp-speak-cta-left">
+          <div class="hp-speak-cta-icon">📊</div>
+          <div>
+            <div class="hp-speak-cta-title">学习数据</div>
+            <div class="hp-speak-cta-sub">分数趋势、技能雷达图、进步曲线</div>
+          </div>
+        </div>
+        <button class="hp-speak-cta-btn" onclick="goToAnalyticsPage()">查看数据 →</button>
+      </div>
+    </div>
+
     <section class="hp-tests">
       <div class="hp-tests-hd">
         <h2 class="hp-tests-title">选择考试</h2>
@@ -171,13 +307,13 @@
   <header class="exam-header">
     <div class="exam-header-inner">
       <button class="back-btn" id="backBtn">← 返回首页</button>
-      <div class="exam-title" id="examTitle">Test 1</div>
+      <h1 class="exam-title" id="examTitle">Test 1</h1>
       <div class="exam-controls">
         <div class="timer-box" id="timerBox">
           <span class="timer-label">剩余时间</span>
           <span class="timer-value" id="timerValue">--:--</span>
         </div>
-        <button class="theme-toggle" id="themeToggle2" title="Toggle Theme">
+        <button class="theme-toggle" id="themeToggle2" title="Toggle Theme" aria-label="切换深色/浅色模式">
           <span class="theme-icon2">🌙</span>
         </button>
       </div>
@@ -235,7 +371,7 @@
         <span class="logo-text">IELTS Simulator</span>
       </div>
       <div class="header-right">
-        <button class="theme-toggle" id="themeToggle3" title="Toggle Theme">
+        <button class="theme-toggle" id="themeToggle3" title="Toggle Theme" aria-label="切换深色/浅色模式">
           <span class="theme-icon3">🌙</span>
         </button>
       </div>
@@ -262,6 +398,337 @@
   </main>
 </div>
 
+<!-- ========== NOVEL READING PAGE ========== -->
+<div id="page-novel" class="page">
+  <header class="nv-header">
+    <div class="nv-header-inner">
+      <button class="nv-back-btn" id="nv-main-back" onclick="Novel.backToLibrary()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Library
+      </button>
+      <div class="nv-header-title" id="novel-title">Novel Reading</div>
+      <div class="nv-header-right">
+        <button class="nv-tts-btn" id="nv-tts-btn" onclick="Novel.toggleTTS()">🔊 Read Aloud</button>
+        <button class="theme-toggle" id="themeToggle5" title="Toggle Theme" aria-label="切换深色/浅色模式">
+          <span class="theme-icon5">🌙</span>
+        </button>
+      </div>
+    </div>
+    <div class="nv-ch-nav" id="novel-reader-nav" style="display:none">
+      <button class="nv-nav-btn" id="nv-prev" onclick="Novel.prevChapter()" disabled>← Prev</button>
+      <span class="nv-ch-info" id="nv-ch-info">1 / 1</span>
+      <button class="nv-nav-btn" id="nv-next" onclick="Novel.nextChapter()">Next →</button>
+    </div>
+  </header>
+
+  <!-- Library View -->
+  <div id="novel-library-wrap" class="nv-library-wrap">
+    <div class="nv-library-hero">
+      <span class="nv-lib-badge">English Novel Reading</span>
+      <h1 class="nv-lib-title">英文小说阅读</h1>
+      <p class="nv-lib-sub">精选经典公版小说，分级难度，点击任意单词即可查词</p>
+    </div>
+    <div class="nv-library" id="novel-library"></div>
+    <div class="nv-lib-home">
+      <button class="nv-home-btn" onclick="showPage('home')">← 返回首页</button>
+    </div>
+  </div>
+
+  <!-- Reader View -->
+  <div id="novel-reader-wrap" class="nv-reader-wrap" style="display:none">
+    <div class="nv-reader" id="novel-reader"></div>
+  </div>
+</div>
+
+<!-- ========== TIMED READING PAGE ========== -->
+<div id="page-timed-read" class="page">
+  <header class="tr-header">
+    <div class="tr-header-inner">
+      <button class="tr-back-btn" onclick="trBack()">← 返回</button>
+      <div class="tr-header-title">限时阅读</div>
+      <div class="tr-header-right">
+        <span class="tr-timer" id="trTimer" style="display:none">00:00</span>
+        <button class="theme-toggle" id="themeToggle11" title="Toggle Theme" aria-label="切换深色/浅色模式">
+          <span class="theme-icon11">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Setup -->
+  <div id="trSetup" class="tr-setup">
+    <div class="tr-setup-inner">
+      <div class="tr-badge">Timed Reading</div>
+      <h1 class="tr-setup-heading">限时阅读训练</h1>
+      <p class="tr-setup-sub">提高阅读速度，追踪 WPM，Band 6+ 需 200+ WPM</p>
+      <div class="tr-passages" id="trPassages"></div>
+    </div>
+  </div>
+
+  <!-- Reading -->
+  <div id="trReading" class="tr-reading" style="display:none">
+    <div class="tr-passage-box" id="trPassageBox"></div>
+    <div class="tr-reading-footer">
+      <button class="tr-done-btn" onclick="trFinishReading()">读完了，开始答题</button>
+    </div>
+  </div>
+
+  <!-- Questions (self-assessment) -->
+  <div id="trQuiz" class="tr-quiz" style="display:none">
+    <div class="tr-quiz-inner" id="trQuizContent"></div>
+  </div>
+
+  <!-- Result -->
+  <div id="trResult" class="tr-result" style="display:none">
+    <div class="tr-result-inner" id="trResultContent"></div>
+  </div>
+</div>
+
+<!-- ========== DICTATION PAGE ========== -->
+<div id="page-dictation" class="page">
+  <header class="dc-header">
+    <div class="dc-header-inner">
+      <button class="dc-back-btn" onclick="dcBack()">← 返回</button>
+      <div class="dc-header-title">听力精听</div>
+      <div class="dc-header-right">
+        <button class="theme-toggle" id="themeToggle10" title="Toggle Theme" aria-label="切换深色/浅色模式">
+          <span class="theme-icon10">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Setup -->
+  <div id="dcSetup" class="dc-setup">
+    <div class="dc-setup-inner">
+      <div class="dc-badge">Dictation Practice</div>
+      <h1 class="dc-setup-heading">听力精听训练</h1>
+      <p class="dc-setup-sub">逐句听写，训练听力理解和拼写准确度</p>
+      <div class="dc-speed-row">
+        <span class="dc-speed-label">语速：</span>
+        <button class="dc-speed-btn" data-rate="0.7" onclick="dcSetRate(0.7)">0.7x</button>
+        <button class="dc-speed-btn active" data-rate="0.88" onclick="dcSetRate(0.88)">0.88x</button>
+        <button class="dc-speed-btn" data-rate="1" onclick="dcSetRate(1)">1.0x</button>
+      </div>
+      <div class="dc-tests" id="dcTests"></div>
+    </div>
+  </div>
+
+  <!-- Dictation Area -->
+  <div id="dcSession" class="dc-session" style="display:none">
+    <div class="dc-progress-bar">
+      <div class="dc-progress-fill" id="dcProgressFill"></div>
+    </div>
+    <div class="dc-sentence-box">
+      <div class="dc-sent-num" id="dcSentNum">1 / ?</div>
+      <button class="dc-play-btn" id="dcPlayBtn" onclick="dcPlaySentence()">▶ 播放</button>
+      <button class="dc-replay-btn" onclick="dcPlaySentence()">🔁 重听</button>
+    </div>
+    <div class="dc-input-area">
+      <textarea class="dc-input" id="dcInput" placeholder="听写内容..." rows="3" aria-label="听写输入"></textarea>
+      <button class="dc-check-btn" id="dcCheckBtn" onclick="dcCheckSentence()">检查</button>
+    </div>
+    <div class="dc-diff" id="dcDiff" style="display:none"></div>
+    <button class="dc-next-btn" id="dcNextBtn" onclick="dcNextSentence()" style="display:none">下一句 →</button>
+  </div>
+
+  <!-- Result -->
+  <div id="dcResult" class="dc-result" style="display:none">
+    <div class="dc-result-inner">
+      <div class="dc-result-icon">✓</div>
+      <div class="dc-result-title">精听完成</div>
+      <div class="dc-result-accuracy" id="dcAccuracy">正确率: 0%</div>
+      <div class="dc-result-stats" id="dcStats"></div>
+      <button class="dc-result-btn" onclick="dcBack()">返回选择</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== WRITING PRACTICE PAGE ========== -->
+<div id="page-writing" class="page">
+  <header class="wp-header">
+    <div class="wp-header-inner">
+      <button class="wp-back-btn" onclick="wpBack()">← 返回</button>
+      <div class="wp-header-title">写作练习</div>
+      <div class="wp-header-right">
+        <span class="wp-timer" id="wpTimer">00:00</span>
+        <button class="theme-toggle" id="themeToggle9" title="Toggle Theme" aria-label="切换深色/浅色模式">
+          <span class="theme-icon9">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Setup -->
+  <div id="wpSetup" class="wp-setup">
+    <div class="wp-setup-inner">
+      <div class="wp-badge">AI Writing Practice</div>
+      <h1 class="wp-setup-heading">写作独立练习</h1>
+      <p class="wp-setup-sub">选择题目，计时写作，获取 AI 四维评分</p>
+      <div class="wp-type-row">
+        <button class="wp-type-btn active" data-type="task1" onclick="wpSelectType('task1')">Task 1 · 图表描述</button>
+        <button class="wp-type-btn" data-type="task2" onclick="wpSelectType('task2')">Task 2 · 议论文</button>
+      </div>
+      <div class="wp-topics" id="wpTopics"></div>
+      <div class="wp-history-section">
+        <div class="wp-history-title">历史记录</div>
+        <div class="wp-history-list" id="wpHistoryList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Writing Area -->
+  <div id="wpEditor" class="wp-editor" style="display:none">
+    <div class="wp-prompt-box" id="wpPromptBox"></div>
+    <textarea class="wp-textarea" id="wpTextarea" placeholder="在此输入你的文章..." oninput="wpWordCount()" aria-label="写作练习"></textarea>
+    <div class="wp-editor-footer">
+      <span class="wp-wc" id="wpWordCount">0 words</span>
+      <button class="wp-submit-btn" id="wpSubmitBtn" onclick="wpSubmit()">提交评分</button>
+    </div>
+  </div>
+
+  <!-- Feedback -->
+  <div id="wpFeedback" class="wp-feedback" style="display:none">
+    <div class="wp-fb-content" id="wpFeedbackContent"></div>
+    <div class="wp-fb-actions">
+      <button class="wp-fb-btn" onclick="wpReset()">再练一篇</button>
+      <button class="wp-fb-btn wp-fb-btn-sec" onclick="showPage('home')">返回首页</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== ANALYTICS PAGE ========== -->
+<div id="page-analytics" class="page">
+  <header class="an-header">
+    <div class="an-header-inner">
+      <button class="an-back-btn" onclick="showPage('home')">← 返回首页</button>
+      <h1 class="an-header-title">学习数据</h1>
+      <div class="an-header-right">
+        <button class="theme-toggle" id="themeToggle8" title="Toggle Theme" aria-label="切换深色/浅色模式">
+          <span class="theme-icon8">🌙</span>
+        </button>
+      </div>
+    </div>
+  </header>
+  <div class="an-content">
+    <div class="an-summary" id="anSummary"></div>
+    <div class="an-charts">
+      <div class="an-chart-card">
+        <div class="an-chart-title">分数趋势</div>
+        <canvas id="anTrendChart" width="800" height="320" role="img" aria-label="分数趋势图"></canvas>
+      </div>
+      <div class="an-chart-card an-chart-small">
+        <div class="an-chart-title">技能分布</div>
+        <canvas id="anRadarChart" width="360" height="360" role="img" aria-label="技能雷达图"></canvas>
+      </div>
+    </div>
+    <div class="an-empty" id="anEmpty" style="display:none">
+      <div class="an-empty-text">暂无考试数据，完成模拟考试后这里将显示你的学习趋势</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== WRONG ANSWERS PAGE ========== -->
+<div id="page-wrong" class="page">
+  <header class="wa-header">
+    <div class="wa-header-inner">
+      <button class="wa-back-btn" onclick="showPage('home')">← 返回首页</button>
+      <h1 class="wa-header-title">错题本</h1>
+      <div class="wa-header-right">
+        <button class="theme-toggle" id="themeToggle7" title="Toggle Theme" aria-label="切换深色/浅色模式">
+          <span class="theme-icon7">🌙</span>
+        </button>
+      </div>
+    </div>
+    <div class="wa-filters">
+      <button class="wa-filter active" data-f="all" onclick="waFilter('all')">全部</button>
+      <button class="wa-filter" data-f="listening" onclick="waFilter('listening')">听力</button>
+      <button class="wa-filter" data-f="reading" onclick="waFilter('reading')">阅读</button>
+      <button class="wa-filter" data-f="unmastered" onclick="waFilter('unmastered')">未掌握</button>
+      <button class="wa-filter" data-f="mastered" onclick="waFilter('mastered')">已掌握</button>
+    </div>
+  </header>
+  <div class="wa-stats" id="waStats">
+    <div class="wa-stat"><span class="wa-stat-num" id="waTotal">0</span><span class="wa-stat-label">总错题</span></div>
+    <div class="wa-stat"><span class="wa-stat-num" id="waUnmastered">0</span><span class="wa-stat-label">未掌握</span></div>
+    <div class="wa-stat"><span class="wa-stat-num" id="waMastered">0</span><span class="wa-stat-label">已掌握</span></div>
+  </div>
+  <div class="wa-list-wrap">
+    <div class="wa-list" id="waList">
+      <div class="wa-empty">暂无错题记录，完成模拟考试后错题会自动收集</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== VOCABULARY PAGE ========== -->
+<div id="page-vocab" class="page">
+  <header class="voc-header">
+    <div class="voc-header-inner">
+      <button class="voc-back-btn" onclick="showPage('home')">← 返回首页</button>
+      <h1 class="voc-header-title">生词本</h1>
+      <div class="voc-header-right">
+        <button class="theme-toggle" id="themeToggle6" title="Toggle Theme" aria-label="切换深色/浅色模式">
+          <span class="theme-icon6">🌙</span>
+        </button>
+      </div>
+    </div>
+    <div class="voc-tabs">
+      <button class="voc-tab active" data-view="list" onclick="vocabSwitchView('list')">词汇列表</button>
+      <button class="voc-tab" data-view="review" onclick="vocabSwitchView('review')">闪卡复习</button>
+    </div>
+  </header>
+
+  <!-- Stats Bar -->
+  <div class="voc-stats" id="vocStats">
+    <div class="voc-stat"><span class="voc-stat-num" id="vocTotal">0</span><span class="voc-stat-label">总词汇</span></div>
+    <div class="voc-stat"><span class="voc-stat-num" id="vocDue">0</span><span class="voc-stat-label">待复习</span></div>
+    <div class="voc-stat"><span class="voc-stat-num" id="vocMastered">0</span><span class="voc-stat-label">已掌握</span></div>
+  </div>
+
+  <!-- List View -->
+  <div class="voc-view active" id="vocListView">
+    <div class="voc-search-bar">
+      <input class="voc-search" id="vocSearch" type="text" placeholder="搜索单词..." oninput="vocabSearch()" aria-label="搜索生词本">
+    </div>
+    <div class="voc-list" id="vocList">
+      <div class="voc-empty">暂无生词，在阅读或考试中点击单词上的 ☆ 即可收藏</div>
+    </div>
+  </div>
+
+  <!-- Review View (Flashcard) -->
+  <div class="voc-view" id="vocReviewView">
+    <div class="voc-review-wrap" id="vocReviewWrap">
+      <div class="voc-card-container" id="vocCardContainer">
+        <div class="voc-card" id="vocCard" onclick="vocabFlipCard()" onkeydown="if(event.key==='Enter')vocabFlipCard()" role="button" tabindex="0" aria-label="翻转闪卡">
+          <div class="voc-card-front">
+            <div class="voc-card-word" id="vocCardWord">—</div>
+            <div class="voc-card-phonetic" id="vocCardPhonetic"></div>
+            <div class="voc-card-hint">点击翻转</div>
+          </div>
+          <div class="voc-card-back">
+            <div class="voc-card-pos" id="vocCardPos"></div>
+            <div class="voc-card-def" id="vocCardDef"></div>
+            <div class="voc-card-def-en" id="vocCardDefEn"></div>
+            <div class="voc-card-ctx" id="vocCardCtx"></div>
+          </div>
+        </div>
+      </div>
+      <div class="voc-review-btns" id="vocReviewBtns" style="display:none">
+        <button class="voc-rbtn voc-rbtn-fail" onclick="vocabRate(1)">忘了</button>
+        <button class="voc-rbtn voc-rbtn-hard" onclick="vocabRate(3)">困难</button>
+        <button class="voc-rbtn voc-rbtn-good" onclick="vocabRate(4)">记得</button>
+        <button class="voc-rbtn voc-rbtn-easy" onclick="vocabRate(5)">简单</button>
+      </div>
+      <div class="voc-review-progress" id="vocReviewProgress"></div>
+    </div>
+    <div class="voc-review-empty" id="vocReviewEmpty" style="display:none">
+      <div class="voc-review-empty-icon">✓</div>
+      <div class="voc-review-empty-text">暂无待复习的单词</div>
+      <div class="voc-review-empty-sub">收藏的新词会自动安排复习计划</div>
+    </div>
+  </div>
+</div>
+
 <!-- ========== SPEAKING PRACTICE PAGE ========== -->
 <div id="page-speak" class="page sp-page">
   <!-- Ambient glow orbs -->
@@ -281,7 +748,7 @@
       <span class="sp-timer" id="saTimer" style="display:none">
         <span class="sp-timer-val" id="saTimerValue">00:00</span>
       </span>
-      <button class="sp-theme-btn" id="themeToggle4" title="Toggle Theme">
+      <button class="sp-theme-btn" id="themeToggle4" title="Toggle Theme" aria-label="切换深色/浅色模式">
         <span class="theme-icon4">🌙</span>
       </button>
     </div>
@@ -317,6 +784,20 @@
         <div class="sp-topic-wrap" id="saTopicGrid"></div>
       </div>
 
+      <div class="sp-section">
+        <div class="sp-label">对话模式</div>
+        <div class="sp-mode-row" id="saConvModeGroup">
+          <button class="sa-mode-btn" data-conv="text">
+            <span class="sp-mode-num">Text</span>
+            <span class="sp-mode-sub">语音识别 + TTS</span>
+          </button>
+          <button class="sa-mode-btn active" data-conv="realtime">
+            <span class="sp-mode-num">Realtime</span>
+            <span class="sp-mode-sub">实时语音对话</span>
+          </button>
+        </div>
+      </div>
+
       <div class="sa-browser-warn" id="saBrowserWarn" style="display:none">
         ⚠ 请使用 Chrome 或 Edge 以启用语音识别，将自动启用文字输入模式。
       </div>
@@ -344,7 +825,7 @@
             <div class="sp-orb-shine"></div>
           </div>
         </div>
-        <div class="sp-orb-status" id="saStatus">准备就绪</div>
+        <div class="sp-orb-status" id="saStatus" role="status" aria-live="polite">准备就绪</div>
       </div>
 
       <!-- Transcript -->
@@ -353,12 +834,12 @@
       <!-- Controls -->
       <div class="sp-ctrl-bar">
         <div class="sp-text-wrap" id="saTextInputWrap" style="display:none">
-          <input class="sp-text-input" id="saTextInput" type="text" placeholder="输入您的回答..." onkeydown="if(event.key==='Enter')sendSpeakText()">
+          <input class="sp-text-input" id="saTextInput" type="text" placeholder="输入您的回答..." aria-label="输入回答" onkeydown="if(event.key==='Enter')sendSpeakText()">
           <button class="sp-send-btn" onclick="sendSpeakText()">发送</button>
         </div>
         <div class="sp-mic-row">
           <button class="sp-end-link" onclick="leaveSpeakPage()">结束练习</button>
-          <button class="sp-mic-btn" id="saMicBtn" onclick="toggleListening()">
+          <button class="sp-mic-btn" id="saMicBtn" onclick="toggleListening()" aria-label="切换麦克风">
             <svg class="sp-mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="9" y="2" width="6" height="12" rx="3"/>
               <path d="M5 10a7 7 0 0 0 14 0M12 19v3M8 22h8"/>
@@ -394,7 +875,20 @@
   </div>
 </div>
 
-<script src="js/data.js"></script>
-<script src="js/app.js"></script>
+<script src="js/data.js?v=20260324" defer></script>
+<script src="js/word-hover.js?v=20260324" defer></script>
+<script src="js/novel.js?v=20260324" defer></script>
+<script src="js/speaking-realtime.js?v=20260324" defer></script>
+<script src="js/app.js?v=20260324" defer></script>
+<script>
+// ---- Register Service Worker ----
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log('SW registered, scope:', reg.scope))
+      .catch(err => console.warn('SW registration failed:', err));
+  });
+}
+</script>
 </body>
 </html>

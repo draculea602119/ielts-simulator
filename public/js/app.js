@@ -133,7 +133,7 @@ async function handleLogin(e) {
   } catch (err) {
     errEl.textContent = err.message;
   } finally {
-    btn.disabled = false; btn.textContent = '登录';
+    btn.disabled = false; btn.textContent = '登录账号';
   }
 }
 
@@ -162,7 +162,7 @@ async function handleRegister(e) {
   } catch (err) {
     errEl.textContent = err.message;
   } finally {
-    btn.disabled = false; btn.textContent = '注册账号';
+    btn.disabled = false; btn.textContent = '创建账号';
   }
 }
 
@@ -199,8 +199,13 @@ function toggleTheme() {
 
 // ---- Page Navigation ----
 function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.page').forEach(p => {
+    p.classList.remove('active');
+    p.setAttribute('aria-hidden', 'true');
+  });
+  const target = document.getElementById('page-' + id);
+  target.classList.add('active');
+  target.removeAttribute('aria-hidden');
   window.scrollTo(0, 0);
 }
 
@@ -227,7 +232,10 @@ async function renderHome() {
       <div class="test-status">${score ? `<span class="test-done">✓ Band ${score}</span>` : '<span style="color:var(--text-muted)">未开始</span>'}</div>
       ${score ? '<div class="test-badge badge-done">✓</div>' : ''}
     `;
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
     card.onclick = () => startTest(test.id);
+    card.onkeydown = (e) => { if (e.key === 'Enter') startTest(test.id); };
     grid.appendChild(card);
   });
 
@@ -239,6 +247,45 @@ async function renderHome() {
   } else {
     document.getElementById('scoreSummary').style.display = 'none';
   }
+
+  // Load streak
+  loadStreak();
+}
+
+async function loadStreak() {
+  try {
+    const s = await apiCall('/api/activity/streak?tz=' + new Date().getTimezoneOffset());
+    const row = document.getElementById('streakRow');
+    if (s.streak > 0 || s.todayCount > 0) {
+      row.style.display = '';
+      document.getElementById('streakNum').textContent = s.streak;
+
+      // Render week progress rings
+      const rings = document.getElementById('weekRings');
+      const items = [
+        { label: '做题', val: s.weekTests, max: 3, color: 'var(--c-listen)' },
+        { label: '口语', val: s.weekSpeaking, max: 3, color: 'var(--c-speak)' },
+        { label: '词汇', val: s.weekVocab, max: 10, color: 'var(--c-write)' },
+      ];
+      rings.innerHTML = items.map(it => {
+        const pct = Math.min(it.val / it.max, 1);
+        const dashLen = 100.5;  // 2 * PI * 16
+        const offset = dashLen * (1 - pct);
+        return `<div class="hp-ring-item">
+          <svg class="hp-ring-svg" viewBox="0 0 40 40">
+            <circle cx="20" cy="20" r="16" fill="none" stroke="var(--bd)" stroke-width="3"/>
+            <circle cx="20" cy="20" r="16" fill="none" stroke="${it.color}" stroke-width="3"
+              stroke-dasharray="${dashLen}" stroke-dashoffset="${offset}"
+              stroke-linecap="round" transform="rotate(-90 20 20)"/>
+          </svg>
+          <span class="hp-ring-val">${it.val}</span>
+          <span class="hp-ring-label">${it.label}</span>
+        </div>`;
+      }).join('');
+    } else {
+      row.style.display = 'none';
+    }
+  } catch {}
 }
 
 // ---- Start Test ----
@@ -250,13 +297,23 @@ function startTest(testId) {
   state.writingAnswers = { task1: '', task2: '' };
   state.speakingNotes = {};
   document.getElementById('examTitle').textContent = `Test ${test.id} — ${test.topic}`;
+  submitting = false;
   showPage('exam');
+  document.getElementById('submitBtn').disabled = false;
+  window.onbeforeunload = () => '你有未提交的答案，确定要离开吗？';
   switchSection('listening');
   startTimer(30 * 60);
   renderListening(test);
   renderReading(test);
   renderWriting(test);
   renderSpeaking(test);
+  // Enable click-to-lookup on all exam text
+  if (window.WordHover) {
+    WordHover.processTextNodes(document.getElementById('listening-content'));
+    WordHover.processTextNodes(document.getElementById('reading-content'));
+    WordHover.processTextNodes(document.getElementById('writing-content'));
+    WordHover.processTextNodes(document.getElementById('speaking-content'));
+  }
 }
 
 // ---- Quick Start by Section ----
@@ -333,6 +390,10 @@ function renderListening(test) {
 function toggleTranscript(si) {
   const el = document.getElementById('transcript-' + si);
   el.style.display = el.style.display === 'none' ? 'block' : 'none';
+  // Process text for word hover when transcript is first shown
+  if (el.style.display === 'block' && window.WordHover) {
+    WordHover.processTextNodes(el);
+  }
 }
 function toggleAnswers(id) {
   const el = document.getElementById(id);
@@ -527,8 +588,43 @@ function scoreLocalLR() {
   return { lScore, lTotal, rScore, rTotal };
 }
 
+function collectWrongAnswers(test) {
+  const wrong = [];
+  let qNum = 0;
+  test.listening.sections.forEach((sec, si) => {
+    sec.questions.forEach((q, qi) => {
+      qNum++;
+      const key = `L${si}_${qi}`;
+      const userAns = (state.answers[key] || '').toLowerCase().trim();
+      const correct = q.answer.toLowerCase().trim();
+      const isCorrect = userAns === correct || (q.type === 'mc' && userAns === correct.charAt(0).toLowerCase());
+      if (!isCorrect) {
+        wrong.push({ section: 'listening', questionNum: qNum, questionText: q.question, questionType: q.type, userAnswer: state.answers[key] || '', correctAnswer: q.answer });
+      }
+    });
+  });
+  qNum = 0;
+  test.reading.passages.forEach((passage, pi) => {
+    passage.questions.forEach((q, qi) => {
+      qNum++;
+      const key = `R${pi}_${qi}`;
+      const userAns = (state.answers[key] || '').toLowerCase().trim();
+      const correct = q.answer.toLowerCase().trim();
+      const isCorrect = userAns === correct || (q.type === 'mc' && userAns === correct.charAt(0).toLowerCase());
+      if (!isCorrect) {
+        wrong.push({ section: 'reading', questionNum: qNum, questionText: q.question, questionType: q.type, userAnswer: state.answers[key] || '', correctAnswer: q.answer });
+      }
+    });
+  });
+  return wrong;
+}
+
 // ---- Submit Exam ----
+let submitting = false;
 async function submitExam() {
+  if (submitting) return;
+  submitting = true;
+  document.getElementById('submitBtn').disabled = true;
   clearInterval(state.timerInterval);
   stopAudio();
 
@@ -539,6 +635,9 @@ async function submitExam() {
 
   const { lScore, lTotal, rScore, rTotal } = scoreLocalLR();
   const test = state.currentTest;
+
+  // Collect wrong answers for L/R
+  const wrongAnswers = collectWrongAnswers(test);
 
   showLoading('AI 正在批改写作，请稍候（约10-20秒）...');
 
@@ -554,13 +653,18 @@ async function submitExam() {
           task1: test.writing.task1.prompt,
           task2: test.writing.task2.prompt
         },
-        speakingNotes: state.speakingNotes
+        speakingNotes: state.speakingNotes,
+        wrongAnswers
       })
     });
     hideLoading();
+    submitting = false;
+    window.onbeforeunload = null;
     showResult(result);
   } catch (err) {
     hideLoading();
+    submitting = false;
+    document.getElementById('submitBtn').disabled = false;
     alert('提交失败：' + err.message + '\n请检查网络连接后重试。');
   }
 }
@@ -629,7 +733,7 @@ function renderAIFeedback(t1, t2) {
     return `
       <div class="ai-task-card">
         <div class="ai-task-header">
-          <span>${label}</span>
+          <span>${escapeHtml(label)}</span>
           <span class="ai-band-badge">Band ${fb.band}</span>
         </div>
         <div class="ai-criteria">
@@ -639,14 +743,14 @@ function renderAIFeedback(t1, t2) {
                 <span class="ai-criterion-name">${c.name}</span>
                 <span class="ai-criterion-score">${fb[c.key].score}</span>
               </div>
-              <div class="ai-criterion-comment">${fb[c.key].comment}</div>
+              <div class="ai-criterion-comment">${escapeHtml(fb[c.key].comment)}</div>
             </div>` : '').join('')}
         </div>
-        ${fb.overall_feedback ? `<div class="ai-overall"><strong>总体评价：</strong>${fb.overall_feedback}</div>` : ''}
+        ${fb.overall_feedback ? `<div class="ai-overall"><strong>总体评价：</strong>${escapeHtml(fb.overall_feedback)}</div>` : ''}
         ${suggestions.length ? `
           <div class="ai-suggestions">
             <strong>改进建议：</strong>
-            <ul>${suggestions.map(s => `<li>${s.trim()}</li>`).join('')}</ul>
+            <ul>${suggestions.map(s => `<li>${escapeHtml(s.trim())}</li>`).join('')}</ul>
           </div>` : ''}
       </div>
     `;
@@ -655,69 +759,75 @@ function renderAIFeedback(t1, t2) {
   content.innerHTML = taskCard('Writing Task 1', t1) + taskCard('Writing Task 2', t2);
 }
 
-// ---- Review ----
-function escapeHtml(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+// ---- Utility ----
+function escapeHtml(s) {
+  if (!s) return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
+
+// ---- Review ----
 
 function showReview(test) {
   const area = document.getElementById('reviewArea');
   area.style.display = 'block';
   area.innerHTML = '';
 
+  function buildReviewHtml(title, sections) {
+    let html = `<h3>${title}</h3>`;
+    sections.forEach(({ questions, prefix }) => {
+      questions.forEach((q, qi) => {
+        const key = `${prefix}_${qi}`;
+        const userAns = state.answers[key] || '（未作答）';
+        const correct = q.answer;
+        const isCorrect = userAns.toLowerCase().trim() === correct.toLowerCase().trim() ||
+          (q.type === 'mc' && userAns.toLowerCase().trim() === correct.toLowerCase().charAt(0));
+        html += `
+          <div style="padding:8px 0;border-bottom:1px solid var(--border-light);font-size:0.85rem">
+            <strong>Q${q.num}:</strong> ${q.question.replace(/<[^>]+>/g,'').substring(0,80)}...<br>
+            <span style="color:var(--text-muted)">你的答案：</span><span style="color:${isCorrect?'var(--accent-green)':'var(--accent-red)'}">${escapeHtml(userAns)}</span>
+            ${!isCorrect ? `<span style="color:var(--text-muted)"> · 正确答案：</span><span style="color:var(--accent-green)">${escapeHtml(correct)}</span>` : ' ✓'}
+          </div>`;
+      });
+    });
+    return html;
+  }
+
+  const lSections = test.listening.sections.map((sec, si) => ({ questions: sec.questions, prefix: `L${si}` }));
   const lDiv = document.createElement('div');
   lDiv.className = 'review-section';
-  lDiv.innerHTML = '<h3>🎧 Listening — 答案解析</h3>';
-  test.listening.sections.forEach((sec, si) => {
-    sec.questions.forEach((q, qi) => {
-      const key = `L${si}_${qi}`;
-      const userAns = state.answers[key] || '（未作答）';
-      const correct = q.answer;
-      const isCorrect = userAns.toLowerCase().trim() === correct.toLowerCase().trim() ||
-        (q.type === 'mc' && userAns.toLowerCase().trim() === correct.toLowerCase().charAt(0));
-      lDiv.innerHTML += `
-        <div style="padding:8px 0;border-bottom:1px solid var(--border-light);font-size:0.85rem">
-          <strong>Q${q.num}:</strong> ${q.question.replace(/<[^>]+>/g,'').substring(0,80)}...<br>
-          <span style="color:var(--text-muted)">你的答案：</span><span style="color:${isCorrect?'var(--accent-green)':'var(--accent-red)'}">${escapeHtml(userAns)}</span>
-          ${!isCorrect ? `<span style="color:var(--text-muted)"> · 正确答案：</span><span style="color:var(--accent-green)">${escapeHtml(correct)}</span>` : ' ✓'}
-        </div>`;
-    });
-  });
+  lDiv.innerHTML = buildReviewHtml('🎧 Listening — 答案解析', lSections);
   area.appendChild(lDiv);
 
+  const rSections = test.reading.passages.map((p, pi) => ({ questions: p.questions, prefix: `R${pi}` }));
   const rDiv = document.createElement('div');
   rDiv.className = 'review-section';
-  rDiv.innerHTML = '<h3>📖 Reading — 答案解析</h3>';
-  test.reading.passages.forEach((passage, pi) => {
-    passage.questions.forEach((q, qi) => {
-      const key = `R${pi}_${qi}`;
-      const userAns = state.answers[key] || '（未作答）';
-      const correct = q.answer;
-      const isCorrect = userAns.toLowerCase().trim() === correct.toLowerCase().trim() ||
-        (q.type === 'mc' && userAns.toLowerCase().trim() === correct.toLowerCase().charAt(0));
-      rDiv.innerHTML += `
-        <div style="padding:8px 0;border-bottom:1px solid var(--border-light);font-size:0.85rem">
-          <strong>Q${q.num}:</strong> ${q.question.replace(/<[^>]+>/g,'').substring(0,80)}...<br>
-          <span style="color:var(--text-muted)">你的答案：</span><span style="color:${isCorrect?'var(--accent-green)':'var(--accent-red)'}">${escapeHtml(userAns)}</span>
-          ${!isCorrect ? `<span style="color:var(--text-muted)"> · 正确答案：</span><span style="color:var(--accent-green)">${escapeHtml(correct)}</span>` : ' ✓'}
-        </div>`;
-    });
-  });
+  rDiv.innerHTML = buildReviewHtml('📖 Reading — 答案解析', rSections);
   area.appendChild(rDiv);
   area.scrollIntoView({ behavior: 'smooth' });
 }
 
 // ---- Init ----
 document.addEventListener('DOMContentLoaded', async () => {
-  initTheme();
-  await checkAuth();
+  try {
+    initTheme();
+    await checkAuth();
+  } catch (e) {
+    console.error('Init error during checkAuth:', e);
+    // Ensure auth page is always reachable even if checkAuth fails
+    showPage('auth');
+  }
 
-  document.getElementById('themeToggle').onclick = toggleTheme;
-  document.getElementById('themeToggle2').onclick = toggleTheme;
-  document.getElementById('themeToggle3').onclick = toggleTheme;
-  document.getElementById('themeToggle4').onclick = toggleTheme;
+  // Hook up ALL theme toggles (IDs themeToggle, themeToggle2 ... themeToggle11)
+  document.querySelectorAll('[id^="themeToggle"]').forEach(el => {
+    el.onclick = toggleTheme;
+  });
 
   document.getElementById('backBtn').onclick = () => {
+    const hasAnswers = Object.keys(state.answers).length > 0 ||
+      state.writingAnswers.task1 || state.writingAnswers.task2 ||
+      Object.values(state.speakingNotes).some(v => v);
+    if (hasAnswers && !confirm('你有未提交的答案，确定要离开吗？')) return;
+    window.onbeforeunload = null;
     clearInterval(state.timerInterval);
     stopAudio();
     showPage('home');
@@ -752,12 +862,17 @@ const speakState = {
   sessionActive: false,
   timerInterval: null,
   timerSeconds: 0,
-  selectedTopic: null
+  selectedTopic: null,
+  realtimeMode: true
 };
 
 function goToSpeakPage() {
   showPage('speak');
   initSpeakPage();
+}
+
+function goToNovelPage() {
+  if (window.Novel) Novel.showNovelPage();
 }
 
 function leaveSpeakPage() {
@@ -814,7 +929,20 @@ function initSpeakPage() {
     grid.appendChild(btn);
   });
 
-  // Check Speech API
+  // Conversation mode toggle (text vs realtime)
+  const convGroup = document.getElementById('saConvModeGroup');
+  if (convGroup) {
+    convGroup.querySelectorAll('.sa-mode-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.conv === (speakState.realtimeMode ? 'realtime' : 'text'));
+      btn.onclick = () => {
+        speakState.realtimeMode = btn.dataset.conv === 'realtime';
+        convGroup.querySelectorAll('.sa-mode-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      };
+    });
+  }
+
+  // Check Speech API (only relevant for text mode)
   const hasRecognition = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
   document.getElementById('saBrowserWarn').style.display = hasRecognition ? 'none' : '';
 }
@@ -848,6 +976,66 @@ function startSpeakSession() {
   // Part 2 starts with cue_card subPhase
   if (speakState.mode === 'part2') speakState.subPhase = 'cue_card';
 
+  // Branch: realtime voice vs text mode
+  if (speakState.realtimeMode && window.SpeakRealtime) {
+    // Hide mic button row, show realtime indicator
+    document.querySelector('.sp-mic-row').style.display = 'none';
+    document.getElementById('saTextInputWrap').style.display = 'none';
+    document.getElementById('saStatus').textContent = '连接中…';
+    setOrbState('thinking');
+
+    let currentAiBubble = null;
+    let currentUserBubble = null;
+
+    SpeakRealtime.start(authState.token, speakState.mode, speakState.topic, speakState.subPhase, 'Kore', {
+      onOrbState: (s) => setOrbState(s),
+      onSetupComplete: () => {
+        document.getElementById('saStatus').textContent = '正在聆听… 请开始说话';
+      },
+      onAiText: (text) => {
+        if (!currentAiBubble) {
+          currentAiBubble = document.createElement('div');
+          currentAiBubble.className = 'sa-bubble sa-bubble-ai';
+          document.getElementById('saChat').appendChild(currentAiBubble);
+        }
+        currentAiBubble.textContent = text;
+        document.getElementById('saChat').scrollTop = 99999;
+      },
+      onUserText: (text) => {
+        if (!currentUserBubble) {
+          currentUserBubble = document.createElement('div');
+          currentUserBubble.className = 'sa-bubble sa-bubble-user';
+          document.getElementById('saChat').appendChild(currentUserBubble);
+        }
+        currentUserBubble.textContent = text;
+        document.getElementById('saChat').scrollTop = 99999;
+      },
+      onTurnComplete: () => {
+        // Enable word hover on completed bubbles
+        if (currentAiBubble && window.WordHover) WordHover.processTextNodes(currentAiBubble);
+        if (currentUserBubble && window.WordHover) WordHover.processTextNodes(currentUserBubble);
+        currentAiBubble = null;
+        currentUserBubble = null;
+        document.getElementById('saStatus').textContent = '正在聆听…';
+      },
+      onSessionEnd: (messages) => {
+        speakState.messages = messages;
+        speakState.sessionActive = false;
+        document.getElementById('saStatus').textContent = '练习完毕，正在评分…';
+        document.getElementById('saScoreBox').style.display = '';
+        requestScore();
+      },
+      onError: (err) => {
+        document.getElementById('saStatus').textContent = '错误: ' + err;
+        setOrbState('idle');
+        // Show text mode controls as fallback
+        document.querySelector('.sp-mic-row').style.display = '';
+      }
+    });
+    return;
+  }
+
+  // Text mode (original flow)
   setOrbState('thinking');
   sendSpeakMessage('[SESSION_START]');
 }
@@ -893,11 +1081,11 @@ function extractSentences(text) {
 }
 
 // ---- Orb state ----
-function setOrbState(state) {
+function setOrbState(orbMode) {
   const pg = document.getElementById('page-speak');
   if (!pg) return;
   pg.classList.remove('sp-speaking', 'sp-listening', 'sp-thinking');
-  if (state !== 'idle') pg.classList.add('sp-' + state);
+  if (orbMode !== 'idle') pg.classList.add('sp-' + orbMode);
 }
 
 // ---- Streaming sendSpeakMessage ----
@@ -957,6 +1145,8 @@ async function sendSpeakMessage(text) {
             if (!inMeta && ttsBuffer.trim()) { enqueueTTS(ttsBuffer); ttsBuffer = ''; }
             // Save full reply to messages
             if (replyText) speakState.messages.push({ role: 'assistant', content: replyText });
+            // Enable word hover on completed AI bubble
+            if (aiDiv && window.WordHover) WordHover.processTextNodes(aiDiv);
             if (msg.cueCard) renderCueCard(msg.cueCard);
             if (msg.tips && msg.tips.length) showSpeakTips(msg.tips);
 
@@ -1060,14 +1250,15 @@ function showScoreCard(d) {
   const criteria = [
     { key: 'fc', label: '流利 & 连贯' },
     { key: 'lr', label: '词汇资源' },
-    { key: 'gr', label: '语法精度' }
+    { key: 'gr', label: '语法精度' },
+    { key: 'pr', label: '发音' }
   ];
   const grid = document.getElementById('spScoreGrid');
   grid.innerHTML = criteria.map(c => `
     <div class="sp-sc-criterion">
       <div class="sp-sc-cr-label">${c.label}</div>
       <div class="sp-sc-cr-score">${d[c.key]?.score || '--'}</div>
-      <div class="sp-sc-cr-comment">${d[c.key]?.comment || ''}</div>
+      <div class="sp-sc-cr-comment">${escapeHtml(d[c.key]?.comment || '')}</div>
     </div>
   `).join('');
 
@@ -1077,7 +1268,7 @@ function showScoreCard(d) {
   const mkList = (title, items) => `
     <div>
       <div class="sp-sc-col-title">${title}</div>
-      ${(items || []).map(i => `<div class="sp-sc-list-item">${i}</div>`).join('')}
+      ${(items || []).map(i => `<div class="sp-sc-list-item">${escapeHtml(i)}</div>`).join('')}
     </div>`;
   lists.innerHTML = mkList('✓ 优势', d.strengths) + mkList('→ 改进', d.improvements);
 }
@@ -1168,6 +1359,7 @@ function appendSpeakBubble(role, text) {
   div.textContent = text;
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
+  if (window.WordHover) WordHover.processTextNodes(div);
 }
 
 function renderCueCard(card) {
@@ -1175,14 +1367,15 @@ function renderCueCard(card) {
   const div = document.createElement('div');
   div.className = 'sa-cue-card';
   div.innerHTML = `
-    <div class="sa-cue-task">${card.task}</div>
+    <div class="sa-cue-task">${escapeHtml(card.task || '')}</div>
     <ul class="sa-cue-prompts">
-      ${(card.prompts || []).map(p => `<li>${p}</li>`).join('')}
+      ${(card.prompts || []).map(p => `<li>${escapeHtml(p)}</li>`).join('')}
     </ul>
-    ${card.followUpHint ? `<div class="sa-cue-hint">💡 ${card.followUpHint}</div>` : ''}
+    ${card.followUpHint ? `<div class="sa-cue-hint">💡 ${escapeHtml(card.followUpHint)}</div>` : ''}
   `;
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
+  if (window.WordHover) WordHover.processTextNodes(div);
 }
 
 function showSpeakTips(tips) {
@@ -1198,6 +1391,10 @@ function showSpeakTips(tips) {
 }
 
 function endSpeakSession() {
+  // Stop realtime session if active
+  if (window.SpeakRealtime && SpeakRealtime.isActive()) {
+    SpeakRealtime.stop();
+  }
   stopListening();
   stopTTS();
   window.speechSynthesis && window.speechSynthesis.cancel();
@@ -1224,4 +1421,868 @@ function startSpeakTimer() {
     const s = String(speakState.timerSeconds % 60).padStart(2, '0');
     document.getElementById('saTimerValue').textContent = `${m}:${s}`;
   }, 1000);
+}
+
+// ================ VOCABULARY PAGE ================
+const vocabState = { words: [], reviewQueue: [], reviewIdx: 0, flipped: false };
+
+function goToVocabPage() {
+  showPage('vocab');
+  vocabSwitchView('list');
+  vocabLoadStats();
+  vocabLoadList();
+}
+
+async function vocabLoadStats() {
+  try {
+    const s = await apiCall('/api/vocab/stats');
+    document.getElementById('vocTotal').textContent = s.total;
+    document.getElementById('vocDue').textContent = s.due;
+    document.getElementById('vocMastered').textContent = s.mastered;
+  } catch {}
+}
+
+async function vocabLoadList(q) {
+  try {
+    const url = q ? '/api/vocab/list?q=' + encodeURIComponent(q) : '/api/vocab/list';
+    vocabState.words = await apiCall(url);
+    vocabRenderList();
+  } catch {}
+}
+
+function vocabRenderList() {
+  const el = document.getElementById('vocList');
+  if (!vocabState.words.length) {
+    el.innerHTML = '<div class="voc-empty">暂无生词，在阅读或考试中点击单词上的 ☆ 即可收藏</div>';
+    return;
+  }
+  el.innerHTML = vocabState.words.map(w => `
+    <div class="voc-item" data-id="${w.id}">
+      <div class="voc-item-main">
+        <span class="voc-item-word">${escapeHtml(w.word)}</span>
+        <span class="voc-item-phonetic">${escapeHtml(w.phonetic)}</span>
+        <span class="voc-item-pos">${escapeHtml(w.pos)}</span>
+      </div>
+      <div class="voc-item-def">${escapeHtml(w.definition)}</div>
+      ${w.definition_en ? `<div class="voc-item-def-en">${escapeHtml(w.definition_en)}</div>` : ''}
+      <div class="voc-item-meta">
+        ${w.source_context ? `<span class="voc-item-ctx">${escapeHtml(w.source_context)}</span>` : ''}
+        <span class="voc-item-date">${new Date(w.created_at).toLocaleDateString()}</span>
+        <button class="voc-item-del" onclick="vocabDelete(${w.id})" title="删除">✕</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+let vocabSearchTimer;
+function vocabSearch() {
+  clearTimeout(vocabSearchTimer);
+  vocabSearchTimer = setTimeout(() => {
+    vocabLoadList(document.getElementById('vocSearch').value.trim());
+  }, 300);
+}
+
+async function vocabDelete(id) {
+  try {
+    await apiCall('/api/vocab/' + id, { method: 'DELETE' });
+    vocabState.words = vocabState.words.filter(w => w.id !== id);
+    vocabRenderList();
+    vocabLoadStats();
+  } catch {}
+}
+
+function vocabSwitchView(view) {
+  document.querySelectorAll('.voc-tab').forEach(t => t.classList.toggle('active', t.dataset.view === view));
+  document.getElementById('vocListView').classList.toggle('active', view === 'list');
+  document.getElementById('vocReviewView').classList.toggle('active', view === 'review');
+  if (view === 'review') vocabStartReview();
+}
+
+async function vocabStartReview() {
+  try {
+    vocabState.reviewQueue = await apiCall('/api/vocab/review');
+    vocabState.reviewIdx = 0;
+    vocabState.flipped = false;
+    if (vocabState.reviewQueue.length === 0) {
+      document.getElementById('vocReviewWrap').style.display = 'none';
+      document.getElementById('vocReviewEmpty').style.display = '';
+    } else {
+      document.getElementById('vocReviewWrap').style.display = '';
+      document.getElementById('vocReviewEmpty').style.display = 'none';
+      vocabShowCard();
+    }
+  } catch {}
+}
+
+function vocabShowCard() {
+  const q = vocabState.reviewQueue;
+  const i = vocabState.reviewIdx;
+  if (i >= q.length) {
+    document.getElementById('vocReviewWrap').style.display = 'none';
+    document.getElementById('vocReviewEmpty').style.display = '';
+    document.querySelector('.voc-review-empty-text').textContent = '本轮复习完成！';
+    document.querySelector('.voc-review-empty-sub').textContent = `共复习了 ${q.length} 个单词`;
+    vocabLoadStats();
+    return;
+  }
+  const w = q[i];
+  vocabState.flipped = false;
+  document.getElementById('vocCard').classList.remove('voc-card-flipped');
+  document.getElementById('vocCardWord').textContent = w.word;
+  document.getElementById('vocCardPhonetic').textContent = w.phonetic || '';
+  document.getElementById('vocCardPos').textContent = w.pos || '';
+  document.getElementById('vocCardDef').textContent = w.definition || '';
+  document.getElementById('vocCardDefEn').textContent = w.definition_en || '';
+  document.getElementById('vocCardCtx').textContent = w.source_context ? '来源: ' + w.source_context : '';
+  document.getElementById('vocReviewBtns').style.display = 'none';
+  document.getElementById('vocReviewProgress').textContent = `${i + 1} / ${q.length}`;
+}
+
+function vocabFlipCard() {
+  if (vocabState.flipped) return;
+  vocabState.flipped = true;
+  document.getElementById('vocCard').classList.add('voc-card-flipped');
+  document.getElementById('vocReviewBtns').style.display = '';
+}
+
+async function vocabRate(quality) {
+  const w = vocabState.reviewQueue[vocabState.reviewIdx];
+  if (!w) return;
+  try {
+    await apiCall('/api/vocab/review', { method: 'POST', body: JSON.stringify({ id: w.id, quality }) });
+  } catch {}
+  vocabState.reviewIdx++;
+  vocabShowCard();
+}
+
+// ================ WRONG ANSWERS PAGE ================
+const waState = { items: [], filter: 'all' };
+
+function goToWrongPage() {
+  showPage('wrong');
+  waState.filter = 'all';
+  document.querySelectorAll('.wa-filter').forEach(b => b.classList.toggle('active', b.dataset.f === 'all'));
+  waLoadStats();
+  waLoadList();
+}
+
+async function waLoadStats() {
+  try {
+    const s = await apiCall('/api/tests/wrong-answers/stats');
+    document.getElementById('waTotal').textContent = s.total;
+    document.getElementById('waUnmastered').textContent = s.unmastered;
+    document.getElementById('waMastered').textContent = s.mastered;
+  } catch {}
+}
+
+async function waLoadList() {
+  try {
+    const f = waState.filter;
+    let url = '/api/tests/wrong-answers?';
+    if (f === 'listening' || f === 'reading') url += 'section=' + f;
+    else if (f === 'mastered') url += 'mastered=1';
+    else if (f === 'unmastered') url += 'mastered=0';
+    waState.items = await apiCall(url);
+    waRenderList();
+  } catch {}
+}
+
+function waFilter(f) {
+  waState.filter = f;
+  document.querySelectorAll('.wa-filter').forEach(b => b.classList.toggle('active', b.dataset.f === f));
+  waLoadList();
+}
+
+function waRenderList() {
+  const el = document.getElementById('waList');
+  if (!waState.items.length) {
+    el.innerHTML = '<div class="wa-empty">暂无错题记录，完成模拟考试后错题会自动收集</div>';
+    return;
+  }
+  // Group by test
+  const groups = {};
+  waState.items.forEach(w => {
+    const key = w.test_id;
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(w);
+  });
+
+  el.innerHTML = Object.entries(groups).map(([testId, items]) => `
+    <div class="wa-group">
+      <div class="wa-group-hd">Test ${testId} <span class="wa-group-count">${items.length} 题</span></div>
+      ${items.map(w => `
+        <div class="wa-item ${w.mastered ? 'wa-item-mastered' : ''}" data-id="${w.id}">
+          <div class="wa-item-top">
+            <span class="wa-item-badge wa-badge-${w.section}">${w.section === 'listening' ? '听力' : '阅读'}</span>
+            <span class="wa-item-qnum">Q${w.question_num}</span>
+            <span class="wa-item-type">${w.question_type === 'mc' ? '选择' : '填空'}</span>
+            ${w.mastered ? '<span class="wa-item-mastered-tag">✓ 已掌握</span>' : ''}
+          </div>
+          <div class="wa-item-q">${escapeHtml(w.question_text)}</div>
+          <div class="wa-item-answers">
+            <span class="wa-item-wrong">你的答案: ${escapeHtml(w.user_answer)}</span>
+            <span class="wa-item-correct">正确答案: ${escapeHtml(w.correct_answer)}</span>
+          </div>
+          ${!w.mastered ? `<button class="wa-master-btn" onclick="waMaster(${w.id})">标记已掌握</button>` : ''}
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+async function waMaster(id) {
+  try {
+    await apiCall('/api/tests/wrong-answers/' + id + '/master', { method: 'POST' });
+    waState.items = waState.items.map(w => w.id === id ? { ...w, mastered: 1 } : w);
+    waRenderList();
+    waLoadStats();
+  } catch {}
+}
+
+// ================ ANALYTICS PAGE ================
+function goToAnalyticsPage() {
+  showPage('analytics');
+  loadAnalytics();
+}
+
+async function loadAnalytics() {
+  try {
+    const rows = await apiCall('/api/tests/analytics');
+    if (!rows.length) {
+      document.getElementById('anEmpty').style.display = '';
+      document.querySelector('.an-charts').style.display = 'none';
+      document.getElementById('anSummary').innerHTML = '';
+      return;
+    }
+    document.getElementById('anEmpty').style.display = 'none';
+    document.querySelector('.an-charts').style.display = '';
+
+    // Summary
+    const latest = rows[rows.length - 1];
+    const avgL = (rows.reduce((s, r) => s + r.score_listening, 0) / rows.length).toFixed(1);
+    const avgR = (rows.reduce((s, r) => s + r.score_reading, 0) / rows.length).toFixed(1);
+    const avgW = (rows.reduce((s, r) => s + r.score_writing, 0) / rows.length).toFixed(1);
+    const avgS = (rows.reduce((s, r) => s + r.score_speaking, 0) / rows.length).toFixed(1);
+    const scores = [{ label: '听力', val: avgL, color: 'var(--c-listen)' }, { label: '阅读', val: avgR, color: 'var(--c-read)' }, { label: '写作', val: avgW, color: 'var(--c-write)' }, { label: '口语', val: avgS, color: 'var(--c-speak)' }];
+    const best = scores.reduce((a, b) => parseFloat(a.val) >= parseFloat(b.val) ? a : b);
+    const worst = scores.reduce((a, b) => parseFloat(a.val) <= parseFloat(b.val) ? a : b);
+    document.getElementById('anSummary').innerHTML = `
+      <div class="an-sum-row">
+        <div class="an-sum-item"><span class="an-sum-num">${rows.length}</span><span class="an-sum-lbl">完成考试</span></div>
+        <div class="an-sum-item"><span class="an-sum-num">${latest.score_overall}</span><span class="an-sum-lbl">最新总分</span></div>
+        <div class="an-sum-item an-sum-best"><span class="an-sum-num">${best.label}</span><span class="an-sum-lbl">最强项 ${best.val}</span></div>
+        <div class="an-sum-item an-sum-worst"><span class="an-sum-num">${worst.label}</span><span class="an-sum-lbl">最弱项 ${worst.val}</span></div>
+      </div>`;
+
+    drawTrendChart(rows);
+    drawRadarChart(parseFloat(avgL), parseFloat(avgR), parseFloat(avgW), parseFloat(avgS));
+  } catch (e) {
+    console.warn('Analytics error:', e.message);
+  }
+}
+
+function drawTrendChart(rows) {
+  const canvas = document.getElementById('anTrendChart');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = canvas.clientWidth * dpr;
+  canvas.height = canvas.clientHeight * dpr;
+  ctx.scale(dpr, dpr);
+  const W = canvas.clientWidth, H = canvas.clientHeight;
+  const pad = { top: 20, right: 20, bottom: 30, left: 36 };
+  const gW = W - pad.left - pad.right, gH = H - pad.top - pad.bottom;
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Y-axis (bands 4-9)
+  const yMin = 4, yMax = 9;
+  ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--bd').trim() || '#e0d9cf';
+  ctx.lineWidth = 0.5;
+  ctx.font = '11px "DM Sans", sans-serif';
+  ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--tx-3').trim() || '#7a90a4';
+  for (let b = yMin; b <= yMax; b++) {
+    const y = pad.top + gH - ((b - yMin) / (yMax - yMin)) * gH;
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
+    ctx.fillText(b.toString(), pad.left - 20, y + 4);
+  }
+
+  const series = [
+    { key: 'score_overall', color: '#18273a', label: 'Overall', width: 2.5 },
+    { key: 'score_listening', color: '#2563eb', label: 'L', width: 1.5 },
+    { key: 'score_reading', color: '#059669', label: 'R', width: 1.5 },
+    { key: 'score_writing', color: '#d97706', label: 'W', width: 1.5 },
+    { key: 'score_speaking', color: '#7c3aed', label: 'S', width: 1.5 },
+  ];
+
+  const toX = i => pad.left + (i / Math.max(rows.length - 1, 1)) * gW;
+  const toY = v => pad.top + gH - ((v - yMin) / (yMax - yMin)) * gH;
+
+  series.forEach(s => {
+    ctx.strokeStyle = s.color;
+    ctx.lineWidth = s.width;
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    rows.forEach((r, i) => {
+      const x = toX(i), y = toY(r[s.key]);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    // Last point dot
+    if (rows.length > 0) {
+      const last = rows[rows.length - 1];
+      ctx.fillStyle = s.color;
+      ctx.beginPath();
+      ctx.arc(toX(rows.length - 1), toY(last[s.key]), 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  });
+
+  // X-axis labels (test numbers)
+  ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--tx-3').trim() || '#7a90a4';
+  ctx.font = '10px "DM Mono", monospace';
+  const step = Math.max(1, Math.floor(rows.length / 8));
+  rows.forEach((r, i) => {
+    if (i % step === 0 || i === rows.length - 1) {
+      ctx.fillText('T' + r.test_id, toX(i) - 6, H - 6);
+    }
+  });
+
+  // Legend
+  ctx.font = '11px "DM Sans", sans-serif';
+  let lx = pad.left;
+  series.forEach(s => {
+    ctx.fillStyle = s.color;
+    ctx.fillRect(lx, 4, 14, 3);
+    ctx.fillText(s.label, lx + 18, 10);
+    lx += ctx.measureText(s.label).width + 32;
+  });
+}
+
+function drawRadarChart(l, r, w, s) {
+  const canvas = document.getElementById('anRadarChart');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = canvas.clientWidth * dpr;
+  canvas.height = canvas.clientHeight * dpr;
+  ctx.scale(dpr, dpr);
+  const W = canvas.clientWidth, H = canvas.clientHeight;
+  const cx = W / 2, cy = H / 2, R = Math.min(W, H) / 2 - 40;
+
+  ctx.clearRect(0, 0, W, H);
+
+  const labels = ['Listening', 'Reading', 'Writing', 'Speaking'];
+  const values = [l, r, w, s];
+  const colors = ['#2563eb', '#059669', '#d97706', '#7c3aed'];
+  const n = 4;
+  const angleStep = (Math.PI * 2) / n;
+
+  // Grid rings (4-9)
+  ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--bd').trim() || '#e0d9cf';
+  ctx.lineWidth = 0.5;
+  for (let ring = 1; ring <= 5; ring++) {
+    const rr = (ring / 5) * R;
+    ctx.beginPath();
+    for (let i = 0; i <= n; i++) {
+      const a = -Math.PI / 2 + i * angleStep;
+      const x = cx + rr * Math.cos(a), y = cy + rr * Math.sin(a);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+
+  // Axis lines
+  for (let i = 0; i < n; i++) {
+    const a = -Math.PI / 2 + i * angleStep;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + R * Math.cos(a), cy + R * Math.sin(a));
+    ctx.stroke();
+  }
+
+  // Data polygon
+  const norm = v => Math.max(0, Math.min(1, (v - 4) / 5)); // 4-9 → 0-1
+  ctx.fillStyle = 'rgba(40,120,106,0.15)';
+  ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--v-teal').trim() || '#28786a';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  values.forEach((v, i) => {
+    const a = -Math.PI / 2 + i * angleStep;
+    const rr = norm(v) * R;
+    const x = cx + rr * Math.cos(a), y = cy + rr * Math.sin(a);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Data points & labels
+  ctx.font = '12px "DM Sans", sans-serif';
+  values.forEach((v, i) => {
+    const a = -Math.PI / 2 + i * angleStep;
+    const rr = norm(v) * R;
+    // Point
+    ctx.fillStyle = colors[i];
+    ctx.beginPath();
+    ctx.arc(cx + rr * Math.cos(a), cy + rr * Math.sin(a), 4, 0, Math.PI * 2);
+    ctx.fill();
+    // Label
+    const lr = R + 22;
+    const lx = cx + lr * Math.cos(a), ly = cy + lr * Math.sin(a);
+    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--tx').trim() || '#18273a';
+    ctx.textAlign = Math.abs(Math.cos(a)) < 0.1 ? 'center' : Math.cos(a) > 0 ? 'left' : 'right';
+    ctx.textBaseline = Math.abs(Math.sin(a)) < 0.1 ? 'middle' : Math.sin(a) > 0 ? 'top' : 'bottom';
+    ctx.fillText(`${labels[i]} ${v}`, lx, ly);
+  });
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
+}
+
+// ================ WRITING PRACTICE PAGE ================
+const wpState = { type: 'task1', prompt: '', timerInterval: null, seconds: 0 };
+
+function goToWritingPage() {
+  showPage('writing');
+  document.getElementById('wpSetup').style.display = '';
+  document.getElementById('wpEditor').style.display = 'none';
+  document.getElementById('wpFeedback').style.display = 'none';
+  wpSelectType('task1');
+  wpLoadHistory();
+}
+
+function wpSelectType(type) {
+  wpState.type = type;
+  document.querySelectorAll('.wp-type-btn').forEach(b => b.classList.toggle('active', b.dataset.type === type));
+  // Build topic list from TESTS
+  const el = document.getElementById('wpTopics');
+  el.innerHTML = TESTS.map(t => {
+    const w = type === 'task1' ? t.writing.task1 : t.writing.task2;
+    const prompt = w.prompt || '';
+    const preview = prompt.length > 80 ? prompt.slice(0, 80) + '...' : prompt;
+    return `<div class="wp-topic-card" onclick='wpStartWrite(${t.id}, ${JSON.stringify(type)})'>
+      <span class="wp-topic-num">Test ${t.id}</span>
+      <span class="wp-topic-preview">${escapeHtml(preview)}</span>
+    </div>`;
+  }).join('');
+}
+
+function wpStartWrite(testId, type) {
+  const test = TESTS.find(t => t.id === testId);
+  if (!test) return;
+  const w = type === 'task1' ? test.writing.task1 : test.writing.task2;
+  wpState.prompt = w.prompt;
+  wpState.type = type;
+
+  document.getElementById('wpSetup').style.display = 'none';
+  document.getElementById('wpEditor').style.display = '';
+  document.getElementById('wpFeedback').style.display = 'none';
+
+  const label = type === 'task1' ? 'Task 1 (至少 150 词)' : 'Task 2 (至少 250 词)';
+  document.getElementById('wpPromptBox').innerHTML = `<div class="wp-prompt-label">${label}</div><div class="wp-prompt-text">${escapeHtml(w.prompt)}</div>`;
+  if (w.chart) {
+    document.getElementById('wpPromptBox').innerHTML += `<div class="wp-prompt-chart">📊 ${escapeHtml(w.chart)}</div>`;
+  }
+
+  document.getElementById('wpTextarea').value = '';
+  document.getElementById('wpWordCount').textContent = '0 words';
+  document.getElementById('wpSubmitBtn').disabled = false;
+
+  // Start timer
+  wpState.seconds = 0;
+  clearInterval(wpState.timerInterval);
+  wpState.timerInterval = setInterval(() => {
+    wpState.seconds++;
+    const m = String(Math.floor(wpState.seconds / 60)).padStart(2, '0');
+    const s = String(wpState.seconds % 60).padStart(2, '0');
+    document.getElementById('wpTimer').textContent = `${m}:${s}`;
+  }, 1000);
+}
+
+function wpWordCount() {
+  const text = document.getElementById('wpTextarea').value.trim();
+  const count = text ? text.split(/\s+/).filter(w => w).length : 0;
+  document.getElementById('wpWordCount').textContent = count + ' words';
+}
+
+async function wpSubmit() {
+  const essay = document.getElementById('wpTextarea').value.trim();
+  if (!essay) return;
+  clearInterval(wpState.timerInterval);
+  document.getElementById('wpSubmitBtn').disabled = true;
+  showLoading('AI 正在评分，请稍候...');
+
+  try {
+    const result = await apiCall('/api/writing/submit', {
+      method: 'POST',
+      body: JSON.stringify({
+        taskType: wpState.type,
+        prompt: wpState.prompt,
+        essay,
+        timeSpent: wpState.seconds
+      })
+    });
+    hideLoading();
+    wpShowFeedback(result.feedback, result.wordCount);
+  } catch (err) {
+    hideLoading();
+    document.getElementById('wpSubmitBtn').disabled = false;
+    alert('提交失败: ' + err.message);
+  }
+}
+
+function wpShowFeedback(fb, wordCount) {
+  document.getElementById('wpEditor').style.display = 'none';
+  document.getElementById('wpFeedback').style.display = '';
+  const el = document.getElementById('wpFeedbackContent');
+  const criteria = [
+    { label: 'Task Achievement', data: fb.task_achievement },
+    { label: 'Coherence & Cohesion', data: fb.coherence },
+    { label: 'Lexical Resource', data: fb.lexical },
+    { label: 'Grammar Range & Accuracy', data: fb.grammar }
+  ];
+  el.innerHTML = `
+    <div class="wp-fb-band">Band ${fb.band}</div>
+    <div class="wp-fb-wc">${wordCount} words · ${Math.floor(wpState.seconds / 60)} min</div>
+    <div class="wp-fb-criteria">
+      ${criteria.map(c => `
+        <div class="wp-fb-crit">
+          <div class="wp-fb-crit-hd"><span>${c.label}</span><span class="wp-fb-crit-score">${c.data?.score || '-'}</span></div>
+          <div class="wp-fb-crit-comment">${escapeHtml(c.data?.comment || '')}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="wp-fb-overall">${escapeHtml(fb.overall_feedback || '')}</div>
+    ${fb.suggestions ? `<div class="wp-fb-suggestions"><strong>改进建议：</strong><ul>${fb.suggestions.split('|').map(s => `<li>${escapeHtml(s.trim())}</li>`).join('')}</ul></div>` : ''}
+  `;
+}
+
+function wpReset() {
+  document.getElementById('wpSetup').style.display = '';
+  document.getElementById('wpEditor').style.display = 'none';
+  document.getElementById('wpFeedback').style.display = 'none';
+  wpLoadHistory();
+}
+
+function wpBack() {
+  clearInterval(wpState.timerInterval);
+  if (document.getElementById('wpEditor').style.display !== 'none') {
+    wpReset();
+  } else {
+    showPage('home');
+  }
+}
+
+async function wpLoadHistory() {
+  try {
+    const rows = await apiCall('/api/writing/history');
+    const el = document.getElementById('wpHistoryList');
+    if (!rows.length) { el.innerHTML = '<div class="wp-history-empty">暂无写作记录</div>'; return; }
+    el.innerHTML = rows.slice(0, 10).map(r => `
+      <div class="wp-history-item">
+        <span class="wp-history-type">${r.task_type === 'task1' ? 'T1' : 'T2'}</span>
+        <span class="wp-history-band">Band ${r.band_score}</span>
+        <span class="wp-history-wc">${r.word_count} 词</span>
+        <span class="wp-history-date">${new Date(r.created_at).toLocaleDateString()}</span>
+      </div>
+    `).join('');
+  } catch {}
+}
+
+// ================ DICTATION PAGE ================
+const dcState = { sentences: [], idx: 0, rate: 0.88, totalCorrect: 0, totalWords: 0 };
+
+function goToDictationPage() {
+  showPage('dictation');
+  document.getElementById('dcSetup').style.display = '';
+  document.getElementById('dcSession').style.display = 'none';
+  document.getElementById('dcResult').style.display = 'none';
+  // Build test/section selector
+  const el = document.getElementById('dcTests');
+  el.innerHTML = TESTS.map(t => `
+    <div class="dc-test-card">
+      <div class="dc-test-title">Test ${t.id} — ${escapeHtml(t.topic)}</div>
+      <div class="dc-test-sections">
+        ${t.listening.sections.map((sec, si) => `
+          <button class="dc-sec-btn" onclick="dcStart(${t.id}, ${si})">Section ${si + 1}</button>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function dcSetRate(r) {
+  dcState.rate = r;
+  document.querySelectorAll('.dc-speed-btn').forEach(b => b.classList.toggle('active', parseFloat(b.dataset.rate) === r));
+}
+
+function dcStart(testId, sectionIdx) {
+  const test = TESTS.find(t => t.id === testId);
+  if (!test) return;
+  const sec = test.listening.sections[sectionIdx];
+  if (!sec || !sec.transcript) return;
+
+  // Split transcript into sentences
+  const raw = sec.transcript.replace(/\s+/g, ' ').trim();
+  dcState.sentences = raw.match(/[^.!?]+[.!?]+/g) || [raw];
+  dcState.sentences = dcState.sentences.map(s => s.trim()).filter(s => s.length > 5);
+  dcState.idx = 0;
+  dcState.totalCorrect = 0;
+  dcState.totalWords = 0;
+
+  document.getElementById('dcSetup').style.display = 'none';
+  document.getElementById('dcSession').style.display = '';
+  document.getElementById('dcResult').style.display = 'none';
+  dcShowSentence();
+
+  // Log activity
+  apiCall('/api/activity/log', { method: 'POST', body: JSON.stringify({ type: 'dictation', data: `Test ${testId} S${sectionIdx + 1}` }) }).catch(() => {});
+}
+
+function dcShowSentence() {
+  const total = dcState.sentences.length;
+  const i = dcState.idx;
+  document.getElementById('dcSentNum').textContent = `${i + 1} / ${total}`;
+  document.getElementById('dcProgressFill').style.width = `${((i) / total) * 100}%`;
+  document.getElementById('dcInput').value = '';
+  document.getElementById('dcDiff').style.display = 'none';
+  document.getElementById('dcNextBtn').style.display = 'none';
+  document.getElementById('dcCheckBtn').style.display = '';
+  document.getElementById('dcInput').focus();
+}
+
+function dcPlaySentence() {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(dcState.sentences[dcState.idx]);
+  const voice = getEnVoice();
+  if (voice) u.voice = voice;
+  u.rate = dcState.rate;
+  u.pitch = 1;
+  window.speechSynthesis.speak(u);
+}
+
+function dcCheckSentence() {
+  const original = dcState.sentences[dcState.idx];
+  const userText = document.getElementById('dcInput').value.trim();
+  if (!userText) return;
+
+  const origWords = original.replace(/[^\w\s'-]/g, '').toLowerCase().split(/\s+/).filter(w => w);
+  const userWords = userText.replace(/[^\w\s'-]/g, '').toLowerCase().split(/\s+/).filter(w => w);
+
+  // Simple word-by-word comparison using LCS
+  const diff = diffWords(origWords, userWords);
+  dcState.totalWords += origWords.length;
+  dcState.totalCorrect += diff.correct;
+
+  // Render diff
+  const el = document.getElementById('dcDiff');
+  el.innerHTML = `
+    <div class="dc-diff-label">原文对比 (${diff.correct}/${origWords.length} 正确)</div>
+    <div class="dc-diff-words">${diff.html}</div>
+  `;
+  el.style.display = '';
+  document.getElementById('dcCheckBtn').style.display = 'none';
+  document.getElementById('dcNextBtn').style.display = '';
+}
+
+function diffWords(orig, user) {
+  // LCS-based diff: find longest common subsequence, then mark matches/misses
+  const m = orig.length, n = user.length;
+  const dp = Array.from({ length: m + 1 }, () => new Uint16Array(n + 1));
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      dp[i][j] = orig[i - 1] === user[j - 1] ? dp[i - 1][j - 1] + 1 : Math.max(dp[i - 1][j], dp[i][j - 1]);
+    }
+  }
+  // Backtrack to find which orig words are matched
+  const matched = new Set();
+  let i = m, j = n;
+  while (i > 0 && j > 0) {
+    if (orig[i - 1] === user[j - 1]) { matched.add(i - 1); i--; j--; }
+    else if (dp[i - 1][j] >= dp[i][j - 1]) i--;
+    else j--;
+  }
+  const correct = matched.size;
+  const html = orig.map((w, idx) => {
+    if (matched.has(idx)) return `<span class="dc-w-ok">${escapeHtml(w)}</span>`;
+    return `<span class="dc-w-miss">${escapeHtml(w)}</span>`;
+  }).join(' ');
+  return { correct, html };
+}
+
+function dcNextSentence() {
+  dcState.idx++;
+  if (dcState.idx >= dcState.sentences.length) {
+    dcShowResult();
+  } else {
+    dcShowSentence();
+  }
+}
+
+function dcShowResult() {
+  document.getElementById('dcSession').style.display = 'none';
+  document.getElementById('dcResult').style.display = '';
+  const pct = dcState.totalWords > 0 ? Math.round((dcState.totalCorrect / dcState.totalWords) * 100) : 0;
+  document.getElementById('dcAccuracy').textContent = `正确率: ${pct}%`;
+  document.getElementById('dcStats').textContent = `共 ${dcState.sentences.length} 句 · ${dcState.totalCorrect}/${dcState.totalWords} 词正确`;
+}
+
+function dcBack() {
+  window.speechSynthesis && window.speechSynthesis.cancel();
+  if (document.getElementById('dcSession').style.display !== 'none') {
+    document.getElementById('dcSetup').style.display = '';
+    document.getElementById('dcSession').style.display = 'none';
+  } else {
+    showPage('home');
+  }
+}
+
+// ================ TIMED READING PAGE ================
+const trState = { passage: '', wordCount: 0, timerInterval: null, seconds: 0, questions: [] };
+
+function goToTimedReadPage() {
+  showPage('timed-read');
+  document.getElementById('trSetup').style.display = '';
+  document.getElementById('trReading').style.display = 'none';
+  document.getElementById('trQuiz').style.display = 'none';
+  document.getElementById('trResult').style.display = 'none';
+  document.getElementById('trTimer').style.display = 'none';
+
+  const el = document.getElementById('trPassages');
+  el.innerHTML = TESTS.map(t => `
+    <div class="tr-test-card">
+      <div class="tr-test-title">Test ${t.id} — ${escapeHtml(t.topic)}</div>
+      <div class="tr-test-passages">
+        ${t.reading.passages.map((p, pi) => {
+          const wc = p.text.split(/\s+/).length;
+          return `<button class="tr-pass-btn" onclick="trStartReading(${t.id}, ${pi})">
+            Passage ${pi + 1} <span class="tr-pass-wc">${wc} words</span>
+          </button>`;
+        }).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function trStartReading(testId, passageIdx) {
+  const test = TESTS.find(t => t.id === testId);
+  if (!test) return;
+  const p = test.reading.passages[passageIdx];
+  trState.passage = p.text;
+  trState.wordCount = p.text.split(/\s+/).length;
+  trState.questions = p.questions.slice(0, 5); // Use first 5 existing questions
+
+  document.getElementById('trSetup').style.display = 'none';
+  document.getElementById('trReading').style.display = '';
+  document.getElementById('trTimer').style.display = '';
+
+  document.getElementById('trPassageBox').innerHTML = `
+    <h3 class="tr-pass-title">${escapeHtml(p.title || 'Passage ' + (passageIdx + 1))}</h3>
+    <div class="tr-pass-text">${p.text}</div>
+  `;
+
+  // Start timer
+  trState.seconds = 0;
+  clearInterval(trState.timerInterval);
+  trState.timerInterval = setInterval(() => {
+    trState.seconds++;
+    const m = String(Math.floor(trState.seconds / 60)).padStart(2, '0');
+    const s = String(trState.seconds % 60).padStart(2, '0');
+    document.getElementById('trTimer').textContent = `${m}:${s}`;
+  }, 1000);
+}
+
+function trFinishReading() {
+  clearInterval(trState.timerInterval);
+  document.getElementById('trReading').style.display = 'none';
+  document.getElementById('trQuiz').style.display = '';
+
+  const wpm = Math.round(trState.wordCount / (trState.seconds / 60));
+
+  // Show questions from the existing test data
+  const el = document.getElementById('trQuizContent');
+  if (trState.questions.length > 0) {
+    el.innerHTML = `
+      <div class="tr-quiz-info">用时 ${Math.floor(trState.seconds / 60)}分${trState.seconds % 60}秒 · ${trState.wordCount} 词 · <strong>${wpm} WPM</strong></div>
+      <div class="tr-quiz-qs">
+        ${trState.questions.map((q, i) => `
+          <div class="tr-q-item">
+            <div class="tr-q-text">Q${i + 1}. ${escapeHtml(q.question)}</div>
+            ${q.type === 'mc' ? `
+              <div class="tr-q-opts">
+                ${q.options.map(opt => `
+                  <label class="tr-q-opt">
+                    <input type="radio" name="trq_${i}" value="${opt.charAt(0)}"> ${escapeHtml(opt)}
+                  </label>
+                `).join('')}
+              </div>
+            ` : `
+              <input class="tr-q-input" type="text" placeholder="答案..." data-idx="${i}">
+            `}
+          </div>
+        `).join('')}
+      </div>
+      <button class="tr-quiz-submit" onclick="trSubmitQuiz()">提交答案</button>
+    `;
+  } else {
+    trShowResult(wpm, 0, 0);
+  }
+}
+
+function trSubmitQuiz() {
+  let correct = 0;
+  trState.questions.forEach((q, i) => {
+    let userAns = '';
+    if (q.type === 'mc') {
+      const checked = document.querySelector(`input[name="trq_${i}"]:checked`);
+      userAns = checked ? checked.value.toLowerCase() : '';
+    } else {
+      const inp = document.querySelector(`.tr-q-input[data-idx="${i}"]`);
+      userAns = inp ? inp.value.trim().toLowerCase() : '';
+    }
+    const correctAns = q.answer.toLowerCase().trim();
+    if (userAns === correctAns || (q.type === 'mc' && userAns === correctAns.charAt(0).toLowerCase())) {
+      correct++;
+    }
+  });
+  const wpm = Math.round(trState.wordCount / (trState.seconds / 60));
+  trShowResult(wpm, correct, trState.questions.length);
+}
+
+function trShowResult(wpm, correct, total) {
+  document.getElementById('trQuiz').style.display = 'none';
+  document.getElementById('trResult').style.display = '';
+
+  const level = wpm >= 250 ? 'Band 7+' : wpm >= 200 ? 'Band 6+' : wpm >= 150 ? 'Band 5.5' : 'Band 5 以下';
+  const pct = total > 0 ? Math.round((correct / total) * 100) : '-';
+
+  document.getElementById('trResultContent').innerHTML = `
+    <div class="tr-res-wpm">${wpm}</div>
+    <div class="tr-res-wpm-label">WPM (每分钟词数)</div>
+    <div class="tr-res-level">${level}</div>
+    <div class="tr-res-bar">
+      <div class="tr-res-bar-fill" style="width: ${Math.min(wpm / 300 * 100, 100)}%"></div>
+      <div class="tr-res-bar-target" style="left: ${200/300*100}%"><span>200</span></div>
+    </div>
+    <div class="tr-res-bar-labels">
+      <span>0</span><span>100</span><span>200</span><span>300</span>
+    </div>
+    ${total > 0 ? `<div class="tr-res-comp">理解正确率: ${correct}/${total} (${pct}%)</div>` : ''}
+    <div class="tr-res-time">阅读时间: ${Math.floor(trState.seconds / 60)}分${trState.seconds % 60}秒 · ${trState.wordCount} 词</div>
+    <div class="tr-res-actions">
+      <button class="tr-res-btn" onclick="goToTimedReadPage()">再练一篇</button>
+      <button class="tr-res-btn tr-res-btn-sec" onclick="showPage('home')">返回首页</button>
+    </div>
+  `;
+
+  // Log activity
+  apiCall('/api/activity/log', { method: 'POST', body: JSON.stringify({ type: 'reading_drill', data: `${wpm} WPM` }) }).catch(() => {});
+}
+
+function trBack() {
+  clearInterval(trState.timerInterval);
+  if (document.getElementById('trReading').style.display !== 'none' || document.getElementById('trQuiz').style.display !== 'none') {
+    goToTimedReadPage();
+  } else {
+    showPage('home');
+  }
 }
