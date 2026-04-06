@@ -18,8 +18,8 @@ router.post('/log', (req, res) => {
 router.get('/streak', (req, res) => {
   // Client timezone offset (minutes from UTC, e.g., -480 for UTC+8)
   const clientTz = parseInt(req.query.tz);
-  const tzHours = isNaN(clientTz) ? 0 : -clientTz / 60; // e.g., 8 for UTC+8
-  const tzSQL = `${tzHours >= 0 ? '+' : ''}${Math.round(tzHours)} hours`;
+  const tzOffsetMin = isNaN(clientTz) ? 0 : -clientTz; // e.g., 480 for UTC+8
+  const tzSQL = `${tzOffsetMin >= 0 ? '+' : ''}${tzOffsetMin} minutes`;
 
   // Get distinct active days in user's local timezone
   const days = db.prepare(`
@@ -28,9 +28,9 @@ router.get('/streak', (req, res) => {
   `).all(tzSQL, req.user.id).map(r => r.d);
 
   // Compute today/yesterday in user's local timezone
-  const nowLocal = new Date(Date.now() + tzHours * 3600000);
+  const nowLocal = new Date(Date.now() + tzOffsetMin * 60000);
   const todayStr = nowLocal.toISOString().slice(0, 10);
-  const ydLocal = new Date(Date.now() + tzHours * 3600000 - 86400000);
+  const ydLocal = new Date(Date.now() + tzOffsetMin * 60000 - 86400000);
   const yesterdayStr = ydLocal.toISOString().slice(0, 10);
 
   let streak = 0;

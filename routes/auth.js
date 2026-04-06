@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/register', async (req, res) => {
   const { username, password } = req.body || {};
   if (!username || !password) return res.status(400).json({ error: '请填写用户名和密码' });
-  if (username.trim().length < 2) return res.status(400).json({ error: '用户名至少2个字符' });
+  if (username.trim().length < 2 || username.trim().length > 20) return res.status(400).json({ error: '用户名需2-20个字符' });
   if (password.length < 6) return res.status(400).json({ error: '密码至少6位' });
 
   try {

@@ -49,9 +49,11 @@ router.get('/list', (req, res) => {
   const search = (req.query.q || '').trim();
   let rows;
   if (search) {
+    // Escape LIKE wildcards so literal % and _ are matched, not treated as wildcards
+    const escaped = search.replace(/[%_\\]/g, '\\$&');
     rows = db.prepare(
-      `SELECT * FROM user_vocabulary WHERE user_id = ? AND word LIKE ? ORDER BY created_at DESC LIMIT 500`
-    ).all(req.user.id, `%${search}%`);
+      `SELECT * FROM user_vocabulary WHERE user_id = ? AND word LIKE ? ESCAPE '\\' ORDER BY created_at DESC LIMIT 500`
+    ).all(req.user.id, `%${escaped}%`);
   } else {
     rows = db.prepare(
       `SELECT * FROM user_vocabulary WHERE user_id = ? ORDER BY created_at DESC LIMIT 500`

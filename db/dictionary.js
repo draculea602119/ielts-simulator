@@ -82,11 +82,13 @@ function formatPhonetic(phonetic) {
 
 function cleanTranslation(translation) {
   if (!translation) return '';
-  // Take the first line (main meaning), clean up
-  const lines = translation.split('\n').filter(l => l.trim());
+  // Remove redundant POS prefixes (e.g. "vt. ", "n. ") that duplicate the pos field,
+  // keep up to 3 lines (covers most multi-sense entries), join with "；"
+  const lines = translation.split('\n')
+    .map(l => l.replace(/^[a-z]+\.\s*/i, '').trim())
+    .filter(l => l);
   if (lines.length === 0) return '';
-  // Return first line, removing redundant prefixes like "a. " that duplicate POS
-  return lines[0].replace(/^[a-z]+\.\s*/, '').trim();
+  return lines.slice(0, 3).join('；');
 }
 
 // ---- Simple Stemming (inflected → base form) ----
@@ -154,7 +156,7 @@ function lookupEcdict(word) {
         word: row.word,
         phonetic: formatPhonetic(row.phonetic),
         pos: parseEcdictPos(row.pos),
-        definition: row.translation || '',
+        definition: cleanTranslation(row.translation),
         definition_en: row.definition || '',
         source: 'ecdict'
       };
@@ -167,7 +169,7 @@ function lookupEcdict(word) {
           word: word.toLowerCase(),
           phonetic: formatPhonetic(stemRow.phonetic),
           pos: parseEcdictPos(stemRow.pos),
-          definition: stemRow.translation,
+          definition: cleanTranslation(stemRow.translation),
           definition_en: stemRow.definition || '',
           source: 'ecdict'
         };
